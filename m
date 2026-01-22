@@ -1,428 +1,172 @@
-Return-Path: <linux-security-module+bounces-14153-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14155-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IOMrDYlccmn5iwAAu9opvQ
-	(envelope-from <linux-security-module+bounces-14153-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Thu, 22 Jan 2026 18:21:13 +0100
+	id SE2lJHVncmmrjwAAu9opvQ
+	(envelope-from <linux-security-module+bounces-14155-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Thu, 22 Jan 2026 19:07:49 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 935AF6B1C4
-	for <lists+linux-security-module@lfdr.de>; Thu, 22 Jan 2026 18:21:12 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DD226BFDF
+	for <lists+linux-security-module@lfdr.de>; Thu, 22 Jan 2026 19:07:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 69A863000523
-	for <lists+linux-security-module@lfdr.de>; Thu, 22 Jan 2026 17:10:39 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 49C6E3284F53
+	for <lists+linux-security-module@lfdr.de>; Thu, 22 Jan 2026 17:28:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EBFB347BBD;
-	Thu, 22 Jan 2026 16:49:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 258453D8090;
+	Thu, 22 Jan 2026 17:06:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="FNAwTtzU"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="XD1JB33f"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+Received: from sonic315-26.consmr.mail.ne1.yahoo.com (sonic315-26.consmr.mail.ne1.yahoo.com [66.163.190.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA65350A02
-	for <linux-security-module@vger.kernel.org>; Thu, 22 Jan 2026 16:49:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE1003D9F5B
+	for <linux-security-module@vger.kernel.org>; Thu, 22 Jan 2026 17:06:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.190.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769100589; cv=none; b=p+fwWiW/X2KteCh57qTclYKnYNuuoo2Pgm8gHph0OJRWB5SiN6Q/+y+bbFwv0KerM/S/Xom/ld00/6xC2PaIY2HM5pIUeWzGtI54NeAgPY9SwuJ3EZaj+zP0EQqL3IFlVqwQAd3hKvkxBfpRu2fjD+qzCFXongOCtFmwqD9ODy4=
+	t=1769101589; cv=none; b=nDz6LchMvzkeKOVJlDtsKer/tTvGJ3IuYR8qb3ZLzT2Bq/pROcp5M8TQ+pLnyvMJVgYprQkTNp1/IhflTU95r0ywzEzFVZPJM8JjiMCmYTF26gK3pCoMXPZXpRUxds3jV/JCCSzbK8LS8nQD0+hi7W49VNWbUnrys0gIGH/NPXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769100589; c=relaxed/simple;
-	bh=qFVLX/KqoD5gSeJiYxumQ5g1tV4GWZs+Lelo/ycRe1Q=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ZMfOuIXNF+4XB0xw1TIJh3uxCBEzJZmpHdclnelLkNpYfS/okmAIHGy/WNkDdVblqwUuwPIoIMIc4/yMc/qea0N54UYMyNHBUtge+JlaCMi0OT9Oa7sUIjygWo/jcTO8Pw3z6XvybMffOdGMG0nz3JspWNyi9rHx2RjX1Fi/tNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=FNAwTtzU; arc=none smtp.client-ip=209.85.161.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-6610c5b014cso490904eaf.0
-        for <linux-security-module@vger.kernel.org>; Thu, 22 Jan 2026 08:49:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1769100581; x=1769705381; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rwzPgUZ6um1mvTqFso7ZVYWrXOFTNHt7M7xwpsX9stE=;
-        b=FNAwTtzUS3nnLl1jBrn+c2YicmNGtqw6qIlEjsqEq1S4CD2KQbenx2qMKh244CjMeL
-         EDAC3vf8H6aem+yBDwRz/QIMjIKvRQicuVbHSRBCAP69YoUoQUlDAJ3Si/zvrr1wQhbj
-         3DivOdO0JQgMmbRSniBp5N8H77U8Kgyu6YVCYYBTR7wi+cX7kkHmBPx6OwO/2ypYT6v/
-         /+uyiE8SjqWzuA1ECbF5ru2c5zXkZYiB0olNLIc84oDQr74GLrT4WjCM0UMH6tCtl8d4
-         bLOZRcs4DBvnZgYB3JH4QbNmwIeA7xdRsFQbKbKbnNH52CGF5bSK4jANwZeB/9B6rsoP
-         Dwvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769100581; x=1769705381;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rwzPgUZ6um1mvTqFso7ZVYWrXOFTNHt7M7xwpsX9stE=;
-        b=e30nUwE/l6/EvAiG1jwqWk7nQQsPnTwa40XcAQTqbUrE3PYmIl4sdvYFWXn1R5VHrY
-         vUyN7fXv+WO4Ru3OVrMdXdDzmBpyMxBR9KZcCND4at3DI3SNweoU6hBTEALPnhgQEx3I
-         aSJ+icNtilxXB/+OvttgORsuzKb6qOidry2pCz87k11EC2C7mdiniHP6ydxTUi/2Qia+
-         lyAIsYRLp4PQW/Zf1ZvsgOtRpAs0dRpCANylKurLPPnLpGJGuHpvC/XTuBcG4u1472XL
-         zGhTiGJ1FuOiLFo7mhziS309xsRwEXJRReMMYgs3lYyXT52kSmFryyKQaLiTGhwGp/4c
-         KpOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUnlcc+BbUVdho1yt3oZfpOsL9R9mwEXVkIzDdg9yXq17IvVTHEAxCGpfdPIesnrq+7aY8bjHvLVQLaNyEOrArN3NRRSMA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLhWEJwweRFahxHRV5Sq72QB18HBlY1Q5Qk9JmfSR76Uf4F34f
-	6+u1PEG/cXzWW5WEXhO6gZAMYTtxFN4IrMA0viOtJOPHh5NrtMB3A/PPMTITXPhjQIg=
-X-Gm-Gg: AZuq6aLRC4tHNQnLKQHlJ6Nk5PpvkFnuoiko8SCkwbzh1z3Cksfjrkye/+bx11decvk
-	p3bqOGddPgy8LcleVz7CmiP9ms3SdWB47NGJONVQ6rjOBAWLLfsPnO2nCTpDWgkdjICYQB5U2xD
-	CBheOLkxkv1ppJ5mBGLLnJKIW0yAgoEFtSoPDIRthLA5qUEmFhzfeI4RkRaRK8yfMN2rNqhzxb0
-	4YuFLkOdMqImnzIMQ4WChlQRsQzP9G06oxV8tlUyaMlOnpcsCxshQChs+lehk9CKjcWuDvQA3wi
-	27aynnPhDIt5HjvxToplrn1ADVKO9esOH0QVJ/cuvm5xIxAiJCOnVFo+O5NNhZyiCHQWJnSNla7
-	qtL/iI5Hz4+kE9MVB08PvUkPN7CU77n5VPmUt9ceitNV20HV200DMpoI4RbjxO86sMUdXgAo=
-X-Received: by 2002:a05:6820:810c:b0:662:c553:f760 with SMTP id 006d021491bc7-662cab51b60mr128930eaf.45.1769100581297;
-        Thu, 22 Jan 2026 08:49:41 -0800 (PST)
-Received: from [127.0.1.1] ([2a09:bac5:947d:4e6::7d:66])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4044baf613dsm13529519fac.3.2026.01.22.08.49.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jan 2026 08:49:40 -0800 (PST)
-From: Frederick Lawler <fred@cloudflare.com>
-Date: Thu, 22 Jan 2026 10:49:31 -0600
-Subject: [PATCH v3] ima: Fallback to ctime check for FS without
- kstat.change_cookie
+	s=arc-20240116; t=1769101589; c=relaxed/simple;
+	bh=5klaN33jvrpNPqnnd22ydqrvw5+FbN9YiE8xchVg2ao=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HH1v8msHfCx18fCUsPK2/DUXsYR4qc0Y4mqsjvrenOD8rshrH485tlcTzz8nfpKSaMaFjK+rGThDevmEudaH4Yci8GNTTe+lOSLI7wwyCmGv1vS37c8grnAsAJuTxrAUqTk62ojQKx61CCCMb/3XSaMR158eEcUT6n4jp8tLGiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=XD1JB33f; arc=none smtp.client-ip=66.163.190.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1769101573; bh=cruiEawMGiI72EZiu+kzD88U6Dmgh0lmjUBecItvmAo=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=XD1JB33fRRmYG9blU6YzVvfpvPNWhcMdY5lvyp+WZUlxoO++Xn+GCkYi/8pqM6lseP8imLRL/ULN4NCq978t64KlQ2qb/xWDjybf/iyS+RdmIPtRlU/tatzxNS2JTLPiXKgcuDBuKGbsw8tjfDKa9I7UoK7WxUaS4CcjPMvo+FSgNRm6yAxPbUfh34mNAAqVt1l2ONHCrvWCo8FwI9Lf30uw4SjSRXnqAAGI4nJAiK9ymnIpAIcqWriWb34TwMcBa8Bjmkl/7i7TKCPio5h7uu1Q+kyhVHJoyawOhJfZClSunh45AOVaGlZPEQUKbGMRkgDcLlX7eSvPZfcG96bjHg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1769101573; bh=ZWx2GuG/rya2rBWA2csfF9YRm/GidOpsG4Z3SxGqkKp=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=doISO5Vaj2BfDf5op6QsvVmt59GupprTgTyKZ2vDPG3S3mDDcUbzeRszf/jHo7XT4kAs4OhDiXlO6KeOolrYEuSEgO3CtxkrDgSYW5/JbX5f++IJRWfwkwGfJm9S2hJtaxviZt7eG/l0sC2rsjHoAHaCVVTMP8abMbZfpKQuFSrPKtWKzwoVjzYNNnxhp5Fxi26or/3iEbLcSzBBTPPhTztb2h5+EP7PDXmzHtE+S6ZahqINwrWl+d5p9x0N8R2YSD9g0C2IzIZpw+2Zvdyi4RCIKLAV5Xdugvf+a8yYBbmV4GCNV/XOHQvS+SNIZI9XfxMSvFNqVVxEUhDCVSmCMw==
+X-YMail-OSG: cSnibPIVM1lDUKJEU28e7RHQRAxG5BsjmQOBfLexDg4p0URZVmJNodbrpto_xdX
+ n.lwTH67YzBrwPkDdGf7KkVbvSlGNiRbfVp7DLtDOC.vGY5Nd1hdnvQM_bGwXQhPO9O64moznDVd
+ z4g0fWHDZbRtr__MCDnTUY7WGqJFKhcpKYfI7s.u9hdUJ6n2hKpjsOfiyibY2i3nNFHKUTRvQWy1
+ d4C4B0NdJMBhse_5qtZcu04myxAi8W8n0XQu2OQR5Z2PT57UOV2hzK.wdwxVdOfYcgbM2hmCrUxt
+ KrSYw6K1NSeeaxO9ftJ1SQ_NPG11GFWKtVbW11T9Dut7dMayi4578htbyd2xUk3y2nxXPyPz5JOo
+ AYY_5YQAicooXPATTpndCb8J_A4g1ndlAzNnMGoeB7GLzrwDOsnU5dCTJmDU6M4Gs7nsutBpXHfd
+ tIb9GdMMhBQ6ysgcxaOyop9.7OgUOnaby2uwg94TDq1XABGQ8DwdDhBDIMZfwPHpbdSA3GVrQoFb
+ JxR4Rx_04mrQlGUVq5nNlK8kVu9i1GzNEKda8jTLoqPoA.GMvPa35JSODgmhRr.x2IOk5E4pY._3
+ XBgz1xQYaq.nkcEVwu.S8n.H9xmVhPsbB5pQiz3pTXqtqR1zPiqGx_k.ey9CxNul3wswse5dF934
+ fHF6DrWe6q1lXyt.ne6D2C53wVzhKOu3cwkfGN85UISBf6VD_VMAOpnE9rqPm1JPd6hWhprgvvcn
+ toMaTIL_vAJa_u3jpEPr95QwrNQYR.Qhex3LiqNXirEaI0iMxIz.BaAOD5QlIpA.iVPxiaI0yj._
+ CQf2OL4RNJlxww2pwDklfK.ycumNUJxJ2yj.ahq0uIozr5FwHW2DUTgKCfqdqcPh5OVXYTmkfFfy
+ 86Hvh.F0dkcjJHf8aD3F5M9TVu7Z9tKUQWpGWjmrtlWsUHgqbR3vxRgBSFAIhS.iNaP1WKj2qGqf
+ G3SLeo836P18AV02fchfaR9zSVCULrnAEi3HV0k7C0Puc3xUW5.5nrl9.OLOxrPJlNovdj_bblno
+ hlGRV9JXk5Occ6Ld.nJMFlWgoqfRD4ZvKdqHl4WL2lGWeW5rw0FTGhVvIkDakMZXBFBz62GHFTaA
+ 1wAfYyGVVInNMig2kG4b35FAqs1kdF_KlALnslFN_nVcdp9Qg5mF2J25OGdDasrMQhW9tDO4b7XO
+ 024LVOTayv6UmUzYLrn2OKeEmOloG11KeuqraoTNjNMEdmFbD5QEO1muEN6TPQVkDaUVKiZDQVVE
+ iHO4XiIVdOlMBfTTvjtx6WY.NPWtyyfI0iiKcpSJehjr3g0u.X3ENqSt1iCtLkfbajQlEs2s76ok
+ kdsblRde0X5Kk9sLsc4GrGBvCW11ZTJxGfPWk97ydELKF0kDD2LJ4XWnwuU4TZNfQEVnl9umEFIJ
+ _A5mjQOcqh1biDeYnEV_H_qmzacpUoQg1E9mR1uCkyakShuFjNLSqAd_m2Br1zfHtDOG6F4TnBTN
+ XuaM9GjC_UQmSzLp74nTXoygE9jI4YGMU82gzET.onzarPBPEV4l1bmbZvgkTMl6ogsCii8Lq2Mq
+ 2xUUomO45JgivQ7PkzgHAmnNWCFFFeVKyIgIAl8xVrxRuyIyv51VaclqKEtxgC0FqbbgKqpQu.au
+ csM_YDWl23pyMXEHYmDotuSzeZtPDYW3ZS.POplXcHxLIp4XHw7.XAMYc4jh2COBSJBNPd_6J.ye
+ C36S21YV3zOiMthbsWOZjtNYh._HwAW1iQh3p0n.0nUPcEzs2k_6qH8XMwL9Kgbzt.0i3jJ2DHOw
+ 7dIWy0O65u6Fg6SWRJY_cjmZDFMYFmIDwjkWMCmdw89ibh8QdtFxUeZSCXVkxKaN5hJnhWaEIH8w
+ tsXXf5f3kOF6rUbzUqP6QM9JvQT1ZZh8P0XasL02msoGSps3CZEnXnDT7yMmrZg4PXLa2XNAB7Tu
+ SUuyD_j9fGBNTqigVZc4RtosfSQ4LqL9yEk9q7YiZ9ih.ncdMGAOKGmjYTkrON4a10lI7swalFi6
+ LmsjxQ6AZjLVhPPD4JNFoaULXNIfktbMTD.gSo4eWYF8SUL3YRptumOgpsLDl3kTZlXWb7AsIE9l
+ Py2SlPLt3oWUjG_S3fRpoyleTOlYIc1wS4GT8myKwAKjnXpWSoQJ3iVaOWrGFVwgt9mlDlPrNmpU
+ 4_IsUb79F.JyYVS8Z7Zl.bIwSUcArDffNllQ5N9.Ce8j0oM7nyRcIohs9Bd_WFHSacA2qQdsRNaF
+ eDN.FzNBCVWDK28fmQLUpacUjjEXny19rBRLnE.HB_70f4CCriOOzDxBMbzANmhZiScWVLaG5Kog
+ C.Xq3y5l85Zq1HT9VPZWp
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 6e10243e-2d15-4bd4-8a56-3f2d1d095c01
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.ne1.yahoo.com with HTTP; Thu, 22 Jan 2026 17:06:13 +0000
+Received: by hermes--production-gq1-86969b76cd-nvz7p (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 35ea2cfb8615b76b3184ded328eb03ca;
+          Thu, 22 Jan 2026 16:56:02 +0000 (UTC)
+Message-ID: <94bf50cb-cea7-48c1-9f88-073c969eb211@schaufler-ca.com>
+Date: Thu, 22 Jan 2026 08:56:01 -0800
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260122-xfs-ima-fixup-v3-1-20335a8aa836@cloudflare.com>
-X-B4-Tracking: v=1; b=H4sIABpVcmkC/2WOPQ+CMBRF/4rpbE3fqxZw0rg4OrgZh1JaacJXW
- iEYwn+3YFxgvO/mnPsG4rWz2pPjZiBOd9bbugqBbzdE5bJ6aWqzkAkyPAAC0t54aktJje3bhiY
- cophJgQoVCUzjdChm34PczvfLlTzDObf+XbvPvNLBXP6EmCyEHVCgQkYQqYQnJlInVdRtZgrp9
- E7V5TQSUMFg9cuMxhnwVDAGHHCJTp90+F8PCmRLBQaF4Ry1zOKU7flKMY7jFwEy7zA0AQAA
-X-Change-ID: 20251212-xfs-ima-fixup-931780a62c2c
-To: Mimi Zohar <zohar@linux.ibm.com>, 
- Roberto Sassu <roberto.sassu@huawei.com>, 
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
- Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, 
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
- "Darrick J. Wong" <djwong@kernel.org>, 
- Christian Brauner <brauner@kernel.org>, Josef Bacik <josef@toxicpanda.com>, 
- Jeff Layton <jlayton@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org, 
- linux-security-module@vger.kernel.org, kernel-team@cloudflare.com, 
- Frederick Lawler <fred@cloudflare.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10588; i=fred@cloudflare.com;
- h=from:subject:message-id; bh=qFVLX/KqoD5gSeJiYxumQ5g1tV4GWZs+Lelo/ycRe1Q=;
- b=owEBbQKS/ZANAwAKAasltHYDktNtAcsmYgBpclUjH0aacU3Z/gjiQjm/DWMFgYVlEeViax+To
- 0fo5x3fvzWJAjMEAAEKAB0WIQTLNBqMVmu1PHvjOe2rJbR2A5LTbQUCaXJVIwAKCRCrJbR2A5LT
- bc+7EAC/TgO0ycjkyKNFk2pevZa2Of30kmiF4g1oR1302TbVlg4W2tfNFivOG0XWweHJNAlfCZb
- Igm8+KYprEcCpLf9LOQoYo0dKsYaIsLXCiG0gE24wVaGTNMN1EmVqFrjBhJgS9D7VihhSS1+jww
- Eh7WozPWSuSsqyl7TOq4sV+QPHSm9STP+6r5bAby0OXVzaytzjs8asswvDghvGEbpAx2ITrkLYD
- Vwa+quSjNPDw3BL09u9sV53nWwcEOn1Gbq0uIcCw2ei+9GBji4HrWxIcMfwX9aKeK8nk13rm+0r
- uFUZhI9e8fls7NVJhtxS+8JU32/zBBK0G476TpEQNSRM/2CF+UX1gphVGdLoA14XGblVEfplzaO
- He0/goCxIsAS7OuVs7aSddlLD00hb+gpuFC/GJAUWcz8Z5z1Y8r924gMETL97zLYPNqDqS7w8Zr
- RQ4+YpsplBLhFxdpbA2rvOA8gqHAanluvp8aUO6XDh8a3uPW3EyTYKf6tRH33WDhm8//S56MUEi
- /FK/HrtXH+whtd5T6ReE65EE0jQk9AwqJIk5kESkmhhA5uYCdBV69UzieUjDDLmW2Zj+ybCdIra
- OytGR5WHg6JN35V4aS2jInIUg+aZb1yPDAgXCKe0CQUROzzt/ngfS1LrMjkK5kuM1zgQ9alXjOd
- 9su+Jkt+EkNqYqw==
-X-Developer-Key: i=fred@cloudflare.com; a=openpgp;
- fpr=CB341A8C566BB53C7BE339EDAB25B4760392D36D
+User-Agent: Mozilla Thunderbird
+Subject: Re: [LSF/MM/BPF TOPIC] Refactor LSM hooks for VFS mount operations
+To: Song Liu <song@kernel.org>, Paul Moore <paul@paul-moore.com>
+Cc: bpf <bpf@vger.kernel.org>, Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
+ lsf-pc@lists.linux-foundation.org,
+ linux-security-module <linux-security-module@vger.kernel.org>,
+ Christian Brauner <brauner@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <CAPhsuW4=heDwYEkmRzSnLHDdW=da71qDd1KqUj9sYUOT5uOx3w@mail.gmail.com>
+ <CAHC9VhRU_vtN4oXHVuT4Tt=WFP=4FrKc=i8t=xDz+bamUG7r6g@mail.gmail.com>
+ <CAPhsuW6vCrN=k6xEuPf+tJr6ikH_RwfyaU_Q9DvGg2r2U9y+UA@mail.gmail.com>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <CAPhsuW6vCrN=k6xEuPf+tJr6ikH_RwfyaU_Q9DvGg2r2U9y+UA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Mailer: WebService/1.1.24987 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-7.66 / 15.00];
-	WHITELIST_DMARC(-7.00)[cloudflare.com:D:+];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[cloudflare.com,reject];
-	R_DKIM_ALLOW(-0.20)[cloudflare.com:s=google09082023];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[yahoo.com:s=s2048];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14153-lists,linux-security-module=lfdr.de];
-	FREEMAIL_TO(0.00)[linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,kernel.org,toxicpanda.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[cloudflare.com:+];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[fred@cloudflare.com,linux-security-module@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-security-module];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[yahoo.com:+];
+	TAGGED_FROM(0.00)[bounces-14155-lists,linux-security-module=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	DMARC_NA(0.00)[schaufler-ca.com: no valid DMARC record];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,cloudflare.com:email,cloudflare.com:dkim,cloudflare.com:mid]
-X-Rspamd-Queue-Id: 935AF6B1C4
+	TAGGED_RCPT(0.00)[linux-security-module];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[casey@schaufler-ca.com,linux-security-module@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.998];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[paul-moore.com:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,schaufler-ca.com:mid]
+X-Rspamd-Queue-Id: 1DD226BFDF
 X-Rspamd-Action: no action
 
-Commit 1cf7e834a6fb ("xfs: switch to multigrain timestamps")
-introduced a means to track change detection for an inode
-via ctime updates, opposed to setting kstat.change_cookie to
-an i_version when calling into xfs_vn_getattr().
+On 1/21/2026 7:00 PM, Song Liu wrote:
+> Hi Paul,
+>
+> On Wed, Jan 21, 2026 at 4:14 PM Paul Moore <paul@paul-moore.com> wrote:
+>> On Wed, Jan 21, 2026 at 4:18 PM Song Liu <song@kernel.org> wrote:
+>>> Current LSM hooks do not have good coverage for VFS mount operations.
+>>> Specifically, there are the following issues (and maybe more..):
+>> I don't recall LSM folks normally being invited to LSFMMBPF so it
+>> seems like this would be a poor forum to discuss LSM hooks.
+> Agreed this might not be the best forum to discuss LSM hooks.
+> However, I am not aware of a better forum for in person discussions.
+>
+> AFAICT, in-tree LSMs have straightforward logics around mount
+> monitoring. As long as we get these logic translated properly, I
+> don't expect much controversy with in-tree LSMs.
 
-This introduced a regression for IMA such that an action
-performed on a LOWER inode on a stacked file systems always
-requires a re-evaluation if the LOWER file system does not
-leverage kstat.change_cookie to track inode i_version or lacks
-i_version support all together.
+The existing mount hooks can't handle multiple LSMs that provide
+mount options. Fixing this has proven non-trivial. Changes to LSM
+hooks have to be discussed on the LSM email list, regardless of how
+little impact it seems they might have.
 
-In the case of stacking XFS on XFS, an action on either the LOWER or UPPER
-will require re-evaluation. Stacking TMPFS on XFS for instance, once the
-inode is UPPER is mutated, IMA resumes normal behavior because TMPFS
-leverages generic_fillattr() to update the change cookie.
-
-This is because IMA caches kstat.change_cookie to compare against an
-inode's i_version directly in integrity_inode_attrs_changed(), and thus
-could be out of date depending on how file systems set
-kstat.change_cookie.
-
-To address this, require integrity_inode_attrs_changed() to query
-vfs_getattr_nosec() to compare the cached version against
-kstat.change_cookie directly. This ensures that when updates occur,
-we're accessing the same changed inode version on changes, and fallback
-to compare against kstat.ctime when STATX_CHANGE_COOKIE is missing from
-result mask.
-
-Lastly, because EVM still relies on querying and caching a inode's
-i_version directly, the integrity_inode_attrs_changed() falls back to the
-original inode.i_version != cached comparison.
-
-Link: https://lore.kernel.org/all/aTspr4_h9IU4EyrR@CMGLRV3
-Suggested-by: Jeff Layton <jlayton@kernel.org>
-Signed-off-by: Frederick Lawler <fred@cloudflare.com>
----
-We uncovered a case in kernels >= 6.13 where XFS is no longer updating
-struct kstat.change_cookie on i_op getattr() access calls. Instead, XFS is
-using multigrain ctime (as well as other file systems) for
-change detection in commit 1cf7e834a6fb ("xfs: switch to
-multigrain timestamps").
-
-Because file systems may implement i_version as they see fit, IMA
-caching may be behind as well as file systems that don't support/export
-i_version. Thus we're proposing to compare against the kstat.change_cookie
-directly to the cached version, and fall back to a ctime guard when
-that's not updated.
-
-EVM is largely left alone since there's no trivial way to query a file
-directly in the LSM call paths to obtain kstat.change_cookie &
-kstat.ctime to cache. Thus retains accessing i_version directly.
-
-Regression tests will be added to the Linux Test Project instead of
-selftest to help catch future file system changes that may impact
-future evaluation of IMA.
-
-I'd like this to be backported to at least 6.18 if possible.
-
-Below is a simplified test that demonstrates the issue:
-
-_fragment.config_
-CONFIG_XFS_FS=y
-CONFIG_OVERLAY_FS=y
-CONFIG_IMA=y
-CONFIG_IMA_WRITE_POLICY=y
-CONFIG_IMA_READ_POLICY=y
-
-_./test.sh_
-
-IMA_POLICY="/sys/kernel/security/ima/policy"
-TEST_BIN="/bin/date"
-MNT_BASE="/tmp/ima_test_root"
-
-mkdir -p "$MNT_BASE"
-mount -t tmpfs tmpfs "$MNT_BASE"
-mkdir -p "$MNT_BASE"/{xfs_disk,upper,work,ovl}
-
-dd if=/dev/zero of="$MNT_BASE/xfs.img" bs=1M count=300
-mkfs.xfs -q "$MNT_BASE/xfs.img"
-mount "$MNT_BASE/xfs.img" "$MNT_BASE/xfs_disk"
-cp "$TEST_BIN" "$MNT_BASE/xfs_disk/test_prog"
-
-mount -t overlay overlay -o \
-"lowerdir=$MNT_BASE/xfs_disk,upperdir=$MNT_BASE/upper,workdir=$MNT_BASE/work" \
-"$MNT_BASE/ovl"
-
-echo "audit func=BPRM_CHECK uid=$(id -u nobody)" > "$IMA_POLICY"
-
-target_prog="$MNT_BASE/ovl/test_prog"
-setpriv --reuid nobody "$target_prog"
-setpriv --reuid nobody "$target_prog"
-setpriv --reuid nobody "$target_prog"
-
-audit_count=$(dmesg | grep -c "file=\"$target_prog\"")
-
-if [[ "$audit_count" -eq 1 ]]; then
-        echo "PASS: Found exactly 1 audit event."
-else
-        echo "FAIL: Expected 1 audit event, but found $audit_count."
-        exit 1
-fi
----
-Changes in v3:
-- Prefer timespec64_to_ns() to leverage attr.version. [Roberto]
-- s/TPMFS/TMPFS/ in description.
-- Link to v2: https://lore.kernel.org/r/20260120-xfs-ima-fixup-v2-1-f332ead8b043@cloudflare.com
-
-Changes in v2:
-- Updated commit description + message to clarify the problem.
-- compare struct timespec64 to avoid collision possibility [Roberto].
-- Don't check inode_attr_changed() in ima_check_last_writer()
-- Link to v1: https://lore.kernel.org/r/20260112-xfs-ima-fixup-v1-1-8d13b6001312@cloudflare.com
-
-Changes since RFC:
-- Remove calls to I_IS_VERSION()
-- Function documentation/comments
-- Abide IMA/EVM change detection fallback invariants
-- Combined ctime guard into version for attributes struct
-- Link to RFC: https://lore.kernel.org/r/20251229-xfs-ima-fixup-v1-1-6a717c939f7c@cloudflare.com
----
- include/linux/integrity.h         | 35 +++++++++++++++++++++++++++++++----
- security/integrity/evm/evm_main.c |  5 ++---
- security/integrity/ima/ima_api.c  | 11 ++++++++---
- security/integrity/ima/ima_main.c | 17 ++++++++++-------
- 4 files changed, 51 insertions(+), 17 deletions(-)
-
-diff --git a/include/linux/integrity.h b/include/linux/integrity.h
-index f5842372359be5341b6870a43b92e695e8fc78af..034f0a1ed48ca8c19c764e302bbfc555dad92cde 100644
---- a/include/linux/integrity.h
-+++ b/include/linux/integrity.h
-@@ -9,6 +9,8 @@
- 
- #include <linux/fs.h>
- #include <linux/iversion.h>
-+#include <linux/kernel.h>
-+#include <linux/time64.h>
- 
- enum integrity_status {
- 	INTEGRITY_PASS = 0,
-@@ -51,14 +53,39 @@ integrity_inode_attrs_store(struct integrity_inode_attributes *attrs,
- 
- /*
-  * On stacked filesystems detect whether the inode or its content has changed.
-+ *
-+ * Must be called in process context.
-  */
- static inline bool
- integrity_inode_attrs_changed(const struct integrity_inode_attributes *attrs,
--			      const struct inode *inode)
-+			      struct file *file, struct inode *inode)
- {
--	return (inode->i_sb->s_dev != attrs->dev ||
--		inode->i_ino != attrs->ino ||
--		!inode_eq_iversion(inode, attrs->version));
-+	struct kstat stat;
-+
-+	might_sleep();
-+
-+	if (inode->i_sb->s_dev != attrs->dev || inode->i_ino != attrs->ino)
-+		return true;
-+
-+	/*
-+	 * EVM currently relies on backing inode i_version. While IS_I_VERSION
-+	 * is not a good indicator of i_version support, this still retains
-+	 * the logic such that a re-evaluation should still occur for EVM, and
-+	 * only for IMA if vfs_getattr_nosec() fails.
-+	 */
-+	if (!file || vfs_getattr_nosec(&file->f_path, &stat,
-+				       STATX_CHANGE_COOKIE | STATX_CTIME,
-+				       AT_STATX_SYNC_AS_STAT))
-+		return !IS_I_VERSION(inode) ||
-+			!inode_eq_iversion(inode, attrs->version);
-+
-+	if (stat.result_mask & STATX_CHANGE_COOKIE)
-+		return stat.change_cookie != attrs->version;
-+
-+	if (stat.result_mask & STATX_CTIME)
-+		return timespec64_to_ns(&stat.ctime) != (s64)attrs->version;
-+
-+	return true;
- }
- 
- 
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index 73d500a375cb37a54f295b0e1e93fd6e5d9ecddc..6a4e0e246005246d5700b1db590c1759242b9cb6 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -752,9 +752,8 @@ bool evm_metadata_changed(struct inode *inode, struct inode *metadata_inode)
- 	bool ret = false;
- 
- 	if (iint) {
--		ret = (!IS_I_VERSION(metadata_inode) ||
--		       integrity_inode_attrs_changed(&iint->metadata_inode,
--						     metadata_inode));
-+		ret = integrity_inode_attrs_changed(&iint->metadata_inode,
-+						    NULL, metadata_inode);
- 		if (ret)
- 			iint->evm_status = INTEGRITY_UNKNOWN;
- 	}
-diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-index c35ea613c9f8d404ba4886e3b736c3bab29d1668..e47d6281febc15a0ac1bd2ea1d28fea4d0cd5c58 100644
---- a/security/integrity/ima/ima_api.c
-+++ b/security/integrity/ima/ima_api.c
-@@ -272,10 +272,15 @@ int ima_collect_measurement(struct ima_iint_cache *iint, struct file *file,
- 	 * to an initial measurement/appraisal/audit, but was modified to
- 	 * assume the file changed.
- 	 */
--	result = vfs_getattr_nosec(&file->f_path, &stat, STATX_CHANGE_COOKIE,
-+	result = vfs_getattr_nosec(&file->f_path, &stat,
-+				   STATX_CHANGE_COOKIE | STATX_CTIME,
- 				   AT_STATX_SYNC_AS_STAT);
--	if (!result && (stat.result_mask & STATX_CHANGE_COOKIE))
--		i_version = stat.change_cookie;
-+	if (!result) {
-+		if (stat.result_mask & STATX_CHANGE_COOKIE)
-+			i_version = stat.change_cookie;
-+		else if (stat.result_mask & STATX_CTIME)
-+			i_version = timespec64_to_ns(&stat.ctime);
-+	}
- 	hash.hdr.algo = algo;
- 	hash.hdr.length = hash_digest_size[algo];
- 
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 5770cf691912aa912fc65280c59f5baac35dd725..8ac42b03740eb93bf23b15cb9039af6cd32aa999 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -28,6 +28,7 @@
- #include <linux/iversion.h>
- #include <linux/evm.h>
- #include <linux/crash_dump.h>
-+#include <linux/time64.h>
- 
- #include "ima.h"
- 
-@@ -199,10 +200,13 @@ static void ima_check_last_writer(struct ima_iint_cache *iint,
- 					    &iint->atomic_flags);
- 		if ((iint->flags & IMA_NEW_FILE) ||
- 		    vfs_getattr_nosec(&file->f_path, &stat,
--				      STATX_CHANGE_COOKIE,
--				      AT_STATX_SYNC_AS_STAT) ||
--		    !(stat.result_mask & STATX_CHANGE_COOKIE) ||
--		    stat.change_cookie != iint->real_inode.version) {
-+			    STATX_CHANGE_COOKIE | STATX_CTIME,
-+			    AT_STATX_SYNC_AS_STAT) ||
-+		    ((stat.result_mask & STATX_CHANGE_COOKIE) ?
-+		      stat.change_cookie != iint->real_inode.version :
-+		      (!(stat.result_mask & STATX_CTIME) ||
-+			timespec64_to_ns(&stat.ctime) !=
-+			(s64)iint->real_inode.version))) {
- 			iint->flags &= ~(IMA_DONE_MASK | IMA_NEW_FILE);
- 			iint->measured_pcrs = 0;
- 			if (update)
-@@ -328,9 +332,8 @@ static int process_measurement(struct file *file, const struct cred *cred,
- 	real_inode = d_real_inode(file_dentry(file));
- 	if (real_inode != inode &&
- 	    (action & IMA_DO_MASK) && (iint->flags & IMA_DONE_MASK)) {
--		if (!IS_I_VERSION(real_inode) ||
--		    integrity_inode_attrs_changed(&iint->real_inode,
--						  real_inode)) {
-+		if (integrity_inode_attrs_changed(&iint->real_inode,
-+						  file, real_inode)) {
- 			iint->flags &= ~IMA_DONE_MASK;
- 			iint->measured_pcrs = 0;
- 		}
-
----
-base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
-change-id: 20251212-xfs-ima-fixup-931780a62c2c
-
-Best regards,
--- 
-Frederick Lawler <fred@cloudflare.com>
-
+>
+>>> PS: I am not sure whether other folks are already working on it. I will prepare
+>>> some RFC patches before the conference if I don't see other proposals.
+>> FWIW, I'm not aware of anyone currently working on revising the mount
+>> hooks, but it's possible.  Posting a patchset, even an early RFC
+>> draft, is always a good way to find out who might be working in the
+>> same space :)
+>>
+>> Posting to the mailing list also has the advantage of reaching
+>> everyone who might be interested, whereas discussing this at a
+>> conference, especially one that is invite-only, is limiting.
+> I expect there will be RFCs posted to the mailing list before the
+> conference. We will incorporate feedbacks from the mailing list
+> to make the discussion more productive at the conference. It is
+> totally possible that some patches get accepted before the
+> conference, so that we can simply celebrate at the conference. :)
+>
+> Thanks,
+> Song
+>
 
