@@ -1,730 +1,428 @@
-Return-Path: <linux-security-module+bounces-14143-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14153-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UD7bNuVXcmkpiwAAu9opvQ
-	(envelope-from <linux-security-module+bounces-14143-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Thu, 22 Jan 2026 18:01:25 +0100
+	id IOMrDYlccmn5iwAAu9opvQ
+	(envelope-from <linux-security-module+bounces-14153-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Thu, 22 Jan 2026 18:21:13 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 866926A9A5
-	for <lists+linux-security-module@lfdr.de>; Thu, 22 Jan 2026 18:01:25 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 935AF6B1C4
+	for <lists+linux-security-module@lfdr.de>; Thu, 22 Jan 2026 18:21:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 66B1430D312E
-	for <lists+linux-security-module@lfdr.de>; Thu, 22 Jan 2026 16:23:53 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 69A863000523
+	for <lists+linux-security-module@lfdr.de>; Thu, 22 Jan 2026 17:10:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93AF237755F;
-	Thu, 22 Jan 2026 16:07:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EBFB347BBD;
+	Thu, 22 Jan 2026 16:49:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="pCMplYrl";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="pK4qUMIZ"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="FNAwTtzU"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A9B4F7977
-	for <linux-security-module@vger.kernel.org>; Thu, 22 Jan 2026 16:07:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769098075; cv=fail; b=IzmIeZVshN+GOL/zoGvLagkxoKhiWQaMXOHHWCV4Yh9I/QRqFnx1AMPDGPE1xFvoZJ0knehilyjC3m/jSjKUXKqgwQm7cyHryM/uOJLOz4FBeA4mbqs3wnytncIwjDwnrSNP9EmfmpEdnsaAMK9A3j2IEEBi0x5GzgGg6N2FfwQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769098075; c=relaxed/simple;
-	bh=Ase7FD2pAYn1eqytPZmYuZ2B1AJkQsA2RuFJV0QGU9M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=kKml2pfDY6r1VAheig+3hyJCwJkG2xX/VrGWUB4meq8GOQzfR8o3Hio5NjL1lOpLQm6jWL4aS3o7tdGnNACv2GoLd/q+FtF+RG1XLj8rsEKHB51+5lL0wmxUs7KWZ2wCjEgTtpnoNk+/Z7/87RcM8wJLGFJmdSjyVnvGkedNkz8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=pCMplYrl; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=pK4qUMIZ; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60MDgNYn197827;
-	Thu, 22 Jan 2026 16:07:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=lTIYwG7puHxWt6xS68y63LcxuJ/IkQR1N2HKXnahsec=; b=
-	pCMplYrlb71h9GoAmNJtWGO2WrQaF/0eg0hCYAmyGF5beGPtPb4lyC9zbpv7u2ND
-	AtPATuuZRZXIOODRmwI7v0dpG9w1nj8b7+eLXmZ50wgix8+tWLjsvfESpiLOsmGO
-	0JxRDs6P3ldf/VXdgkpOExD2rX2O5osWuvAwsphhM9uMDTEu568KD8YSqnbGr6SC
-	u7y77dqcOcHNQWQ4LRivNon/tQONNutuVBvzUlpBl4IO1WgzqC4xrtrrShLp7FwB
-	NQWVbFpbGy0s1xujSCl00/Hi+9bDcqmZToEfp0IrOVLGGvx9BPS35CbyN6UaHyqC
-	Igs+o5Gu0OaNQvFkpAgDng==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4br2ypyvmw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 22 Jan 2026 16:07:03 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 60MG6xCX032257;
-	Thu, 22 Jan 2026 16:07:02 GMT
-Received: from bl0pr03cu003.outbound.protection.outlook.com (mail-eastusazon11012013.outbound.protection.outlook.com [52.101.53.13])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4br0vgusre-9
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 22 Jan 2026 16:07:02 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=OlF/cOR62RJ+C+t4OfbfCot4BYxN5ZiQ0qtIkJDDwgwtHGxboAVwDde37S+/Kazp/GeZjN73TdYbCPotmpx6Ld50fHmaDUvqjdYtdMufCHhp12Ul2RDzl0a7WcCN9ubVnQdDXPTIi98xD8b/FmNvvpTaN7V6ZuTPLIXcI7t4x6M8RPtRfmOHcj2mG0D/D4YhIMT6wFdSvSlqnF8Zb4yGUMGdh1ZFfRemPD72v6Gx+1wWYsc267jL36BU0TuJEnpdfeXbYv58e7HjThZncvFCRx9o4sJVaPq1qv40wyv7b6JKnRRbK6RdHauO2ZxXn7iTPXzjoNBHI34sd/AnrtHCwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lTIYwG7puHxWt6xS68y63LcxuJ/IkQR1N2HKXnahsec=;
- b=IkC4O5O4DeCmx0KJC89gUGztyoVECfx/90p7yjHbxJSNl++gGWQ+XT3EKMMuoPj0ImLkcpblGF9oY4eS3Aq7PTkMRFKfm1YQTrbQcf/raeEHyMjjgiKMAVBT/PU+VSWT/wbG8Uxf+ONOoDCz/KFarNrSlxUDDeMjGwPWOykf7VKr8mPMdppLms4bCZnADy4SDV8L/eypQ1EX5NBK9fhiJu1LC9sOJib/aEcbi7spJ+27ISN07d+zcPeQC5R4NknTK5105Lbf8AYx9kvTTQMvhwltPz8EoMAD9vwXopgbkYsonltpCpQTJcPveUblRthMI5FKKBwWv5/PGhUZc959mg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA65350A02
+	for <linux-security-module@vger.kernel.org>; Thu, 22 Jan 2026 16:49:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769100589; cv=none; b=p+fwWiW/X2KteCh57qTclYKnYNuuoo2Pgm8gHph0OJRWB5SiN6Q/+y+bbFwv0KerM/S/Xom/ld00/6xC2PaIY2HM5pIUeWzGtI54NeAgPY9SwuJ3EZaj+zP0EQqL3IFlVqwQAd3hKvkxBfpRu2fjD+qzCFXongOCtFmwqD9ODy4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769100589; c=relaxed/simple;
+	bh=qFVLX/KqoD5gSeJiYxumQ5g1tV4GWZs+Lelo/ycRe1Q=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ZMfOuIXNF+4XB0xw1TIJh3uxCBEzJZmpHdclnelLkNpYfS/okmAIHGy/WNkDdVblqwUuwPIoIMIc4/yMc/qea0N54UYMyNHBUtge+JlaCMi0OT9Oa7sUIjygWo/jcTO8Pw3z6XvybMffOdGMG0nz3JspWNyi9rHx2RjX1Fi/tNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=FNAwTtzU; arc=none smtp.client-ip=209.85.161.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-6610c5b014cso490904eaf.0
+        for <linux-security-module@vger.kernel.org>; Thu, 22 Jan 2026 08:49:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lTIYwG7puHxWt6xS68y63LcxuJ/IkQR1N2HKXnahsec=;
- b=pK4qUMIZWr0GPFD1V7w7/QXa9P4naLXT2quwnRc+wRxHqDLiYj71UR/Ka2NSQUf5YIhNtl3+6DV4KAscXQcorasBs9mBEPll95reK8UVDAyNxgb4aRoCznISQhNCbAZDN4IIo5C8pcle2rz6ET0/jz02OWOg5XXjgfco7QyXtYo=
-Received: from BL4PR10MB8229.namprd10.prod.outlook.com (2603:10b6:208:4e6::14)
- by BL3PR10MB6065.namprd10.prod.outlook.com (2603:10b6:208:3b4::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.9; Thu, 22 Jan
- 2026 16:06:51 +0000
-Received: from BL4PR10MB8229.namprd10.prod.outlook.com
- ([fe80::552b:16d2:af:c582]) by BL4PR10MB8229.namprd10.prod.outlook.com
- ([fe80::552b:16d2:af:c582%6]) with mapi id 15.20.9520.005; Thu, 22 Jan 2026
- 16:06:51 +0000
-From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tursulin@ursulin.net>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Huang Rui <ray.huang@amd.com>, Matthew Auld <matthew.auld@intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-        Benjamin LaHaise <bcrl@kvack.org>, Gao Xiang <xiang@kernel.org>,
-        Chao Yu <chao@kernel.org>, Yue Hu <zbestahu@gmail.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>,
-        Sandeep Dhavale <dhavale@google.com>,
-        Hongbo Li <lihongbo22@huawei.com>, Chunhai Guo <guochunhai@vivo.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Muchun Song <muchun.song@linux.dev>,
-        Oscar Salvador <osalvador@suse.de>,
-        David Hildenbrand <david@kernel.org>,
-        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        Mike Marshall <hubcap@omnibond.com>,
-        Martin Brandenburg <martin@omnibond.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>, James Morse <james.morse@arm.com>,
-        Babu Moger <babu.moger@amd.com>, Carlos Maiolino <cem@kernel.org>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Naohiro Aota <naohiro.aota@wdc.com>,
-        Johannes Thumshirn <jth@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
-        Hugh Dickins <hughd@google.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>, Zi Yan <ziy@nvidia.com>,
-        Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
-        Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
-        Lance Yang <lance.yang@linux.dev>, Jann Horn <jannh@google.com>,
-        Pedro Falcato <pfalcato@suse.de>, David Howells <dhowells@redhat.com>,
-        Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>, linux-sgx@vger.kernel.org,
-        linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
-        linux-cxl@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-fsdevel@vger.kernel.org,
-        linux-aio@kvack.org, linux-erofs@lists.ozlabs.org,
-        linux-ext4@vger.kernel.org, linux-mm@kvack.org, ntfs3@lists.linux.dev,
-        devel@lists.orangefs.org, linux-xfs@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH v2 13/13] tools/testing/vma: add VMA userland tests for VMA flag functions
-Date: Thu, 22 Jan 2026 16:06:22 +0000
-Message-ID: <7fe6afe9c8c61e4d3cfc9a2d50a5d24da8528e68.1769097829.git.lorenzo.stoakes@oracle.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <cover.1769097829.git.lorenzo.stoakes@oracle.com>
-References: <cover.1769097829.git.lorenzo.stoakes@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: LO4P123CA0622.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:294::7) To BL4PR10MB8229.namprd10.prod.outlook.com
- (2603:10b6:208:4e6::14)
+        d=cloudflare.com; s=google09082023; t=1769100581; x=1769705381; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rwzPgUZ6um1mvTqFso7ZVYWrXOFTNHt7M7xwpsX9stE=;
+        b=FNAwTtzUS3nnLl1jBrn+c2YicmNGtqw6qIlEjsqEq1S4CD2KQbenx2qMKh244CjMeL
+         EDAC3vf8H6aem+yBDwRz/QIMjIKvRQicuVbHSRBCAP69YoUoQUlDAJ3Si/zvrr1wQhbj
+         3DivOdO0JQgMmbRSniBp5N8H77U8Kgyu6YVCYYBTR7wi+cX7kkHmBPx6OwO/2ypYT6v/
+         /+uyiE8SjqWzuA1ECbF5ru2c5zXkZYiB0olNLIc84oDQr74GLrT4WjCM0UMH6tCtl8d4
+         bLOZRcs4DBvnZgYB3JH4QbNmwIeA7xdRsFQbKbKbnNH52CGF5bSK4jANwZeB/9B6rsoP
+         Dwvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769100581; x=1769705381;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rwzPgUZ6um1mvTqFso7ZVYWrXOFTNHt7M7xwpsX9stE=;
+        b=e30nUwE/l6/EvAiG1jwqWk7nQQsPnTwa40XcAQTqbUrE3PYmIl4sdvYFWXn1R5VHrY
+         vUyN7fXv+WO4Ru3OVrMdXdDzmBpyMxBR9KZcCND4at3DI3SNweoU6hBTEALPnhgQEx3I
+         aSJ+icNtilxXB/+OvttgORsuzKb6qOidry2pCz87k11EC2C7mdiniHP6ydxTUi/2Qia+
+         lyAIsYRLp4PQW/Zf1ZvsgOtRpAs0dRpCANylKurLPPnLpGJGuHpvC/XTuBcG4u1472XL
+         zGhTiGJ1FuOiLFo7mhziS309xsRwEXJRReMMYgs3lYyXT52kSmFryyKQaLiTGhwGp/4c
+         KpOQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUnlcc+BbUVdho1yt3oZfpOsL9R9mwEXVkIzDdg9yXq17IvVTHEAxCGpfdPIesnrq+7aY8bjHvLVQLaNyEOrArN3NRRSMA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLhWEJwweRFahxHRV5Sq72QB18HBlY1Q5Qk9JmfSR76Uf4F34f
+	6+u1PEG/cXzWW5WEXhO6gZAMYTtxFN4IrMA0viOtJOPHh5NrtMB3A/PPMTITXPhjQIg=
+X-Gm-Gg: AZuq6aLRC4tHNQnLKQHlJ6Nk5PpvkFnuoiko8SCkwbzh1z3Cksfjrkye/+bx11decvk
+	p3bqOGddPgy8LcleVz7CmiP9ms3SdWB47NGJONVQ6rjOBAWLLfsPnO2nCTpDWgkdjICYQB5U2xD
+	CBheOLkxkv1ppJ5mBGLLnJKIW0yAgoEFtSoPDIRthLA5qUEmFhzfeI4RkRaRK8yfMN2rNqhzxb0
+	4YuFLkOdMqImnzIMQ4WChlQRsQzP9G06oxV8tlUyaMlOnpcsCxshQChs+lehk9CKjcWuDvQA3wi
+	27aynnPhDIt5HjvxToplrn1ADVKO9esOH0QVJ/cuvm5xIxAiJCOnVFo+O5NNhZyiCHQWJnSNla7
+	qtL/iI5Hz4+kE9MVB08PvUkPN7CU77n5VPmUt9ceitNV20HV200DMpoI4RbjxO86sMUdXgAo=
+X-Received: by 2002:a05:6820:810c:b0:662:c553:f760 with SMTP id 006d021491bc7-662cab51b60mr128930eaf.45.1769100581297;
+        Thu, 22 Jan 2026 08:49:41 -0800 (PST)
+Received: from [127.0.1.1] ([2a09:bac5:947d:4e6::7d:66])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4044baf613dsm13529519fac.3.2026.01.22.08.49.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jan 2026 08:49:40 -0800 (PST)
+From: Frederick Lawler <fred@cloudflare.com>
+Date: Thu, 22 Jan 2026 10:49:31 -0600
+Subject: [PATCH v3] ima: Fallback to ctime check for FS without
+ kstat.change_cookie
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL4PR10MB8229:EE_|BL3PR10MB6065:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5989ffe6-e27a-4526-7d36-08de59d04118
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?VrmzWE6zXJaFt23Eng5O9S3FZFtBDiFCWauEZPuuF0ENmCl6v2cFi4vQINh1?=
- =?us-ascii?Q?cebmubkXAOQvNVn1gPmmZYLBXDRm/VSmK5r5FdfEBLhE/yzq/lg8n3Nl+xqB?=
- =?us-ascii?Q?rlybwr7JimQIuHHw0dtcYERgVcShXzuMe0e95CBhpSrj7adN5lW8TsC1a9fM?=
- =?us-ascii?Q?ELFbXjt1TweLB68a5wzuZH7oTfQs+1B2P0eE1c5GvJOjEc8RtnxOjv+B8NEA?=
- =?us-ascii?Q?y0Zf0bR4lPLN5TyCfmQFTfBZXFlwlhBldMgMOrnKJrIzu9QnadRz0UGjcq9g?=
- =?us-ascii?Q?YEMkRPruJwuT8fwKpYfVfjkwcQMD5DMB/cy+S9y4I+Wmm+Cmxhr4IZbrw2H9?=
- =?us-ascii?Q?RdB+rDCbBtEZ2jX/ml68Zc+fU83FdJXx4bxr3uslWGrr+6hHz2XeMMW0VaDE?=
- =?us-ascii?Q?hzGxrHyH8stilBPHg6qFIDnvq4+Y7MBYhbrBMLqCLdbSu3U4rW5iplqwHLf7?=
- =?us-ascii?Q?I1IoNi6RqyvhfjAO5vvyukavKPZisGFzsg8m6xI/P9tR7InPVNgYBmLWsG2F?=
- =?us-ascii?Q?eJoY2YWnQ1izxs3zGDwlD3i/dzJjQaRVHqkH4ss6g/hXfUFZvwkFREUoQbsc?=
- =?us-ascii?Q?xnZHh4RmlXJvYSQ8Ou0v/5f4IK/QUmSh/eL60ATdI6xp26Z/hxn7COiARxD1?=
- =?us-ascii?Q?Z9EA8B7Rey1x2bOZnZEfjrUKd7GTXyzA+IXhs2PV/9ijctafGcskcDiixtvD?=
- =?us-ascii?Q?CZAgsHOd1sKGsexNve0Yroz4D/6tGUicNx5Knx9lAIiyU5z5XmNrLof3VpRy?=
- =?us-ascii?Q?9Edb2NoyQ7n6Vzxi2ftBaQbT+K74ND3gmnhAoCMMVnL4qywdRVIsWH5chsyg?=
- =?us-ascii?Q?cvAWD2p9aceBinBu7JszGw1wphcDk42LTzisuJtpaGlCdQRJ35Xq37pisiLi?=
- =?us-ascii?Q?Te7bnNQURg/w9baK7RWdVJC0mick3edF4jKFg5PBpMmu2XvFXsQIXpqtKq95?=
- =?us-ascii?Q?ruh7tTCPMBDbjHTVfNjA6vec7OWeA7TuPLAoXhmLTwBd4lCk07sMzI3qryb9?=
- =?us-ascii?Q?iMCH1UWDaNCrZyLPjXp3DYn1H9RLlyrS09ZArKTuU6D41y1iE5AuQb/hOzIt?=
- =?us-ascii?Q?Sau2g6oQEhxv1kwZEQqB8x7f9bv4RpH0oTUO9g3Ou790gIWm3t2PDzKNODko?=
- =?us-ascii?Q?Kq7XNK91C0ueogzo5u002glKfx6B22gb2g8TQ4iovWe37mudZSZnZr2dADLh?=
- =?us-ascii?Q?nO3A30/l4QVLOcy2QNknJ3YFCm9VdSOVO/OwMy4YtYSdZeDYCexgeTefGAbF?=
- =?us-ascii?Q?x7bQzgqx43NNDvDxPqq1vZXIzDMj5NOxl6KLmQCixvBvNWww/EeSHXNjZY++?=
- =?us-ascii?Q?KHD5S2O6/6WkZXckwgmf27bE+sUBYGs3SauYaSLhtoh0vEciBDN8THgQ654t?=
- =?us-ascii?Q?FQ0BueHBKNEEDSIcoFa6Ajwlhf4CdofaDH196erK0oQLQIgZWDeGRomFcL6S?=
- =?us-ascii?Q?d7MTmZbwmiIGaDPJneZGNd1hFCjkd3cZLpVb2Pd2Y+3F2sMwt/xnZPu7CaLM?=
- =?us-ascii?Q?qMMxDJ7nXfKEoDUJD2TF6Rac3mYm7uhQSnxsQdDjmKrxyl5Ewlu2is80s4ZS?=
- =?us-ascii?Q?OE/gs1hmiB6udx6c2YE=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL4PR10MB8229.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?1p+2rx+6mxT5lALOw5A7KZY16l/aiuSHN+doMAoz+SrJUfpc3S/PtnbYqc+G?=
- =?us-ascii?Q?7RGvLt4/lxjESVE1YXjoTYB7lr/Izq//13woLoYUEYil4p9iBkro5kzOirff?=
- =?us-ascii?Q?0DqsrE6x4DArYID4iPQ1XqcWTuGzSnwAccUq1aCYyBVI7Are6crz3LW5OnnL?=
- =?us-ascii?Q?r36e2WTIUdVJsFrAVNb+rZiwqEmzdqTBLYysGasrjVdzvynccviCRWfmOfcw?=
- =?us-ascii?Q?Lc9WxwgLroPzRXwDAcJG19cMJN1zVcbTf0E0s7wMD23P6xg+OxbBBHxACkqf?=
- =?us-ascii?Q?ohW+QizvMNGh8pu4x00bLD3laQxKaEuXed8XA23uV7up5Osdvi5/ldMwOx+Q?=
- =?us-ascii?Q?V2Tuyx7/Od8leMLvc+xpPmDM4yy2codzq28+/4RVeFteFFpsCOroLmMH4OTW?=
- =?us-ascii?Q?lV39/GaYBbvVygVTrH+Npgsq5xhfDVMI/hP8xuc+AH9FYHBR3GHSuGDWf2oL?=
- =?us-ascii?Q?o6ygSd3CGhPqU08t+J6aBeTkkt0fVXUkLV1kBIUd6tsWDbV7FYh4/n5makqH?=
- =?us-ascii?Q?WZ5yq256SmiPosbzc5shKCZ9lJaJyjfo4p7WY3dr550KxSSpBizl5a8RJMMh?=
- =?us-ascii?Q?+siwxwwqQBtWgZvOswHO8jnFOzNWynLWMM+k8osTK2+N0sDXq+wCczmjRtta?=
- =?us-ascii?Q?T+b2mAigW25XAM7P20TGKNdS6Tw7jatox21A2WigDT2/DZKa8WOzCGqGLCXE?=
- =?us-ascii?Q?WLkymMYaFuFiMhhxKBF6vT219AlumGil5AQKXS55uCK5QHo7FgxqWifSZjqX?=
- =?us-ascii?Q?gfOu/fnWJVm5mIGKRRxhtVzjtxeua7sgIMr0XVn+/Cc3B04NagW/uoadriWD?=
- =?us-ascii?Q?JgXgug2TdczlJ/+Kt5Vb3GcPCsuMbK5OIkMgGEafK5NNCIFcXzdrj+w1KgdW?=
- =?us-ascii?Q?vtvRjguN/x+crMJoJnyYJCciookmtrFKnOMMzeYVu4kb215cFjMfcQLvt9Ri?=
- =?us-ascii?Q?m3uJoOC0sw3GH6xGUDOJ38TQZHDjjcEHDqOhdEUaIbBndYkbHg7vVVbFA4f4?=
- =?us-ascii?Q?5bMQNlaI3eENKFIwmteP6x2qI0JvH/mn9YbIs4HPzRbVdlBAIStfMyT7xDZn?=
- =?us-ascii?Q?hqSaTPnzmI5Uf46M0PTaMFVwMy+Qs4AsUrsyAwomuLNEp23i89S/xoXtWOpG?=
- =?us-ascii?Q?Ja08uyAIHbrTllS+BiwOunMBdiuGGKhmVHw08w7RD56KuoHxhoDzAi+xFAZn?=
- =?us-ascii?Q?2u1NaTR/7dBOkkfTZBErHIcTclCzRCxYvu/b927IdMXCuG5jcoLIG1WHcqGL?=
- =?us-ascii?Q?VoIvLQHnljEwcD7PE7QsuqQOQaL+zFZZFEYCTAfvVORuDj2W9KZsKGEtoeOO?=
- =?us-ascii?Q?18wH8V0QdzD7Sat5LN1erbDKMEWwq2x+DWAR8u8O/b/F7NhhokTeww2kRblz?=
- =?us-ascii?Q?cgpFlodW0m3TPVmv9B+SiqVnD6QQW0npW1poT52/20nmdpRUn+HqkFLQ/rxP?=
- =?us-ascii?Q?N2Prcwa2gQTSeTL1qP7Qo4NAf5tL3mO6dZ38W9eV/yBR6AQafr2CTpE1jK/1?=
- =?us-ascii?Q?NGSXZ6CyN3Xj034UEZhVP5Q4X7UgwwXqFH3yjQ4H8mvXCwm00iEwRNKd8mRT?=
- =?us-ascii?Q?3/g05qRZTKExAtp2/EERrN5KIi2nkFWDUaSjtyoBDvKjBTUnvh8eSZfqrOw2?=
- =?us-ascii?Q?joK6CmX8F2S6KIRUMlEP3rvE1HMXCEa3NivEUVM4ESf7OuJqLN3fkXJ/5S7S?=
- =?us-ascii?Q?cPQ/ur8Fozmh9uq55KFNl3VCGNYk9JpdyfXouXsXYJdqejIKg2MUFLzltRm/?=
- =?us-ascii?Q?F30qdCxm8Ie7xhRovWn3OJQQgjvi4ec=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	HPI3IzMYI7OKSpH3wNt4UZtUiQg8dmI25GsU8Ix9mShIme4saup/pmJeLzmDv+Cn+txBzAyim597b1zvwAsQaxotSSe7jrOW529im4oRWwdrFx5DqzT2oX2YOUboGTAkd3JlWALRjY5hYiFh6qxel1r7CDPez/RmgqyTPA9PPYxNpTfIHXgudYdeRtunN5SA/mZd/CtKqsdp5CFOdAIuh5u7dVkP0GDZsPZRjL80Km4ntYq6sJnFsuu6hU/LywJJBIL4rXB/K7LH5fBUFL+GGk7uPAtczPEkkyoUpUn/VibmsFtVfcg3XNZECFBpK1DW83uRIEnMBUkK2+jvnZBB25V+P2gJTNJRHm2DWlh+x9BNdtrS3lDUCGOhNIw7Meybiuft1AqOTCiULH/7EG5veLyK/sKEcetBa1e8Z2b7ryPTMpRUP8eh3dJP3sZG90DOuF6USZ/t336pcLAdJhi2T86iu/B8Bw2b6FfH4hT0c0zDfBGYNswSSSNGhhg81ukyf1rcL+w/FA1i40IoCOBwff/xj31z9Sawpc0fpcwLPMX86wdaqdZtmL6lOoxUOd4uIoxsZ5jz+n8EcOXnO5rfUJoYGLNCT0o60RYU5IOyxa0=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5989ffe6-e27a-4526-7d36-08de59d04118
-X-MS-Exchange-CrossTenant-AuthSource: BL4PR10MB8229.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2026 16:06:51.5447
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IkCtpKPdnTd5ctAxVGo5ov+uKrxysMbGOmcVTc0zD9v5LX4312nGtOCBt2hbEs8cIsS2Ip2fS02B2XyZkdrUOiuzYOgTjLbzavPvC0XN70c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR10MB6065
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
- definitions=2026-01-22_02,2026-01-22_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 adultscore=0
- spamscore=0 phishscore=0 mlxscore=0 mlxlogscore=999 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2601150000
- definitions=main-2601220123
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIyMDEyMyBTYWx0ZWRfX6G+YoVO+bAkd
- HQLW0khavd93eO72OtuX0jvw6sdMxQaKvHoEmEnEr4xMNvAZ8VBJQkB2i3hwhi6PPqFst/lZVzn
- szL45MWyd9a6Z/yi3BcWnKvDFcfpApTVWjTgvE6n7s2INB0MTM/b1Og5qdSSNzx6CkKUUvTabg1
- ZJDl4DOgyzYZIfvI+Ej2USFbUTAiHADfqD7f4InTj+9dJemXX6gNFeWjTqMAvlMlVFLUyfYxe3/
- H25N/JJZYotmZ4el8COFynVKmIVU6rko+4yymu7FJtS+k2KZ3JULOEWuCL292BGZZsUtZtFRo/M
- Vodu1h9l8vqgllP2aJR/ePwjTGzr5vVJsqZ8ttXft5GR/pLqPixsv0Ws6zASz02+LI89nJ20V9k
- Rs7UcLsVC+D27Ex4qMnDmhc3mwhMD/6SJmQ9O+Agt1s/AcpENEh1GYVQ6k4XkMZB+Fyo0Nq/ZmH
- KpDmDcbhl7F6qjj03Poo5u9WF9zz8nDsJBaoy7Qo=
-X-Authority-Analysis: v=2.4 cv=de6NHHXe c=1 sm=1 tr=0 ts=69724b27 b=1 cx=c_pps
- a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=vUbySO9Y5rIA:10
- a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22 a=yPCof4ZbAAAA:8
- a=wdtOZTiSbmFhyPzmQ0gA:9 cc=ntf awl=host:13644
-X-Proofpoint-ORIG-GUID: dRm7XjDGKAXHBwSB4EI2LpvJ6ZD_1i5D
-X-Proofpoint-GUID: dRm7XjDGKAXHBwSB4EI2LpvJ6ZD_1i5D
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260122-xfs-ima-fixup-v3-1-20335a8aa836@cloudflare.com>
+X-B4-Tracking: v=1; b=H4sIABpVcmkC/2WOPQ+CMBRF/4rpbE3fqxZw0rg4OrgZh1JaacJXW
+ iEYwn+3YFxgvO/mnPsG4rWz2pPjZiBOd9bbugqBbzdE5bJ6aWqzkAkyPAAC0t54aktJje3bhiY
+ cophJgQoVCUzjdChm34PczvfLlTzDObf+XbvPvNLBXP6EmCyEHVCgQkYQqYQnJlInVdRtZgrp9
+ E7V5TQSUMFg9cuMxhnwVDAGHHCJTp90+F8PCmRLBQaF4Ry1zOKU7flKMY7jFwEy7zA0AQAA
+X-Change-ID: 20251212-xfs-ima-fixup-931780a62c2c
+To: Mimi Zohar <zohar@linux.ibm.com>, 
+ Roberto Sassu <roberto.sassu@huawei.com>, 
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+ Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, 
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+ "Darrick J. Wong" <djwong@kernel.org>, 
+ Christian Brauner <brauner@kernel.org>, Josef Bacik <josef@toxicpanda.com>, 
+ Jeff Layton <jlayton@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org, 
+ linux-security-module@vger.kernel.org, kernel-team@cloudflare.com, 
+ Frederick Lawler <fred@cloudflare.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10588; i=fred@cloudflare.com;
+ h=from:subject:message-id; bh=qFVLX/KqoD5gSeJiYxumQ5g1tV4GWZs+Lelo/ycRe1Q=;
+ b=owEBbQKS/ZANAwAKAasltHYDktNtAcsmYgBpclUjH0aacU3Z/gjiQjm/DWMFgYVlEeViax+To
+ 0fo5x3fvzWJAjMEAAEKAB0WIQTLNBqMVmu1PHvjOe2rJbR2A5LTbQUCaXJVIwAKCRCrJbR2A5LT
+ bc+7EAC/TgO0ycjkyKNFk2pevZa2Of30kmiF4g1oR1302TbVlg4W2tfNFivOG0XWweHJNAlfCZb
+ Igm8+KYprEcCpLf9LOQoYo0dKsYaIsLXCiG0gE24wVaGTNMN1EmVqFrjBhJgS9D7VihhSS1+jww
+ Eh7WozPWSuSsqyl7TOq4sV+QPHSm9STP+6r5bAby0OXVzaytzjs8asswvDghvGEbpAx2ITrkLYD
+ Vwa+quSjNPDw3BL09u9sV53nWwcEOn1Gbq0uIcCw2ei+9GBji4HrWxIcMfwX9aKeK8nk13rm+0r
+ uFUZhI9e8fls7NVJhtxS+8JU32/zBBK0G476TpEQNSRM/2CF+UX1gphVGdLoA14XGblVEfplzaO
+ He0/goCxIsAS7OuVs7aSddlLD00hb+gpuFC/GJAUWcz8Z5z1Y8r924gMETL97zLYPNqDqS7w8Zr
+ RQ4+YpsplBLhFxdpbA2rvOA8gqHAanluvp8aUO6XDh8a3uPW3EyTYKf6tRH33WDhm8//S56MUEi
+ /FK/HrtXH+whtd5T6ReE65EE0jQk9AwqJIk5kESkmhhA5uYCdBV69UzieUjDDLmW2Zj+ybCdIra
+ OytGR5WHg6JN35V4aS2jInIUg+aZb1yPDAgXCKe0CQUROzzt/ngfS1LrMjkK5kuM1zgQ9alXjOd
+ 9su+Jkt+EkNqYqw==
+X-Developer-Key: i=fred@cloudflare.com; a=openpgp;
+ fpr=CB341A8C566BB53C7BE339EDAB25B4760392D36D
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.84 / 15.00];
+X-Spamd-Result: default: False [-7.66 / 15.00];
+	WHITELIST_DMARC(-7.00)[cloudflare.com:D:+];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25,oracle.onmicrosoft.com:s=selector2-oracle-onmicrosoft-com];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[cloudflare.com,reject];
+	R_DKIM_ALLOW(-0.20)[cloudflare.com:s=google09082023];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14143-lists,linux-security-module=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,linux.intel.com,redhat.com,alien8.de,zytor.com,arndb.de,linuxfoundation.org,intel.com,suse.de,gmail.com,ffwll.ch,ursulin.net,amd.com,zeniv.linux.org.uk,suse.cz,kvack.org,linux.alibaba.com,google.com,huawei.com,vivo.com,mit.edu,dilger.ca,linux.dev,paragon-software.com,omnibond.com,arm.com,wdc.com,infradead.org,oracle.com,suse.com,nvidia.com,paul-moore.com,namei.org,hallyn.com,rasmusvillemoes.dk,vger.kernel.org,lists.linux.dev,lists.freedesktop.org,lists.ozlabs.org,lists.orangefs.org];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-14153-lists,linux-security-module=lfdr.de];
+	FREEMAIL_TO(0.00)[linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,kernel.org,toxicpanda.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lorenzo.stoakes@oracle.com,linux-security-module@vger.kernel.org];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[cloudflare.com:+];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[oracle.com:+,oracle.onmicrosoft.com:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.onmicrosoft.com:dkim,oracle.com:email,oracle.com:dkim,oracle.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[fred@cloudflare.com,linux-security-module@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-security-module];
-	RCPT_COUNT_GT_50(0.00)[93];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[9]
-X-Rspamd-Queue-Id: 866926A9A5
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,cloudflare.com:email,cloudflare.com:dkim,cloudflare.com:mid]
+X-Rspamd-Queue-Id: 935AF6B1C4
 X-Rspamd-Action: no action
 
-Now we have the capability to test the new helpers for the bitmap VMA flags
-in userland, do so.
+Commit 1cf7e834a6fb ("xfs: switch to multigrain timestamps")
+introduced a means to track change detection for an inode
+via ctime updates, opposed to setting kstat.change_cookie to
+an i_version when calling into xfs_vn_getattr().
 
-We also update the Makefile such that both VMA (and while we're here)
-mm_struct flag sizes can be customised on build. We default to 128-bit to
-enable testing of flags above word size even on 64-bit systems.
+This introduced a regression for IMA such that an action
+performed on a LOWER inode on a stacked file systems always
+requires a re-evaluation if the LOWER file system does not
+leverage kstat.change_cookie to track inode i_version or lacks
+i_version support all together.
 
-We add userland tests to ensure that we do not regress VMA flag behaviour
-with the introduction when using bitmap VMA flags, nor accidentally
-introduce unexpected results due to for instance higher bit values not
-being correctly cleared/set.
+In the case of stacking XFS on XFS, an action on either the LOWER or UPPER
+will require re-evaluation. Stacking TMPFS on XFS for instance, once the
+inode is UPPER is mutated, IMA resumes normal behavior because TMPFS
+leverages generic_fillattr() to update the change cookie.
 
-As part of this change, make __mk_vma_flags() a custom function so we can
-handle specifying invalid VMA bits. This is purposeful so we can have the
-VMA tests work at lower and higher number of VMA flags without having to
-duplicate code too much.
+This is because IMA caches kstat.change_cookie to compare against an
+inode's i_version directly in integrity_inode_attrs_changed(), and thus
+could be out of date depending on how file systems set
+kstat.change_cookie.
 
-Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To address this, require integrity_inode_attrs_changed() to query
+vfs_getattr_nosec() to compare the cached version against
+kstat.change_cookie directly. This ensures that when updates occur,
+we're accessing the same changed inode version on changes, and fallback
+to compare against kstat.ctime when STATX_CHANGE_COOKIE is missing from
+result mask.
+
+Lastly, because EVM still relies on querying and caching a inode's
+i_version directly, the integrity_inode_attrs_changed() falls back to the
+original inode.i_version != cached comparison.
+
+Link: https://lore.kernel.org/all/aTspr4_h9IU4EyrR@CMGLRV3
+Suggested-by: Jeff Layton <jlayton@kernel.org>
+Signed-off-by: Frederick Lawler <fred@cloudflare.com>
 ---
- tools/testing/vma/Makefile         |   3 +
- tools/testing/vma/include/custom.h |  16 ++
- tools/testing/vma/include/dup.h    |  11 +-
- tools/testing/vma/tests/vma.c      | 300 +++++++++++++++++++++++++++++
- tools/testing/vma/vma_internal.h   |   4 +-
- 5 files changed, 322 insertions(+), 12 deletions(-)
+We uncovered a case in kernels >= 6.13 where XFS is no longer updating
+struct kstat.change_cookie on i_op getattr() access calls. Instead, XFS is
+using multigrain ctime (as well as other file systems) for
+change detection in commit 1cf7e834a6fb ("xfs: switch to
+multigrain timestamps").
 
-diff --git a/tools/testing/vma/Makefile b/tools/testing/vma/Makefile
-index 50aa4301b3a6..e72b45dedda5 100644
---- a/tools/testing/vma/Makefile
-+++ b/tools/testing/vma/Makefile
-@@ -9,6 +9,9 @@ include ../shared/shared.mk
- OFILES = $(SHARED_OFILES) main.o shared.o maple-shim.o
- TARGETS = vma
+Because file systems may implement i_version as they see fit, IMA
+caching may be behind as well as file systems that don't support/export
+i_version. Thus we're proposing to compare against the kstat.change_cookie
+directly to the cached version, and fall back to a ctime guard when
+that's not updated.
+
+EVM is largely left alone since there's no trivial way to query a file
+directly in the LSM call paths to obtain kstat.change_cookie &
+kstat.ctime to cache. Thus retains accessing i_version directly.
+
+Regression tests will be added to the Linux Test Project instead of
+selftest to help catch future file system changes that may impact
+future evaluation of IMA.
+
+I'd like this to be backported to at least 6.18 if possible.
+
+Below is a simplified test that demonstrates the issue:
+
+_fragment.config_
+CONFIG_XFS_FS=y
+CONFIG_OVERLAY_FS=y
+CONFIG_IMA=y
+CONFIG_IMA_WRITE_POLICY=y
+CONFIG_IMA_READ_POLICY=y
+
+_./test.sh_
+
+IMA_POLICY="/sys/kernel/security/ima/policy"
+TEST_BIN="/bin/date"
+MNT_BASE="/tmp/ima_test_root"
+
+mkdir -p "$MNT_BASE"
+mount -t tmpfs tmpfs "$MNT_BASE"
+mkdir -p "$MNT_BASE"/{xfs_disk,upper,work,ovl}
+
+dd if=/dev/zero of="$MNT_BASE/xfs.img" bs=1M count=300
+mkfs.xfs -q "$MNT_BASE/xfs.img"
+mount "$MNT_BASE/xfs.img" "$MNT_BASE/xfs_disk"
+cp "$TEST_BIN" "$MNT_BASE/xfs_disk/test_prog"
+
+mount -t overlay overlay -o \
+"lowerdir=$MNT_BASE/xfs_disk,upperdir=$MNT_BASE/upper,workdir=$MNT_BASE/work" \
+"$MNT_BASE/ovl"
+
+echo "audit func=BPRM_CHECK uid=$(id -u nobody)" > "$IMA_POLICY"
+
+target_prog="$MNT_BASE/ovl/test_prog"
+setpriv --reuid nobody "$target_prog"
+setpriv --reuid nobody "$target_prog"
+setpriv --reuid nobody "$target_prog"
+
+audit_count=$(dmesg | grep -c "file=\"$target_prog\"")
+
+if [[ "$audit_count" -eq 1 ]]; then
+        echo "PASS: Found exactly 1 audit event."
+else
+        echo "FAIL: Expected 1 audit event, but found $audit_count."
+        exit 1
+fi
+---
+Changes in v3:
+- Prefer timespec64_to_ns() to leverage attr.version. [Roberto]
+- s/TPMFS/TMPFS/ in description.
+- Link to v2: https://lore.kernel.org/r/20260120-xfs-ima-fixup-v2-1-f332ead8b043@cloudflare.com
+
+Changes in v2:
+- Updated commit description + message to clarify the problem.
+- compare struct timespec64 to avoid collision possibility [Roberto].
+- Don't check inode_attr_changed() in ima_check_last_writer()
+- Link to v1: https://lore.kernel.org/r/20260112-xfs-ima-fixup-v1-1-8d13b6001312@cloudflare.com
+
+Changes since RFC:
+- Remove calls to I_IS_VERSION()
+- Function documentation/comments
+- Abide IMA/EVM change detection fallback invariants
+- Combined ctime guard into version for attributes struct
+- Link to RFC: https://lore.kernel.org/r/20251229-xfs-ima-fixup-v1-1-6a717c939f7c@cloudflare.com
+---
+ include/linux/integrity.h         | 35 +++++++++++++++++++++++++++++++----
+ security/integrity/evm/evm_main.c |  5 ++---
+ security/integrity/ima/ima_api.c  | 11 ++++++++---
+ security/integrity/ima/ima_main.c | 17 ++++++++++-------
+ 4 files changed, 51 insertions(+), 17 deletions(-)
+
+diff --git a/include/linux/integrity.h b/include/linux/integrity.h
+index f5842372359be5341b6870a43b92e695e8fc78af..034f0a1ed48ca8c19c764e302bbfc555dad92cde 100644
+--- a/include/linux/integrity.h
++++ b/include/linux/integrity.h
+@@ -9,6 +9,8 @@
  
-+# These can be varied to test different sizes.
-+CFLAGS += -DNUM_VMA_FLAG_BITS=128 -DNUM_MM_FLAG_BITS=128
-+
- main.o: main.c shared.c shared.h vma_internal.h tests/merge.c tests/mmap.c tests/vma.c ../../../mm/vma.c ../../../mm/vma_init.c ../../../mm/vma_exec.c ../../../mm/vma.h include/custom.h include/dup.h include/stubs.h
+ #include <linux/fs.h>
+ #include <linux/iversion.h>
++#include <linux/kernel.h>
++#include <linux/time64.h>
  
- vma:	$(OFILES)
-diff --git a/tools/testing/vma/include/custom.h b/tools/testing/vma/include/custom.h
-index f567127efba9..802a76317245 100644
---- a/tools/testing/vma/include/custom.h
-+++ b/tools/testing/vma/include/custom.h
-@@ -101,3 +101,19 @@ static inline void vma_lock_init(struct vm_area_struct *vma, bool reset_refcnt)
- 	if (reset_refcnt)
- 		refcount_set(&vma->vm_refcnt, 0);
- }
-+
-+static inline vma_flags_t __mk_vma_flags(size_t count, const vma_flag_t *bits)
-+{
-+	vma_flags_t flags;
-+	int i;
-+
-+	/*
-+	 * For testing purposes: allow invalid bit specification so we can
-+	 * easily test.
-+	 */
-+	vma_flags_clear_all(&flags);
-+	for (i = 0; i < count; i++)
-+		if (bits[i] < NUM_VMA_FLAG_BITS)
-+			vma_flag_set(&flags, bits[i]);
-+	return flags;
-+}
-diff --git a/tools/testing/vma/include/dup.h b/tools/testing/vma/include/dup.h
-index ed8708afb7af..31ee02f709b2 100644
---- a/tools/testing/vma/include/dup.h
-+++ b/tools/testing/vma/include/dup.h
-@@ -838,16 +838,7 @@ static inline void vm_flags_clear(struct vm_area_struct *vma,
- 	vma_flags_clear_word(&vma->flags, flags);
- }
+ enum integrity_status {
+ 	INTEGRITY_PASS = 0,
+@@ -51,14 +53,39 @@ integrity_inode_attrs_store(struct integrity_inode_attributes *attrs,
  
--static inline vma_flags_t __mk_vma_flags(size_t count, const vma_flag_t *bits)
--{
--	vma_flags_t flags;
--	int i;
--
--	vma_flags_clear_all(&flags);
--	for (i = 0; i < count; i++)
--		vma_flag_set(&flags, bits[i]);
--	return flags;
--}
-+static inline vma_flags_t __mk_vma_flags(size_t count, const vma_flag_t *bits);
- 
- #define mk_vma_flags(...) __mk_vma_flags(COUNT_ARGS(__VA_ARGS__), \
- 					 (const vma_flag_t []){__VA_ARGS__})
-diff --git a/tools/testing/vma/tests/vma.c b/tools/testing/vma/tests/vma.c
-index 6d9775aee243..c54ffc954f11 100644
---- a/tools/testing/vma/tests/vma.c
-+++ b/tools/testing/vma/tests/vma.c
-@@ -1,5 +1,25 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- 
-+static bool compare_legacy_flags(vm_flags_t legacy_flags, vma_flags_t flags)
-+{
-+	const unsigned long legacy_val = legacy_flags;
-+	/* The lower word should contain the precise same value. */
-+	const unsigned long flags_lower = flags.__vma_flags[0];
-+#if NUM_VMA_FLAGS > BITS_PER_LONG
-+	int i;
-+
-+	/* All bits in higher flag values should be zero. */
-+	for (i = 1; i < NUM_VMA_FLAGS / BITS_PER_LONG; i++) {
-+		if (flags.__vma_flags[i] != 0)
-+			return false;
-+	}
-+#endif
-+
-+	static_assert(sizeof(legacy_flags) == sizeof(unsigned long));
-+
-+	return legacy_val == flags_lower;
-+}
-+
- static bool test_copy_vma(void)
- {
- 	vm_flags_t vm_flags = VM_READ | VM_WRITE | VM_MAYREAD | VM_MAYWRITE;
-@@ -33,7 +53,287 @@ static bool test_copy_vma(void)
- 	return true;
- }
- 
-+static bool test_vma_flags_unchanged(void)
-+{
-+	vma_flags_t flags = EMPTY_VMA_FLAGS;
-+	vm_flags_t legacy_flags = 0;
-+	int bit;
-+	struct vm_area_struct vma;
-+	struct vm_area_desc desc;
-+
-+
-+	vma.flags = EMPTY_VMA_FLAGS;
-+	desc.vma_flags = EMPTY_VMA_FLAGS;
-+
-+	for (bit = 0; bit < BITS_PER_LONG; bit++) {
-+		vma_flags_t mask = mk_vma_flags(bit);
-+
-+		legacy_flags |= (1UL << bit);
-+
-+		/* Individual flags. */
-+		vma_flags_set(&flags, bit);
-+		ASSERT_TRUE(compare_legacy_flags(legacy_flags, flags));
-+
-+		/* Via mask. */
-+		vma_flags_set_mask(&flags, mask);
-+		ASSERT_TRUE(compare_legacy_flags(legacy_flags, flags));
-+
-+		/* Same for VMA. */
-+		vma_set_flags(&vma, bit);
-+		ASSERT_TRUE(compare_legacy_flags(legacy_flags, vma.flags));
-+		vma_set_flags_mask(&vma, mask);
-+		ASSERT_TRUE(compare_legacy_flags(legacy_flags, vma.flags));
-+
-+		/* Same for VMA descriptor. */
-+		vma_desc_set_flags(&desc, bit);
-+		ASSERT_TRUE(compare_legacy_flags(legacy_flags, desc.vma_flags));
-+		vma_desc_set_flags_mask(&desc, mask);
-+		ASSERT_TRUE(compare_legacy_flags(legacy_flags, desc.vma_flags));
-+	}
-+
-+	return true;
-+}
-+
-+static bool test_vma_flags_cleared(void)
-+{
-+	const vma_flags_t empty = EMPTY_VMA_FLAGS;
-+	vma_flags_t flags;
-+	int i;
-+
-+	/* Set all bits high. */
-+	memset(&flags, 1, sizeof(flags));
-+	/* Try to clear. */
-+	vma_flags_clear_all(&flags);
-+	/* Equal to EMPTY_VMA_FLAGS? */
-+	ASSERT_EQ(memcmp(&empty, &flags, sizeof(flags)), 0);
-+	/* Make sure every unsigned long entry in bitmap array zero. */
-+	for (i = 0; i < sizeof(flags) / BITS_PER_LONG; i++) {
-+		const unsigned long val = flags.__vma_flags[i];
-+
-+		ASSERT_EQ(val, 0);
-+	}
-+
-+	return true;
-+}
-+
-+/*
-+ * Assert that VMA flag functions that operate at the system word level function
-+ * correctly.
-+ */
-+static bool test_vma_flags_word(void)
-+{
-+	vma_flags_t flags = EMPTY_VMA_FLAGS;
-+	const vma_flags_t comparison =
-+		mk_vma_flags(VMA_READ_BIT, VMA_WRITE_BIT, 64, 65);
-+
-+	/* Set some custom high flags. */
-+	vma_flags_set(&flags, 64, 65);
-+	/* Now overwrite the first word. */
-+	vma_flags_overwrite_word(&flags, VM_READ | VM_WRITE);
-+	/* Ensure they are equal. */
-+	ASSERT_EQ(memcmp(&flags, &comparison, sizeof(flags)), 0);
-+
-+	flags = EMPTY_VMA_FLAGS;
-+	vma_flags_set(&flags, 64, 65);
-+
-+	/* Do the same with the _once() equivalent. */
-+	vma_flags_overwrite_word_once(&flags, VM_READ | VM_WRITE);
-+	ASSERT_EQ(memcmp(&flags, &comparison, sizeof(flags)), 0);
-+
-+	flags = EMPTY_VMA_FLAGS;
-+	vma_flags_set(&flags, 64, 65);
-+
-+	/* Make sure we can set a word without disturbing other bits. */
-+	vma_flags_set(&flags, VMA_WRITE_BIT);
-+	vma_flags_set_word(&flags, VM_READ);
-+	ASSERT_EQ(memcmp(&flags, &comparison, sizeof(flags)), 0);
-+
-+	flags = EMPTY_VMA_FLAGS;
-+	vma_flags_set(&flags, 64, 65);
-+
-+	/* Make sure we can clear a word without disturbing other bits. */
-+	vma_flags_set(&flags, VMA_READ_BIT, VMA_WRITE_BIT, VMA_EXEC_BIT);
-+	vma_flags_clear_word(&flags, VM_EXEC);
-+	ASSERT_EQ(memcmp(&flags, &comparison, sizeof(flags)), 0);
-+
-+	return true;
-+}
-+
-+/* Ensure that vma_flags_test() and friends works correctly. */
-+static bool test_vma_flags_test(void)
-+{
-+	const vma_flags_t flags = mk_vma_flags(VMA_READ_BIT, VMA_WRITE_BIT,
-+					       VMA_EXEC_BIT, 64, 65);
-+	struct vm_area_struct vma;
-+	struct vm_area_desc desc;
-+
-+	vma.flags = flags;
-+	desc.vma_flags = flags;
-+
-+#define do_test(...)						\
-+	ASSERT_TRUE(vma_flags_test(&flags, __VA_ARGS__));	\
-+	ASSERT_TRUE(vma_desc_test_flags(&desc, __VA_ARGS__))
-+
-+#define do_test_all_true(...)					\
-+	ASSERT_TRUE(vma_flags_test_all(&flags, __VA_ARGS__));	\
-+	ASSERT_TRUE(vma_test_all_flags(&vma, __VA_ARGS__))
-+
-+#define do_test_all_false(...)					\
-+	ASSERT_FALSE(vma_flags_test_all(&flags, __VA_ARGS__));	\
-+	ASSERT_FALSE(vma_test_all_flags(&vma, __VA_ARGS__))
-+
-+	/*
-+	 * Testing for some flags that are present, some that are not - should
-+	 * pass. ANY flags matching should work.
-+	 */
-+	do_test(VMA_READ_BIT, VMA_MAYREAD_BIT, VMA_SEQ_READ_BIT);
-+	/* However, the ...test_all() variant should NOT pass. */
-+	do_test_all_false(VMA_READ_BIT, VMA_MAYREAD_BIT, VMA_SEQ_READ_BIT);
-+	/* But should pass for flags present. */
-+	do_test_all_true(VMA_READ_BIT, VMA_WRITE_BIT, VMA_EXEC_BIT, 64, 65);
-+	/* Also subsets... */
-+	do_test_all_true(VMA_READ_BIT, VMA_WRITE_BIT, VMA_EXEC_BIT, 64);
-+	do_test_all_true(VMA_READ_BIT, VMA_WRITE_BIT, VMA_EXEC_BIT);
-+	do_test_all_true(VMA_READ_BIT, VMA_WRITE_BIT);
-+	do_test_all_true(VMA_READ_BIT);
-+	/*
-+	 * Check _mask variant. We don't need to test extensively as macro
-+	 * helper is the equivalent.
-+	 */
-+	ASSERT_TRUE(vma_flags_test_mask(&flags, flags));
-+	ASSERT_TRUE(vma_flags_test_all_mask(&flags, flags));
-+
-+	/* Single bits. */
-+	do_test(VMA_READ_BIT);
-+	do_test(VMA_WRITE_BIT);
-+	do_test(VMA_EXEC_BIT);
-+#if NUM_VMA_FLAG_BITS > 64
-+	do_test(64);
-+	do_test(65);
-+#endif
-+
-+	/* Two bits. */
-+	do_test(VMA_READ_BIT, VMA_WRITE_BIT);
-+	do_test(VMA_READ_BIT, VMA_EXEC_BIT);
-+	do_test(VMA_WRITE_BIT, VMA_EXEC_BIT);
-+	/* Ordering shouldn't matter. */
-+	do_test(VMA_WRITE_BIT, VMA_READ_BIT);
-+	do_test(VMA_EXEC_BIT, VMA_READ_BIT);
-+	do_test(VMA_EXEC_BIT, VMA_WRITE_BIT);
-+#if NUM_VMA_FLAG_BITS > 64
-+	do_test(VMA_READ_BIT, 64);
-+	do_test(VMA_WRITE_BIT, 64);
-+	do_test(64, VMA_READ_BIT);
-+	do_test(64, VMA_WRITE_BIT);
-+	do_test(VMA_READ_BIT, 65);
-+	do_test(VMA_WRITE_BIT, 65);
-+	do_test(65, VMA_READ_BIT);
-+	do_test(65, VMA_WRITE_BIT);
-+#endif
-+	/* Three bits. */
-+	do_test(VMA_READ_BIT, VMA_WRITE_BIT, VMA_EXEC_BIT);
-+#if NUM_VMA_FLAG_BITS > 64
-+	/* No need to consider every single permutation. */
-+	do_test(VMA_READ_BIT, VMA_WRITE_BIT, 64);
-+	do_test(VMA_READ_BIT, VMA_WRITE_BIT, 65);
-+
-+	/* Four bits. */
-+	do_test(VMA_READ_BIT, VMA_WRITE_BIT, VMA_EXEC_BIT, 64);
-+	do_test(VMA_READ_BIT, VMA_WRITE_BIT, VMA_EXEC_BIT, 65);
-+
-+	/* Five bits. */
-+	do_test(VMA_READ_BIT, VMA_WRITE_BIT, VMA_EXEC_BIT, 64, 65);
-+#endif
-+
-+#undef do_test
-+#undef do_test_all_true
-+#undef do_test_all_false
-+
-+	return true;
-+}
-+
-+/* Ensure that vma_flags_clear() and friends works correctly. */
-+static bool test_vma_flags_clear(void)
-+{
-+	vma_flags_t flags = mk_vma_flags(VMA_READ_BIT, VMA_WRITE_BIT,
-+					 VMA_EXEC_BIT, 64, 65);
-+	vma_flags_t mask = mk_vma_flags(VMA_EXEC_BIT, 64);
-+	struct vm_area_struct vma;
-+	struct vm_area_desc desc;
-+
-+	vma.flags = flags;
-+	desc.vma_flags = flags;
-+
-+	/* Cursory check of _mask() variant, as the helper macros imply. */
-+	vma_flags_clear_mask(&flags, mask);
-+	vma_flags_clear_mask(&vma.flags, mask);
-+	vma_desc_clear_flags_mask(&desc, mask);
-+	ASSERT_FALSE(vma_flags_test(&flags, VMA_EXEC_BIT, 64));
-+	ASSERT_FALSE(vma_flags_test(&vma.flags, VMA_EXEC_BIT, 64));
-+	ASSERT_FALSE(vma_desc_test_flags(&desc, VMA_EXEC_BIT, 64));
-+	/* Reset. */
-+	vma_flags_set(&flags, VMA_EXEC_BIT, 64);
-+	vma_set_flags(&vma, VMA_EXEC_BIT, 64);
-+	vma_desc_set_flags(&desc, VMA_EXEC_BIT, 64);
-+
-+	/*
-+	 * Clear the flags and assert clear worked, then reset flags back to
-+	 * include specified flags.
-+	 */
-+#define do_test_and_reset(...)					\
-+	vma_flags_clear(&flags, __VA_ARGS__);			\
-+	vma_flags_clear(&vma.flags, __VA_ARGS__);		\
-+	vma_desc_clear_flags(&desc, __VA_ARGS__);		\
-+	ASSERT_FALSE(vma_flags_test(&flags, __VA_ARGS__));	\
-+	ASSERT_FALSE(vma_flags_test(&vma.flags, __VA_ARGS__));	\
-+	ASSERT_FALSE(vma_desc_test_flags(&desc, __VA_ARGS__));	\
-+	vma_flags_set(&flags, __VA_ARGS__);			\
-+	vma_set_flags(&vma, __VA_ARGS__);			\
-+	vma_desc_set_flags(&desc, __VA_ARGS__)
-+
-+	/* Single flags. */
-+	do_test_and_reset(VMA_READ_BIT);
-+	do_test_and_reset(VMA_WRITE_BIT);
-+	do_test_and_reset(VMA_EXEC_BIT);
-+	do_test_and_reset(64);
-+	do_test_and_reset(65);
-+
-+	/* Two flags, in different orders. */
-+	do_test_and_reset(VMA_READ_BIT, VMA_WRITE_BIT);
-+	do_test_and_reset(VMA_READ_BIT, VMA_EXEC_BIT);
-+	do_test_and_reset(VMA_READ_BIT, 64);
-+	do_test_and_reset(VMA_READ_BIT, 65);
-+	do_test_and_reset(VMA_WRITE_BIT, VMA_READ_BIT);
-+	do_test_and_reset(VMA_WRITE_BIT, VMA_EXEC_BIT);
-+	do_test_and_reset(VMA_WRITE_BIT, 64);
-+	do_test_and_reset(VMA_WRITE_BIT, 65);
-+	do_test_and_reset(VMA_EXEC_BIT, VMA_READ_BIT);
-+	do_test_and_reset(VMA_EXEC_BIT, VMA_WRITE_BIT);
-+	do_test_and_reset(VMA_EXEC_BIT, 64);
-+	do_test_and_reset(VMA_EXEC_BIT, 65);
-+	do_test_and_reset(64, VMA_READ_BIT);
-+	do_test_and_reset(64, VMA_WRITE_BIT);
-+	do_test_and_reset(64, VMA_EXEC_BIT);
-+	do_test_and_reset(64, 65);
-+	do_test_and_reset(65, VMA_READ_BIT);
-+	do_test_and_reset(65, VMA_WRITE_BIT);
-+	do_test_and_reset(65, VMA_EXEC_BIT);
-+	do_test_and_reset(65, 64);
-+
-+	/* Three flags. */
-+
-+#undef do_test_some_missing
-+#undef do_test_and_reset
-+
-+	return true;
-+}
-+
- static void run_vma_tests(int *num_tests, int *num_fail)
- {
- 	TEST(copy_vma);
-+	TEST(vma_flags_unchanged);
-+	TEST(vma_flags_cleared);
-+	TEST(vma_flags_word);
-+	TEST(vma_flags_test);
-+	TEST(vma_flags_clear);
- }
-diff --git a/tools/testing/vma/vma_internal.h b/tools/testing/vma/vma_internal.h
-index e3ed05b57819..0e1121e2ef23 100644
---- a/tools/testing/vma/vma_internal.h
-+++ b/tools/testing/vma/vma_internal.h
-@@ -36,11 +36,11 @@
-  * ahead of all other headers.
+ /*
+  * On stacked filesystems detect whether the inode or its content has changed.
++ *
++ * Must be called in process context.
   */
- #define __private
--#define NUM_MM_FLAG_BITS (64)
-+/* NUM_MM_FLAG_BITS defined by test code. */
- typedef struct {
- 	__private DECLARE_BITMAP(__mm_flags, NUM_MM_FLAG_BITS);
- } mm_flags_t;
--#define NUM_VMA_FLAG_BITS BITS_PER_LONG
-+/* NUM_VMA_FLAG_BITS defined by test code. */
- typedef struct {
- 	DECLARE_BITMAP(__vma_flags, NUM_VMA_FLAG_BITS);
- } __private vma_flags_t;
+ static inline bool
+ integrity_inode_attrs_changed(const struct integrity_inode_attributes *attrs,
+-			      const struct inode *inode)
++			      struct file *file, struct inode *inode)
+ {
+-	return (inode->i_sb->s_dev != attrs->dev ||
+-		inode->i_ino != attrs->ino ||
+-		!inode_eq_iversion(inode, attrs->version));
++	struct kstat stat;
++
++	might_sleep();
++
++	if (inode->i_sb->s_dev != attrs->dev || inode->i_ino != attrs->ino)
++		return true;
++
++	/*
++	 * EVM currently relies on backing inode i_version. While IS_I_VERSION
++	 * is not a good indicator of i_version support, this still retains
++	 * the logic such that a re-evaluation should still occur for EVM, and
++	 * only for IMA if vfs_getattr_nosec() fails.
++	 */
++	if (!file || vfs_getattr_nosec(&file->f_path, &stat,
++				       STATX_CHANGE_COOKIE | STATX_CTIME,
++				       AT_STATX_SYNC_AS_STAT))
++		return !IS_I_VERSION(inode) ||
++			!inode_eq_iversion(inode, attrs->version);
++
++	if (stat.result_mask & STATX_CHANGE_COOKIE)
++		return stat.change_cookie != attrs->version;
++
++	if (stat.result_mask & STATX_CTIME)
++		return timespec64_to_ns(&stat.ctime) != (s64)attrs->version;
++
++	return true;
+ }
+ 
+ 
+diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+index 73d500a375cb37a54f295b0e1e93fd6e5d9ecddc..6a4e0e246005246d5700b1db590c1759242b9cb6 100644
+--- a/security/integrity/evm/evm_main.c
++++ b/security/integrity/evm/evm_main.c
+@@ -752,9 +752,8 @@ bool evm_metadata_changed(struct inode *inode, struct inode *metadata_inode)
+ 	bool ret = false;
+ 
+ 	if (iint) {
+-		ret = (!IS_I_VERSION(metadata_inode) ||
+-		       integrity_inode_attrs_changed(&iint->metadata_inode,
+-						     metadata_inode));
++		ret = integrity_inode_attrs_changed(&iint->metadata_inode,
++						    NULL, metadata_inode);
+ 		if (ret)
+ 			iint->evm_status = INTEGRITY_UNKNOWN;
+ 	}
+diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
+index c35ea613c9f8d404ba4886e3b736c3bab29d1668..e47d6281febc15a0ac1bd2ea1d28fea4d0cd5c58 100644
+--- a/security/integrity/ima/ima_api.c
++++ b/security/integrity/ima/ima_api.c
+@@ -272,10 +272,15 @@ int ima_collect_measurement(struct ima_iint_cache *iint, struct file *file,
+ 	 * to an initial measurement/appraisal/audit, but was modified to
+ 	 * assume the file changed.
+ 	 */
+-	result = vfs_getattr_nosec(&file->f_path, &stat, STATX_CHANGE_COOKIE,
++	result = vfs_getattr_nosec(&file->f_path, &stat,
++				   STATX_CHANGE_COOKIE | STATX_CTIME,
+ 				   AT_STATX_SYNC_AS_STAT);
+-	if (!result && (stat.result_mask & STATX_CHANGE_COOKIE))
+-		i_version = stat.change_cookie;
++	if (!result) {
++		if (stat.result_mask & STATX_CHANGE_COOKIE)
++			i_version = stat.change_cookie;
++		else if (stat.result_mask & STATX_CTIME)
++			i_version = timespec64_to_ns(&stat.ctime);
++	}
+ 	hash.hdr.algo = algo;
+ 	hash.hdr.length = hash_digest_size[algo];
+ 
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 5770cf691912aa912fc65280c59f5baac35dd725..8ac42b03740eb93bf23b15cb9039af6cd32aa999 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -28,6 +28,7 @@
+ #include <linux/iversion.h>
+ #include <linux/evm.h>
+ #include <linux/crash_dump.h>
++#include <linux/time64.h>
+ 
+ #include "ima.h"
+ 
+@@ -199,10 +200,13 @@ static void ima_check_last_writer(struct ima_iint_cache *iint,
+ 					    &iint->atomic_flags);
+ 		if ((iint->flags & IMA_NEW_FILE) ||
+ 		    vfs_getattr_nosec(&file->f_path, &stat,
+-				      STATX_CHANGE_COOKIE,
+-				      AT_STATX_SYNC_AS_STAT) ||
+-		    !(stat.result_mask & STATX_CHANGE_COOKIE) ||
+-		    stat.change_cookie != iint->real_inode.version) {
++			    STATX_CHANGE_COOKIE | STATX_CTIME,
++			    AT_STATX_SYNC_AS_STAT) ||
++		    ((stat.result_mask & STATX_CHANGE_COOKIE) ?
++		      stat.change_cookie != iint->real_inode.version :
++		      (!(stat.result_mask & STATX_CTIME) ||
++			timespec64_to_ns(&stat.ctime) !=
++			(s64)iint->real_inode.version))) {
+ 			iint->flags &= ~(IMA_DONE_MASK | IMA_NEW_FILE);
+ 			iint->measured_pcrs = 0;
+ 			if (update)
+@@ -328,9 +332,8 @@ static int process_measurement(struct file *file, const struct cred *cred,
+ 	real_inode = d_real_inode(file_dentry(file));
+ 	if (real_inode != inode &&
+ 	    (action & IMA_DO_MASK) && (iint->flags & IMA_DONE_MASK)) {
+-		if (!IS_I_VERSION(real_inode) ||
+-		    integrity_inode_attrs_changed(&iint->real_inode,
+-						  real_inode)) {
++		if (integrity_inode_attrs_changed(&iint->real_inode,
++						  file, real_inode)) {
+ 			iint->flags &= ~IMA_DONE_MASK;
+ 			iint->measured_pcrs = 0;
+ 		}
+
+---
+base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+change-id: 20251212-xfs-ima-fixup-931780a62c2c
+
+Best regards,
 -- 
-2.52.0
+Frederick Lawler <fred@cloudflare.com>
 
 
