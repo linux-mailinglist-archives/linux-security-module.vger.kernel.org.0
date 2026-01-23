@@ -1,41 +1,41 @@
-Return-Path: <linux-security-module+bounces-14162-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14160-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kg52HJvhcmkyrAAAu9opvQ
-	(envelope-from <linux-security-module+bounces-14162-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Fri, 23 Jan 2026 03:48:59 +0100
+	id mIzwMDDfcmntqwAAu9opvQ
+	(envelope-from <linux-security-module+bounces-14160-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Fri, 23 Jan 2026 03:38:40 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3BD76FCCE
-	for <lists+linux-security-module@lfdr.de>; Fri, 23 Jan 2026 03:48:58 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 124EF6FB8B
+	for <lists+linux-security-module@lfdr.de>; Fri, 23 Jan 2026 03:38:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C15B2300DD6E
-	for <lists+linux-security-module@lfdr.de>; Fri, 23 Jan 2026 02:48:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 75F26300DDF1
+	for <lists+linux-security-module@lfdr.de>; Fri, 23 Jan 2026 02:38:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E97D3596F6;
-	Fri, 23 Jan 2026 02:48:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2313D34B69B;
+	Fri, 23 Jan 2026 02:38:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="D1VqS3QN"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="apMg7zam"
 X-Original-To: linux-security-module@vger.kernel.org
 Received: from sonic314-28.consmr.mail.ne1.yahoo.com (sonic314-28.consmr.mail.ne1.yahoo.com [66.163.189.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D04DB1A3172
-	for <linux-security-module@vger.kernel.org>; Fri, 23 Jan 2026 02:48:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC7BA2EE617
+	for <linux-security-module@vger.kernel.org>; Fri, 23 Jan 2026 02:38:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.189.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769136534; cv=none; b=Iah1+110d5sQ460uKa+DnJO+PaeINUv+VF001q77AW2uYWa0/WoWlmHU9JQUKz6VBkvS3ShGAI3dgTLpaH6UBM+8Nwj2+xJ1zFe/QOLKohztN09JLVKobpVRW+YKlSAq71S2hqXiKe4G2bM/S1uAnvJAWgiaeAPfl5rzvrFcNrU=
+	t=1769135915; cv=none; b=r5ZRKtMWsqZSzHk+UlC/nMf7SyHE0Dj21UT1QKnWPs+eKLFsyjA6dV/ZvQZFO+fcf3M7YzrJc5eb7UVXqRxmy3qz2RPkpCHCc6XosXuEnRkYD6ALN4O/fUyhpKCue+U3bcf4VOMYUPL4WR+StI8iUUqb/Xav73yp3xgzSpz1QMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769136534; c=relaxed/simple;
+	s=arc-20240116; t=1769135915; c=relaxed/simple;
 	bh=vqEXaVCi3RbcN0ysaBISMtJxr8iChdFz1yI6n7D3fU8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uu9TLhoSB+fhOIMgEBqjiPFoLk3V//WGoIs/uUNbDMe6DWkBW9LLI2Y+DNnXfjdgshCCROuh46VQpxj1JV66p2sXOdiYIUwgHtjywokAll2Zc3jGuWzxzxJntsWSGQpctnvZ83ryxn0a+IL0cE72aVVA7V/t4kWABAWEYCltrGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=D1VqS3QN; arc=none smtp.client-ip=66.163.189.154
+	 In-Reply-To:Content-Type; b=pygNPi5MQRMFy0tvUCwmaYEO8yQmLVLWv5tJZxLTcdZP+u4uKNkhcu+XPn8ljM/SDpkqyvbEhSdKu83T3IcGARIroCSRVbeDGoPGJQ3hdPwHRNWg7fxHdSBpifI1OfU4mb+plUTthe5lArgSORXerxOHoB1O2v8VBeS6BQ9Mi50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=apMg7zam; arc=none smtp.client-ip=66.163.189.154
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1769136492; bh=vqEXaVCi3RbcN0ysaBISMtJxr8iChdFz1yI6n7D3fU8=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=D1VqS3QNASX07lBpWy8GNBjzJGb7n83jFunoh7P+o15nB749Ap4jqgKvkYt8MqLm6NW+uAGbq4Cq8A19Qd/BiMTZqhNwvqnGGOBNTnwvzAE3pCDaV+2sbMiFN6Fm0B7klXDF6Kzp0rkjeTQLCpRQAm2XRAGyZ1En8JpM8/+CH7Pv8nELo13A/YrKe6Z7w3QqgaVrLpUfWiJwHAP1T3WiESZPrhSe6CW//Zn6VlbTme4r/iwElWCq6hQ3Fx7CFBcVST0mNC6/SFQoXonLQNhswjsj7q48p8dGA32tq1NqvmBt7jFyA9EF3XvVeIueIpF2J18PAmwIiOKmiAnyqNA41Q==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1769136492; bh=QrlLcwIkAKDeXs4C5fJs+RRTu0vKU+Qy/9cHz4KS516=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=YoRS5pgec4SV2vSIrHOnwcnOaHKIRHLqvVEJzfmXHjl+XcO1dcD9K57Nrztfea3LtrEApOmaRX0CAU3lXhn9DFq7v8gqneni25ru/0WGtmXvqm2qEapKAsoiCocVatvW4pjeTNhnBBgzcRQNjd0TAxxrYXHUpQuAQJLFG+nV14y39K5xLnR+nWjDErhxBcBIEgiQMTHevo/qq6Qr4TWbhgiVFeAC8n/Tz+8bTNn7p1LUObYWCEEysLMLwT3USCBm1FfK8A9CnpRxeIxRiggecm2quu9x1PS7aGeaxnkOsHzlz/j6Wj3VwJQHDZCLTGq6ePyGfRD5pXSrL5UTufLd1g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1769135858; bh=vqEXaVCi3RbcN0ysaBISMtJxr8iChdFz1yI6n7D3fU8=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=apMg7zamNn3X/D0sX2wK4ggWEISSWpeoN/vkQFt9WefFma04tE1m3Y6qrxXbSon55CQiSonaJEwDLle32IVAMXEbz6BBfWQSQIBym8FW/j6TT2b38oDiDAYV7TWRIkOHFfSzrKQF9DOb8+Yw1rMtaZwI9xFYErUms3itajX3otcifiog3+68AKsr5RB+ztC76sCUJkzO5GGmvPF1DYlrWMP3inGB6z7dGvQV1lMW3/PQ4xRvUjZhIMMbGyimQ+knfhnAYqlsGb4pIzkeNE6w4apHoupLEPxVTjDK/PNpOfBZteLCs1C6Z69hgV6QoHTCryot5GXIlb/tmXRXXx+csw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1769135858; bh=JbC8n4TEIlFqOv079tgZNg0ETODzvc37OnV1I0GNfjA=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=BueWAKYp8awqny69Ws38cjnWjvMC2bzLJXgjaZlKIBK1u2fmXw94ETDFfPJJKl1lQr5uE5g5lxMg0Q4yDNSl5joZ0NPd4pMGNxDo8OdKI+u8kAw8OlYbQB1piFFTzgMfv6bbW3+uHVwq1FsCq5VrVBmWB9LdAVlz0Jhw3LceKjYPHFYZKTOPkHFFjlcXv4TCVCm5kC0rIhab5y6SYt3M46HbOdcIeAlGERX8zsOcadMEEPN+P0qSJxmbjq1Rho/aFjYn0IuqSlnBy+eEA5nI8wprHCjTD/6dqMduvfAzZOrV9BOB9ltwFXVAaNoKS4Bcs5tpGYwcCnYxq3ChUhPlgA==
 X-YMail-OSG: 4pxd8c4VM1lTHo66rI3FqLspIrBDlZgKkVBAigZ9MY3GJWZNlooC.KIA6_sxNu.
  0nK_D_40PRrV9uK69zGdSTIjeXKQYM_b6xpeSQ7SMX5ZCVFOtOwFxujWOAB4QIoy.G10sPaSx9f8
  QwqzVChv4HOd2JIc5Um4dhC5DodgYJpSQ21aen.N7ekJppkJJIxdsEcI1FNvU30iIwL3rlKyeCR5
@@ -70,7 +70,7 @@ X-YMail-OSG: 4pxd8c4VM1lTHo66rI3FqLspIrBDlZgKkVBAigZ9MY3GJWZNlooC.KIA6_sxNu.
  FeRMZad1svtw-
 X-Sonic-MF: <casey@schaufler-ca.com>
 X-Sonic-ID: f6bd16f5-4ce5-45f8-bc24-63b96081a564
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ne1.yahoo.com with HTTP; Fri, 23 Jan 2026 02:48:12 +0000
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ne1.yahoo.com with HTTP; Fri, 23 Jan 2026 02:37:37 +0000
 Received: by hermes--production-gq1-86969b76cd-qmsdz (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 26a1c629605e02226d9b5d383e0f6a08;
           Fri, 23 Jan 2026 02:29:04 +0000 (UTC)
 Message-ID: <633aa038-4356-4db3-b61f-191cf56c73b4@schaufler-ca.com>
@@ -104,20 +104,20 @@ X-Mailer: WebService/1.1.24987 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[yahoo.com:s=s2048];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[yahoo.com:+];
-	TAGGED_FROM(0.00)[bounces-14162-lists,linux-security-module=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14160-lists,linux-security-module=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	DMARC_NA(0.00)[schaufler-ca.com: no valid DMARC record];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-security-module];
 	PRECEDENCE_BULK(0.00)[];
@@ -127,8 +127,8 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-0.998];
 	RCPT_COUNT_SEVEN(0.00)[9];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[schaufler-ca.com:mid,schaufler-ca.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,paul-moore.com:email]
-X-Rspamd-Queue-Id: D3BD76FCCE
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,schaufler-ca.com:mid,schaufler-ca.com:email]
+X-Rspamd-Queue-Id: 124EF6FB8B
 X-Rspamd-Action: no action
 
 On 1/22/2026 3:01 PM, Song Liu wrote:
