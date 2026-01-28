@@ -1,196 +1,179 @@
-Return-Path: <linux-security-module+bounces-14262-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14263-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +A4UNbU3eWkJwAEAu9opvQ
-	(envelope-from <linux-security-module+bounces-14262-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Tue, 27 Jan 2026 23:09:57 +0100
+	id kLnMLwWAeWmexQEAu9opvQ
+	(envelope-from <linux-security-module+bounces-14263-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Wed, 28 Jan 2026 04:18:29 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A5BE9AEA1
-	for <lists+linux-security-module@lfdr.de>; Tue, 27 Jan 2026 23:09:57 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id D68599C8EF
+	for <lists+linux-security-module@lfdr.de>; Wed, 28 Jan 2026 04:18:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id B7F5E300B5AC
-	for <lists+linux-security-module@lfdr.de>; Tue, 27 Jan 2026 22:09:56 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 8EABE300698A
+	for <lists+linux-security-module@lfdr.de>; Wed, 28 Jan 2026 03:18:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20052330B11;
-	Tue, 27 Jan 2026 22:09:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00DCF2C21D9;
+	Wed, 28 Jan 2026 03:18:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="K+NW2PUz"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="P0yw8aIk"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B79322FD1DC
-	for <linux-security-module@vger.kernel.org>; Tue, 27 Jan 2026 22:09:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769551794; cv=pass; b=XdpFa6tJcwYRfUVa92y+g5qs+H4rFNFgDNdH6lFPdSPb+r9t5XT5AoGD5YyWUMwuxYOMzeA/Yn69FSriIm0rM9muKV9kfeFHx6/x8kJrrh4ZgexJ4VmqtfKjS4AdK9vuqd+N7HfdUgxr3WEkCvkePnVQMx4yGukqo2bw4F6UBRo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769551794; c=relaxed/simple;
-	bh=OG1FMv7wv4zKYSMHqfAUvVUusenZX7NCSUBskUeV0AY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RogYEMqtPDAGsoSHkvPiKaLoCDBtCpPRR1DfPDxrvdsK/Gd3vB5lLQzvjPQF5C6aoPxJasHjimy65Bx007tKKZ6o8XIkWCbCS9CIzbhDS7OZ5d88yqszfaDuzwoXlm/iQjU2ymlzZ5tEuSYZkuEajvX7IfCJgPQlriDBVr//rkc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=K+NW2PUz; arc=pass smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2a2ea96930cso38838835ad.2
-        for <linux-security-module@vger.kernel.org>; Tue, 27 Jan 2026 14:09:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769551792; cv=none;
-        d=google.com; s=arc-20240605;
-        b=kw80fZ2nsXg/pl8NBAN2/1KsyqXs51qHHYYDVYYlMR2I6xxiH1gGPaTTbfJUPm+28M
-         Lej2FoahvZOKE4IDX0udLePQDTjDd8TjN2qmiotT7YsYcx3S+mqyhysSV8BZnMx3dgB9
-         Uhbnsdxw7rdB4i0Lm8cWU5MWQ6j4a8H7sgqBU7IeV3Sltpgl48cBUsVyHDqyn4B2uAO3
-         POQUeWg3yJtyvN6SPcn/cV0g68RyRt3KpawvkyeeOzyXqVp6wDenucVCHQhrRN5Q0VhD
-         DaQA6FcaWPrZPV/dlnjjUrwq6q0xZD0vMyUTNucTZbHBINiaEOSq8JEBrqXPdJcMEZoL
-         WmsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=/pGzPiXnxjkHtE3/gMOoiHqHPM0exsif4iCDkj4dB0I=;
-        fh=ERrStXkCW5wpxE5zQ5HH59i2THmXUkKpDS6gzWYneLA=;
-        b=A8dVxwZ0ZvX4XSU2Q+hF+FEfXvsUZbDZuCgHL4EEvf6OXgmU6JhqhCm6+Psdgxm/HN
-         UmmuFJHHXGJktHe9JVw/oWbq7e+dSsPg8DcS9PRyETAERNoTOokLaDE1AycUwocpczEq
-         F9KKkbfEFaaWl3X91SbU5ta2Aj8nLFAtUFBQ2lAmUoHODEd/S3gQ/e3DJowRvvPkPgA+
-         vMKQ/ciYCAh4JSiIbiJpLuhFDtHruPv0FuC+7nEld09xRTZ6ThrzAbdM+Z6FUN9n/s6e
-         aC7i7swoz2bvTK/X5CEWW2szHHRVxx5tBq3pUyO+S0zqUfTfqqgcKmK3WHGZ1X5lsWyw
-         k8lQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1769551792; x=1770156592; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/pGzPiXnxjkHtE3/gMOoiHqHPM0exsif4iCDkj4dB0I=;
-        b=K+NW2PUzOkp3OBjZuNn5mEk/eIDu+inVJGXEf3b+z3wgN9RpC5JSCz2QpafmyFpvjd
-         PptkDgdBv0EmEWmQXnOFX6nONaIZ9ITfVwNm1v9FQ39GLg2CzqSSmIYhBgXw5g5C+0GJ
-         YJmPBC7wK/ZBqZGLGcroXtoVL3SOJC2ZPos0+344Wv+MvCKigIbxSVQ2i42RWFHanEA5
-         /Y8ZI4jZwmWw8mOSfBaDvLVCnkbHXvIpw6qZX2oDijU3YbRqmIwi5vg2VkZEEZim2s2Q
-         MiDUoXAgodLwadbMWwNwc8S/eLHHMYaMbvu3B1hglGAl0ZBh4Ijw++Oi49qHImZ+wLQp
-         nbVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769551792; x=1770156592;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/pGzPiXnxjkHtE3/gMOoiHqHPM0exsif4iCDkj4dB0I=;
-        b=LlVcGTLXVV9TLV76Y53YYoOpt1q0S0fhTCNCRX6XLrJT0F2QDzVV1+0yxqn32G28z4
-         xTyo/W2giOm3Tq27HZPt/OIUbsd4twIN+Ccr9Vkwjt7guLX83nzfH7UCzs5dfdJRrmMI
-         5neLsGzekmvt3ka9xH/KAHRuVuZFQ1BCJwtI/fi3zP9TF3CS5Ht4TtEHC4DkdyRIYjZP
-         zoRj/4DgHeA2xbvjHjjA9nq1D8RRLJtrvxx7ai/FUwSYhdPaWt8hdmRrIkdtuR1ew+sG
-         gcyXjlt5o2YF/55lyTjlBb+0Pu6K1fJa4p0cen6t9q/MMrZCdj5HlcMj8ibviidl7+Zi
-         5gqA==
-X-Forwarded-Encrypted: i=1; AJvYcCUffH5a4RFlfxRT7DvUWnBJcz+w+pHTRfrinhuMsvutHOSRjk77Y+UFaUa31cVhAl0QL0AjyoeOxdbwDVr3IaK8kRdvkAs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxG/yeG+pSobm+oZKDXC9YM6XqdZKIJGwJJ4wQBlLDD5XMfuchu
-	rd4C4O/Wwt3OhC7wclQwBtKQFXtgw65NeLl6VyqXPxl8tkctF0Bvv1GJHQtYmY6W3LNA9igcm4B
-	H9tx888j7Inz8DJ7Z2PhdOXW7eF4YV+BQ01quafO/
-X-Gm-Gg: AZuq6aLRtn7vqSuBIV1lKol+MQfltQ2Mmj8CZbPGtwhjB8PuaRGCrN84vQlnPGybtvz
-	aH5Ge1cUBnK4ARA8MSJGn6nqjYB4QgiOQ6AkbtauRFagmJYMm2bAyHwm6b4iOB7H60eP2ocNWOP
-	z3YewNKKkCkC4T4zxL0wM/yVL6iW7cdwp0yCUOt4QPLq9bBCQ/SPz/7wMVN9ZkYN6wDimU3Lvw6
-	+EuI61tFow9I8H40HU/YMySDh9tCzTwWgYNq6LQWnrq1VLpyxM3pZBRpNNlrmfke8wk9YE=
-X-Received: by 2002:a17:902:d4cf:b0:2a8:7827:bb32 with SMTP id
- d9443c01a7336-2a87827bd1amr24618345ad.15.1769551791950; Tue, 27 Jan 2026
- 14:09:51 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ADF332C92B;
+	Wed, 28 Jan 2026 03:18:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769570303; cv=none; b=ITUXE43Z7fF2CGiC9/4w1A0D9XNaVwfnmEUXvOCNp+sKhAfDbamt33qfvhAgv9g+fnen1hMr0XM8xGc/Rp6RNtyvo+sgqLSSzuJXGex/PAKjFBX9fBWZK1PcwRaT/17REcqN4QlSHSeutgOkokzaZXuXhhL+x7Stnmu2rhKM0sI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769570303; c=relaxed/simple;
+	bh=Qf/2TS2of/nkAOMks3tpncweSRTTuD/9x6Pk744h8R0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=R18oWqozJ6IDSc/a3RtJrkoHrOd1J7fz3U6SkxyePbZ3nzjZQalHM5uhYkKPzjoNxuGBIPTcIgDQ1gUO0UEaquivhNfwUU/ZEMmo3PtLAZV7U7bEdAnGVs/bR+mgvQbQkSlOvtuu6dtqKFrnu/dwq4RaCTN91PTg/pGMhty123I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=P0yw8aIk; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60RNEREd566918;
+	Wed, 28 Jan 2026 03:18:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2025-04-25; bh=eUU6O38wzhWbaEouVv0IddK5sWsQH
+	PiMCm9vJ0wjp/s=; b=P0yw8aIkGrDC0T21RPjweQw2GDkg4csexiwZe4UKaUlC3
+	vY4WvUKWCGvlrINtR/DCQzY6U+Q96BwsklpY3odisO4jPhvshbHwFiaOBgkPJM41
+	1oLXSl6c56XgqLhn7qcj3aCyehT1CESVG95sNaUHc1wg64/hC+ObeRnZSUAdTqvY
+	vL9iz/I7UzphOkBiTj6SCM7rR9CGdP7QeFadbRV2G1/m4hgwCqGN+ZQb4YytdhEz
+	UTIkUQPG5lzbpt1/28DJO0Oqe2cxTsg001ZKQH00zhi9KAsGT/0+UC6v0bQlHUcN
+	DfT8YbGHAWkg0Kk6uyLhmNvIOBv4NNsTRzuMVey1w==
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4by5b68c6q-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 28 Jan 2026 03:18:16 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 60S14apB032693;
+	Wed, 28 Jan 2026 03:18:16 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4bvmhab27m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 28 Jan 2026 03:18:16 +0000
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 60S3F1jr004661;
+	Wed, 28 Jan 2026 03:18:15 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4bvmhab27f-1;
+	Wed, 28 Jan 2026 03:18:15 +0000
+From: Samasth Norway Ananda <samasth.norway.ananda@oracle.com>
+To: gnoack@google.com, mic@digikod.net
+Cc: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+        samasth.norway.ananda@oracle.com
+Subject: [PATCH v3 0/3] landlock: documentation improvements
+Date: Tue, 27 Jan 2026 19:18:09 -0800
+Message-ID: <20260128031814.2945394-1-samasth.norway.ananda@oracle.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260122140745.239428-1-omosnace@redhat.com> <CAHC9VhSgbHx4NcMVjMMk0D332b0DTEQi6dD_wO1fvQne-JVisw@mail.gmail.com>
- <aXgZI1td0Hremulj@mail.hallyn.com> <CAFqZXNve_7oKFWydUrskOcvsfbRZVKyWRmLvHKsTzBhG+RmEmQ@mail.gmail.com>
-In-Reply-To: <CAFqZXNve_7oKFWydUrskOcvsfbRZVKyWRmLvHKsTzBhG+RmEmQ@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 27 Jan 2026 17:09:40 -0500
-X-Gm-Features: AZwV_QhApYhBIK3eOvHFa1J083mRfHMvnNKXNenkPREHmuM8NGRVHHw_H7kBAek
-Message-ID: <CAHC9VhQOW4BQR+UCvrcXa_yiSqADN0HC2Xp0pMKs3FtnjcVaOQ@mail.gmail.com>
-Subject: Re: [PATCH] ucount: check for CAP_SYS_RESOURCE using ns_capable_noaudit()
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Ondrej Mosnacek <omosnace@redhat.com>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	"Eric W . Biederman" <ebiederm@xmission.com>, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-01-27_05,2026-01-27_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 mlxlogscore=963
+ adultscore=0 malwarescore=0 spamscore=0 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2601150000
+ definitions=main-2601280023
+X-Proofpoint-GUID: mkaYQO0N_nYA3Bfc18YythK7WyY8Oodm
+X-Authority-Analysis: v=2.4 cv=OLQqHCaB c=1 sm=1 tr=0 ts=69797ff8 b=1 cx=c_pps
+ a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
+ a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=b_9QdsMtNgtwmMDE4PsA:9
+X-Proofpoint-ORIG-GUID: mkaYQO0N_nYA3Bfc18YythK7WyY8Oodm
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI4MDAyMiBTYWx0ZWRfX/HN43D4AwFuP
+ f7Mo2U3CpwBpo3vjPgH0gsXqGfuajUhkvkN40XlB1bDB7iGwKxhUHA+sA4ZETfvrQo2/dhin3IH
+ LcJaSh/UEg3OiuMikkJsOVitXTbqNSZtdB2V64udIw0eLJvV7fnl0M8rZhzpg1e/DM10cVFIASt
+ ohkB0D5uZo2lRQZnVqdgMf0Q49vChQnP2lkVI2FLPN21KcKdlWTa16WA8W3QH3vUGhKXZfzAocO
+ b8I1LgdHRQSu8rXkFggFPEBUYDodrfCaaHvyoou2w58LBJ8DrSgUGbXwyYj48Nu06XeiY9fiaDv
+ kybImzv/RktpSRKfwWLLoa7AG4+6ZIKnMnsMipJmYfvBbVKAhTj2PAFrMwH7i4rIL7FdgA9sONP
+ hlC9zfZ/RsWqfyv34MniihYhIQPu7wxzia2IsNZe58JWXAf99S1RvWSBMkkaIYUnBo8litBKJ02
+ wvljouTJYbOT/V5F+Bg==
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[paul-moore.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
-	R_DKIM_ALLOW(-0.20)[paul-moore.com:s=google];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14262-lists,linux-security-module=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14263-lists,linux-security-module=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns];
 	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[paul-moore.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[paul@paul-moore.com,linux-security-module@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[samasth.norway.ananda@oracle.com,linux-security-module@vger.kernel.org];
+	DKIM_TRACE(0.00)[oracle.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
 	TAGGED_RCPT(0.00)[linux-security-module];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,paul-moore.com:email,paul-moore.com:url,paul-moore.com:dkim,hallyn.com:email,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 5A5BE9AEA1
+	TO_DN_NONE(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_SEVEN(0.00)[9]
+X-Rspamd-Queue-Id: D68599C8EF
 X-Rspamd-Action: no action
 
-On Tue, Jan 27, 2026 at 3:05=E2=80=AFAM Ondrej Mosnacek <omosnace@redhat.co=
-m> wrote:
->
-> On Tue, Jan 27, 2026 at 2:55=E2=80=AFAM Serge E. Hallyn <serge@hallyn.com=
-> wrote:
-> >
-> > On Mon, Jan 26, 2026 at 05:52:03PM -0500, Paul Moore wrote:
-> > > On Thu, Jan 22, 2026 at 9:25=E2=80=AFAM Ondrej Mosnacek <omosnace@red=
-hat.com> wrote:
-> > > >
-> > > > The user.* sysctls implement the ctl_table_root::permissions hook a=
-nd
-> > > > they override the file access mode based on the CAP_SYS_RESOURCE
-> > > > capability (at most rwx if capable, at most r-- if not). The capabi=
-lity
-> > > > is being checked unconditionally, so if an LSM denies the capabilit=
-y, an
-> > > > audit record may be logged even when access is in fact granted.
-> > > >
-> > > > Given the logic in the set_permissions() function in kernel/ucount.=
-c and
-> > > > the unfortunate way the permission checking is implemented, it does=
-n't
-> > > > seem viable to avoid false positive denials by deferring the capabi=
-lity
-> > > > check. Thus, do the same as in net_ctl_permissions() (net/sysctl_ne=
-t.c)
-> > > > - switch from ns_capable() to ns_capable_noaudit(), so that the che=
-ck
-> > > > never logs an audit record.
-> > > >
-> > > > Fixes: dbec28460a89 ("userns: Add per user namespace sysctls.")
-> > > > Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
-> > > > ---
-> > > >  kernel/ucount.c | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > Reviewed-by: Paul Moore <paul@paul-moore.com>
-> >
-> > Acked-by: Serge Hallyn <serge@hallyn.com>
-> >
-> > Looks good to me.  What tree should this go through?  Network?
->
-> Andrew has already applied the two patches I posted into his
-> mm-nonmm-unstable branch, so I assume they are set to go through his
-> tree.
+This patch series improves Landlock documentation by addressing gaps in
+ABI compatibility examples, adding errata documentation, and documenting
+the audit blockers field format.
 
-Andrew, any chance we can get a reply to these threads when you merge
-a patch into your tree?
+Changes since v2:
+=================
 
---=20
-paul-moore.com
+Patch 1/3:
+- Handle restrict_flags in a separate code block, not in the switch
+- Clear all three ABI v7 logging flags for a generic example
+- Reference sys_landlock_restrict_self() for available flags
+- Use restrict_flags in landlock_restrict_self()
+
+Patch 2/3:
+- Use kernel-doc directives to include errata from header files
+- Move rephrased ABI version text before errata section
+
+Patch 3/3:
+- No changes
+
+Changes since v1:
+=================
+
+Patch 1/3:
+- Add backwards compatibility section for restrict flags
+- Fix /usr rule description
+
+Patch 2/3:
+- Enhance existing DOC sections with Impact descriptions
+- Add errata usage documentation
+
+Patch 3/3:
+- Document audit blocker field format
+
+Samasth Norway Ananda (3):
+  landlock: add backwards compatibility for restrict flags
+  landlock: add errata documentation section
+  landlock: document audit blockers field format
+
+ Documentation/admin-guide/LSM/landlock.rst | 20 ++++-
+ Documentation/userspace-api/landlock.rst   | 97 +++++++++++++++++++---
+ security/landlock/errata/abi-1.h           |  8 ++
+ security/landlock/errata/abi-4.h           |  7 ++
+ security/landlock/errata/abi-6.h           | 10 +++
+ security/landlock/syscalls.c               |  4 +-
+ 6 files changed, 131 insertions(+), 15 deletions(-)
+
+-- 
+2.50.1
+
 
