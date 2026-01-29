@@ -1,63 +1,63 @@
-Return-Path: <linux-security-module+bounces-14296-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14300-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kFpSBNDSe2nrIgIAu9opvQ
-	(envelope-from <linux-security-module+bounces-14296-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Thu, 29 Jan 2026 22:36:16 +0100
+	id 2Ko1KZ3Ve2klIwIAu9opvQ
+	(envelope-from <linux-security-module+bounces-14300-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Thu, 29 Jan 2026 22:48:13 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8260AB4DAF
-	for <lists+linux-security-module@lfdr.de>; Thu, 29 Jan 2026 22:36:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 26F20B50E8
+	for <lists+linux-security-module@lfdr.de>; Thu, 29 Jan 2026 22:48:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EA34330D015F
-	for <lists+linux-security-module@lfdr.de>; Thu, 29 Jan 2026 21:29:32 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C23E030238CF
+	for <lists+linux-security-module@lfdr.de>; Thu, 29 Jan 2026 21:47:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8AB535CBD4;
-	Thu, 29 Jan 2026 21:27:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5674F2AF1B;
+	Thu, 29 Jan 2026 21:47:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="oN0ry0Qs"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="xSEu740h"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-42a9.mail.infomaniak.ch (smtp-42a9.mail.infomaniak.ch [84.16.66.169])
+Received: from smtp-bc0f.mail.infomaniak.ch (smtp-bc0f.mail.infomaniak.ch [45.157.188.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2C635C1A2
-	for <linux-security-module@vger.kernel.org>; Thu, 29 Jan 2026 21:27:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E50E314D17
+	for <linux-security-module@vger.kernel.org>; Thu, 29 Jan 2026 21:46:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769722040; cv=none; b=JZpF0k5xpn9cqN5ekSscS5noraSoe/H1Px4oGYkJPrMPyO5Ey3StJrZYE/nRgr6omIb7X5ZGzGBDEVfyv0gW0AOxuMB2So4zybzvXz5Eq49aH3yKVwDN/YYHMFIDMp1ay2v7P8fkwDSUFxZ+4NUcbM58PUn/Wu5BMwW+KOD+vOM=
+	t=1769723223; cv=none; b=XOo5UznUw4G+bjAcbzljSD31mPU8rZEUCCLgzcCwUHOh0mAjoAc3+3TdofJNd5wiOuZFGHuJaGaEgyPynpjdnfbUFiXQWp9u4Uo/uV38c5tzXrY8iDlw/181JqIXZBOmR7QVaYdwM8N1e7xKgOeITNShoTgfWQ0BDvAofxNFmAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769722040; c=relaxed/simple;
-	bh=yemhb4VCupH2JWXQB1vol+NVYcjVNrgq3ffPdAtHsjw=;
+	s=arc-20240116; t=1769723223; c=relaxed/simple;
+	bh=dSXYHrwHroAarAJKnKVPvXXj5UN/7ZF+2KgIb3iLzVM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DOeq4lrGMffFdoOaoLxISBGz5rLLZHr6F0f9kwMDZv0sEK/A9yioAOG36yfLM17PP76tmSUroe5I2Qse0tHK67VxuZuRLC5jqOjpAxHNrJ71hWN8XSKHvBK+/sicjyYNBixn7Z6iJGTHZI4SS3TmgRlUgEnePC7J6RyDqCHNyys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=oN0ry0Qs; arc=none smtp.client-ip=84.16.66.169
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ru4chHtuR2h2Prx2NATtrhMrFAeKcG6hPc/qMPOftCR5w+iQwWGuI1Wr0o5bqlskFtX9RX2V7yR3QhkSn3cZ7v5ANyFANU+f61vYpE/x7pz25cmTzDXm1HOocwcM6IcPmU5u4A8V4RL3I7I6U/M1lP6goVTRPyUcyNZkoI1yEuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=xSEu740h; arc=none smtp.client-ip=45.157.188.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4f2C020D8mzhK3;
-	Thu, 29 Jan 2026 22:27:14 +0100 (CET)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246b])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4f2C0Q62CdzjKy;
+	Thu, 29 Jan 2026 22:27:34 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1769722033;
-	bh=4YSvjoGmBm4c4yCcpZuTBpdHeR9ZvnZgdbXtUjF6J5o=;
+	s=20191114; t=1769722054;
+	bh=OPoVRGlEg8/GxtBQjVri+hG2DCjE1B7pQ+kkPMKIQt0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oN0ry0Qsr+C1RpLUak0eDde21IW9sKavwpHv+HzvgOTLmbP2RP3yU3Nx++9vlbIHi
-	 1Uf8MiN/elmTFf6CvFzGmCzjMboc0STrIBaQrk9zZuUGrSbrs8qLtJfTCjB2tXIReL
-	 x6DPDe6Gakbzvst9HQqhqP/wVpkUUPnKafwzYJe0=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4f2C012r7tzVxk;
-	Thu, 29 Jan 2026 22:27:13 +0100 (CET)
-Date: Thu, 29 Jan 2026 22:27:08 +0100
+	b=xSEu740h+Zc1nenj3UeY00KP8AtjVNpfD2gpEf6RXOfzFEkr9yJkNwq5GNlpiAKPJ
+	 jC2SM4GvyitsUyTSk4F6HBGpPj5m4RtPTV2D/Tozz7HP9iF54HmPsi3tnXNfOQyDh1
+	 8V4eVdaPM1iLQyXWNato3/APpcmrmxQYkALeKliU=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4f2C0Q1zkfzd0k;
+	Thu, 29 Jan 2026 22:27:34 +0100 (CET)
+Date: Thu, 29 Jan 2026 22:27:33 +0100
 From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
 To: Tingmao Wang <m@maowtm.org>
 Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
 	Demi Marie Obenour <demiobenour@gmail.com>, Alyssa Ross <hi@alyssa.is>, Jann Horn <jannh@google.com>, 
 	Tahera Fahimi <fahimitahera@gmail.com>, Justin Suess <utilityemal77@gmail.com>, 
 	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] landlock: Add LANDLOCK_SCOPE_PATHNAME_UNIX_SOCKET
- scope bit to uAPI
-Message-ID: <20260129.Gie0HaenguiG@digikod.net>
+Subject: Re: [PATCH v2 2/6] landlock: Implement
+ LANDLOCK_SCOPE_PATHNAME_UNIX_SOCKET
+Message-ID: <20260129.iCah3fash9ch@digikod.net>
 References: <cover.1767115163.git.m@maowtm.org>
- <88f914eb2024fa1fffe219e34c33a835b31730b8.1767115163.git.m@maowtm.org>
+ <a6d6479888d9d216a3f2e7bb133523f856f92461.1767115163.git.m@maowtm.org>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -66,12 +66,12 @@ List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <88f914eb2024fa1fffe219e34c33a835b31730b8.1767115163.git.m@maowtm.org>
+In-Reply-To: <a6d6479888d9d216a3f2e7bb133523f856f92461.1767115163.git.m@maowtm.org>
 X-Infomaniak-Routing: alpha
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.99 / 15.00];
+X-Spamd-Result: default: False [-0.75 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MIXED_CHARSET(0.67)[subject];
+	R_MIXED_CHARSET(0.91)[subject];
 	R_DKIM_ALLOW(-0.20)[digikod.net:s=20191114];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
@@ -79,7 +79,7 @@ X-Spamd-Result: default: False [-0.99 / 15.00];
 	HAS_LIST_UNSUB(-0.01)[];
 	DKIM_TRACE(0.00)[digikod.net:+];
 	FREEMAIL_CC(0.00)[google.com,gmail.com,alyssa.is,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-14296-lists,linux-security-module=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14300-lists,linux-security-module=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -98,187 +98,224 @@ X-Spamd-Result: default: False [-0.99 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-security-module];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[maowtm.org:email,digikod.net:mid,digikod.net:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 8260AB4DAF
+X-Rspamd-Queue-Id: 26F20B50E8
 X-Rspamd-Action: no action
 
-On Tue, Dec 30, 2025 at 05:20:19PM +0000, Tingmao Wang wrote:
-> Add the new scope bit to the uAPI header, add documentation, and bump ABI
-> version to 8.
-
-This patch and the next one should be fold together.  If a new UAPI is
-added, it should come with the kernel implementation.
-
+On Tue, Dec 30, 2025 at 05:20:20PM +0000, Tingmao Wang wrote:
+> Extend the existing abstract UNIX socket scoping to pathname sockets as
+> well.  Basically all of the logic is reused between the two types, just
+> that pathname sockets scoping are controlled by another bit, and has its
+> own audit request type (since the current one is named
+> "abstract_unix_socket").
 > 
-> This documentation edit specifically calls out the security implications of
-> not restricting sockets.
-> 
-> Fix some minor cosmetic issue in landlock.h around the changed lines as
-> well.
-> 
+> Closes: https://github.com/landlock-lsm/linux/issues/51
 > Signed-off-by: Tingmao Wang <m@maowtm.org>
 > ---
 > 
 > Changes in v2:
-> - Fix grammar
+> - Factor out common code in hook_unix_stream_connect and
+>   hook_unix_may_send into check_socket_access(), and inline
+>   is_abstract_socket().
 > 
-> Note that in the code block in "Defining and enforcing a security policy"
-> the switch case currently jumps from 5 to 7.  This should be fixed by
-> https://lore.kernel.org/all/20251216210248.4150777-1-samasth.norway.ananda@oracle.com/
+>  security/landlock/audit.c |   4 ++
+>  security/landlock/audit.h |   1 +
+>  security/landlock/task.c  | 109 ++++++++++++++++++++++----------------
+>  3 files changed, 67 insertions(+), 47 deletions(-)
 > 
->  Documentation/userspace-api/landlock.rst      | 37 ++++++++++++++++---
->  include/uapi/linux/landlock.h                 |  8 +++-
->  security/landlock/limits.h                    |  2 +-
->  security/landlock/syscalls.c                  |  2 +-
->  tools/testing/selftests/landlock/base_test.c  |  2 +-
->  .../testing/selftests/landlock/scoped_test.c  |  2 +-
->  6 files changed, 42 insertions(+), 11 deletions(-)
-> 
-> diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/userspace-api/landlock.rst
-> index 1d0c2c15c22e..5620a2be1091 100644
-> --- a/Documentation/userspace-api/landlock.rst
-> +++ b/Documentation/userspace-api/landlock.rst
-> @@ -83,7 +83,8 @@ to be explicit about the denied-by-default access rights.
->              LANDLOCK_ACCESS_NET_CONNECT_TCP,
->          .scoped =
->              LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET |
-> -            LANDLOCK_SCOPE_SIGNAL,
-> +            LANDLOCK_SCOPE_SIGNAL |
-> +            LANDLOCK_SCOPE_PATHNAME_UNIX_SOCKET,
->      };
+> diff --git a/security/landlock/audit.c b/security/landlock/audit.c
+> index e899995f1fd5..0626cc553ab0 100644
+> --- a/security/landlock/audit.c
+> +++ b/security/landlock/audit.c
+> @@ -75,6 +75,10 @@ get_blocker(const enum landlock_request_type type,
+>  		WARN_ON_ONCE(access_bit != -1);
+>  		return "scope.abstract_unix_socket";
 >  
->  Because we may not know which kernel version an application will be executed
-> @@ -127,6 +128,10 @@ version, and only use the available subset of access rights:
->          /* Removes LANDLOCK_SCOPE_* for ABI < 6 */
->          ruleset_attr.scoped &= ~(LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET |
->                                   LANDLOCK_SCOPE_SIGNAL);
-> +        __attribute__((fallthrough));
-> +    case 7:
-> +        /* Removes LANDLOCK_SCOPE_PATHNAME_UNIX_SOCKET for ABI < 8 */
-> +        ruleset_attr.scoped &= ~LANDLOCK_SCOPE_PATHNAME_UNIX_SOCKET;
->      }
->  
->  This enables the creation of an inclusive ruleset that will contain our rules.
-> @@ -328,10 +333,15 @@ The operations which can be scoped are:
->      This limits the sending of signals to target processes which run within the
->      same or a nested Landlock domain.
->  
-> -``LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET``
-> -    This limits the set of abstract :manpage:`unix(7)` sockets to which we can
-> -    :manpage:`connect(2)` to socket addresses which were created by a process in
-> -    the same or a nested Landlock domain.
-> +``LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET`` and ``LANDLOCK_SCOPE_PATHNAME_UNIX_SOCKET``
-> +    This limits the set of :manpage:`unix(7)` sockets to which we can
-> +    :manpage:`connect(2)` to socket addresses which were created by a
-> +    process in the same or a nested Landlock domain.
-> +    ``LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET`` applies to abstract sockets,
-> +    and ``LANDLOCK_SCOPE_PATHNAME_UNIX_SOCKET`` applies to pathname
-> +    sockets.
-
-The following part is not needed:
-> Even though pathname sockets are represented in the
-> +    filesystem, Landlock filesystem rules do not currently control access
-> +    to them.
-
->  
->      A :manpage:`sendto(2)` on a non-connected datagram socket is treated as if
->      it were doing an implicit :manpage:`connect(2)` and will be blocked if the
-> @@ -604,6 +614,23 @@ Landlock audit events with the ``LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF``,
->  sys_landlock_restrict_self().  See Documentation/admin-guide/LSM/landlock.rst
->  for more details on audit.
->  
-> +Pathname UNIX socket (ABI < 8)
-> +------------------------------
+> +	case LANDLOCK_REQUEST_SCOPE_PATHNAME_UNIX_SOCKET:
+> +		WARN_ON_ONCE(access_bit != -1);
+> +		return "scope.pathname_unix_socket";
 > +
-> +Starting with the Landlock ABI version 8, it is possible to restrict
-> +connections to a pathname (non-abstract) :manpage:`unix(7)` socket by
-> +setting ``LANDLOCK_SCOPE_PATHNAME_UNIX_SOCKET`` to the ``scoped`` ruleset
-> +attribute.  This works the same way as the abstract socket scoping.
-> +
-> +This allows sandboxing applications using only Landlock to protect against
-> +bypasses relying on connecting to Unix sockets of other services running
-> +under the same user.  These services typically assume that any process
-> +capable of connecting to a local Unix socket, or connecting with the
-> +expected user credentials, is trusted.  Without this protection, sandbox
-> +escapes may be possible, especially when running in a standard desktop
-> +environment, such as by using systemd-run, or sockets exposed by other
-> +common applications.
-> +
->  .. _kernel_support:
+>  	case LANDLOCK_REQUEST_SCOPE_SIGNAL:
+>  		WARN_ON_ONCE(access_bit != -1);
+>  		return "scope.signal";
+> diff --git a/security/landlock/audit.h b/security/landlock/audit.h
+> index 92428b7fc4d8..1c9ce8588102 100644
+> --- a/security/landlock/audit.h
+> +++ b/security/landlock/audit.h
+> @@ -21,6 +21,7 @@ enum landlock_request_type {
+>  	LANDLOCK_REQUEST_NET_ACCESS,
+>  	LANDLOCK_REQUEST_SCOPE_ABSTRACT_UNIX_SOCKET,
+>  	LANDLOCK_REQUEST_SCOPE_SIGNAL,
+> +	LANDLOCK_REQUEST_SCOPE_PATHNAME_UNIX_SOCKET,
+>  };
 >  
->  Kernel support
-> diff --git a/include/uapi/linux/landlock.h b/include/uapi/linux/landlock.h
-> index f030adc462ee..590c6d4171a0 100644
-> --- a/include/uapi/linux/landlock.h
-> +++ b/include/uapi/linux/landlock.h
-> @@ -364,10 +364,14 @@ struct landlock_net_port_attr {
->   *   related Landlock domain (e.g., a parent domain or a non-sandboxed process).
->   * - %LANDLOCK_SCOPE_SIGNAL: Restrict a sandboxed process from sending a signal
->   *   to another process outside the domain.
-> + * - %LANDLOCK_SCOPE_PATHNAME_UNIX_SOCKET: Restrict a sandboxed process from
-> + *   connecting to a pathname UNIX socket created by a process outside the
-> + *   related Landlock domain.
->   */
->  /* clang-format off */
->  #define LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET		(1ULL << 0)
-> -#define LANDLOCK_SCOPE_SIGNAL		                (1ULL << 1)
-> -/* clang-format on*/
-> +#define LANDLOCK_SCOPE_SIGNAL				(1ULL << 1)
-> +#define LANDLOCK_SCOPE_PATHNAME_UNIX_SOCKET		(1ULL << 2)
-> +/* clang-format on */
+>  /*
+> diff --git a/security/landlock/task.c b/security/landlock/task.c
+> index 833bc0cfe5c9..10dc356baf6f 100644
+> --- a/security/landlock/task.c
+> +++ b/security/landlock/task.c
+> @@ -232,35 +232,81 @@ static bool domain_is_scoped(const struct landlock_ruleset *const client,
+>  	return false;
+>  }
 >  
->  #endif /* _UAPI_LINUX_LANDLOCK_H */
-> diff --git a/security/landlock/limits.h b/security/landlock/limits.h
-> index 65b5ff051674..d653e14dba10 100644
-> --- a/security/landlock/limits.h
-> +++ b/security/landlock/limits.h
-> @@ -27,7 +27,7 @@
->  #define LANDLOCK_MASK_ACCESS_NET	((LANDLOCK_LAST_ACCESS_NET << 1) - 1)
->  #define LANDLOCK_NUM_ACCESS_NET		__const_hweight64(LANDLOCK_MASK_ACCESS_NET)
->  
-> -#define LANDLOCK_LAST_SCOPE		LANDLOCK_SCOPE_SIGNAL
-> +#define LANDLOCK_LAST_SCOPE		LANDLOCK_SCOPE_PATHNAME_UNIX_SOCKET
->  #define LANDLOCK_MASK_SCOPE		((LANDLOCK_LAST_SCOPE << 1) - 1)
->  #define LANDLOCK_NUM_SCOPE		__const_hweight64(LANDLOCK_MASK_SCOPE)
->  
-> diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
-> index 0116e9f93ffe..66fd196be85a 100644
-> --- a/security/landlock/syscalls.c
-> +++ b/security/landlock/syscalls.c
-> @@ -161,7 +161,7 @@ static const struct file_operations ruleset_fops = {
->   * Documentation/userspace-api/landlock.rst should be updated to reflect the
->   * UAPI change.
->   */
-> -const int landlock_abi_version = 7;
-> +const int landlock_abi_version = 8;
->  
->  /**
->   * sys_landlock_create_ruleset - Create a new ruleset
-> diff --git a/tools/testing/selftests/landlock/base_test.c b/tools/testing/selftests/landlock/base_test.c
-> index 7b69002239d7..f4b1a275d8d9 100644
-> --- a/tools/testing/selftests/landlock/base_test.c
-> +++ b/tools/testing/selftests/landlock/base_test.c
-> @@ -76,7 +76,7 @@ TEST(abi_version)
->  	const struct landlock_ruleset_attr ruleset_attr = {
->  		.handled_access_fs = LANDLOCK_ACCESS_FS_READ_FILE,
->  	};
-> -	ASSERT_EQ(7, landlock_create_ruleset(NULL, 0,
-> +	ASSERT_EQ(8, landlock_create_ruleset(NULL, 0,
->  					     LANDLOCK_CREATE_RULESET_VERSION));
->  
->  	ASSERT_EQ(-1, landlock_create_ruleset(&ruleset_attr, 0,
-> diff --git a/tools/testing/selftests/landlock/scoped_test.c b/tools/testing/selftests/landlock/scoped_test.c
-> index b90f76ed0d9c..7f83512a328d 100644
-> --- a/tools/testing/selftests/landlock/scoped_test.c
-> +++ b/tools/testing/selftests/landlock/scoped_test.c
-> @@ -12,7 +12,7 @@
->  
->  #include "common.h"
->  
-> -#define ACCESS_LAST LANDLOCK_SCOPE_SIGNAL
-> +#define ACCESS_LAST LANDLOCK_SCOPE_PATHNAME_UNIX_SOCKET
->  
->  TEST(ruleset_with_unknown_scope)
+> +/**
+> + * sock_is_scoped - Check if socket connect or send should be restricted
+> + *    based on scope controls.
+> + *
+> + * @other: The server socket.
+> + * @domain: The client domain.
+> + * @scope: The relevant scope bit to check (i.e. pathname or abstract).
+> + *
+> + * Returns: True if connect should be restricted, false otherwise.
+> + */
+>  static bool sock_is_scoped(struct sock *const other,
+> -			   const struct landlock_ruleset *const domain)
+> +			   const struct landlock_ruleset *const domain,
+> +			   access_mask_t scope)
 >  {
+>  	const struct landlock_ruleset *dom_other;
+>  
+>  	/* The credentials will not change. */
+>  	lockdep_assert_held(&unix_sk(other)->lock);
+>  	dom_other = landlock_cred(other->sk_socket->file->f_cred)->domain;
+> -	return domain_is_scoped(domain, dom_other,
+> -				LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET);
+> +	return domain_is_scoped(domain, dom_other, scope);
+>  }
+>  
+> -static bool is_abstract_socket(struct sock *const sock)
+> +/* Allow us to quickly test if the current domain scopes any form of socket */
+
+Missing final dot.
+
+> +static const struct access_masks unix_scope = {
+> +	.scope = LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET |
+> +		 LANDLOCK_SCOPE_PATHNAME_UNIX_SOCKET,
+> +};
+> +
+> +/*
+> + * UNIX sockets can have three types of addresses: pathname (a filesystem path),
+> + * unnamed (not bound to an address), and abstract (sun_path[0] is '\0').
+> + * Unnamed sockets include those created with socketpair() and unbound sockets.
+> + * We do not restrict unnamed sockets since they have no address to identify.
+
+Not because they have no address but because they cannot be used to
+reach a new peer, right?
+
+> + */
+> +static int
+> +check_socket_access(struct sock *const other,
+> +		    const struct landlock_cred_security *const subject,
+> +		    const size_t handle_layer)
+>  {
+> -	struct unix_address *addr = unix_sk(sock)->addr;
+> +	const struct unix_address *addr = unix_sk(other)->addr;
+> +	access_mask_t scope;
+> +	enum landlock_request_type request_type;
+>  
+> +	/* Unnamed sockets are not restricted. */
+>  	if (!addr)
+> -		return false;
+> +		return 0;
+>  
+> +	/*
+> +	 * Abstract and pathname Unix sockets have separate scope and audit
+
+UNIX
+
+> +	 * request type.
+> +	 */
+>  	if (addr->len >= offsetof(struct sockaddr_un, sun_path) + 1 &&
+> -	    addr->name->sun_path[0] == '\0')
+> -		return true;
+> +	    addr->name->sun_path[0] == '\0') {
+> +		scope = LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET;
+> +		request_type = LANDLOCK_REQUEST_SCOPE_ABSTRACT_UNIX_SOCKET;
+> +	} else {
+> +		scope = LANDLOCK_SCOPE_PATHNAME_UNIX_SOCKET;
+> +		request_type = LANDLOCK_REQUEST_SCOPE_PATHNAME_UNIX_SOCKET;
+> +	}
+>  
+> -	return false;
+> -}
+> +	if (!sock_is_scoped(other, subject->domain, scope))
+> +		return 0;
+>  
+> -static const struct access_masks unix_scope = {
+> -	.scope = LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET,
+> -};
+> +	landlock_log_denial(subject, &(struct landlock_request) {
+> +		.type = request_type,
+> +		.audit = {
+> +			.type = LSM_AUDIT_DATA_NET,
+> +			.u.net = &(struct lsm_network_audit) {
+> +				.sk = other,
+> +			},
+> +		},
+> +		.layer_plus_one = handle_layer + 1,
+> +	});
+> +	return -EPERM;
+> +}
+>  
+>  static int hook_unix_stream_connect(struct sock *const sock,
+>  				    struct sock *const other,
+> @@ -275,23 +321,7 @@ static int hook_unix_stream_connect(struct sock *const sock,
+>  	if (!subject)
+>  		return 0;
+>  
+> -	if (!is_abstract_socket(other))
+> -		return 0;
+> -
+> -	if (!sock_is_scoped(other, subject->domain))
+> -		return 0;
+> -
+> -	landlock_log_denial(subject, &(struct landlock_request) {
+> -		.type = LANDLOCK_REQUEST_SCOPE_ABSTRACT_UNIX_SOCKET,
+> -		.audit = {
+> -			.type = LSM_AUDIT_DATA_NET,
+> -			.u.net = &(struct lsm_network_audit) {
+> -				.sk = other,
+> -			},
+> -		},
+> -		.layer_plus_one = handle_layer + 1,
+> -	});
+> -	return -EPERM;
+> +	return check_socket_access(other, subject, handle_layer);
+>  }
+>  
+>  static int hook_unix_may_send(struct socket *const sock,
+> @@ -302,6 +332,7 @@ static int hook_unix_may_send(struct socket *const sock,
+>  		landlock_get_applicable_subject(current_cred(), unix_scope,
+>  						&handle_layer);
+>  
+> +	/* Quick return for non-landlocked tasks. */
+>  	if (!subject)
+>  		return 0;
+>  
+> @@ -312,23 +343,7 @@ static int hook_unix_may_send(struct socket *const sock,
+>  	if (unix_peer(sock->sk) == other->sk)
+>  		return 0;
+>  
+> -	if (!is_abstract_socket(other->sk))
+> -		return 0;
+> -
+> -	if (!sock_is_scoped(other->sk, subject->domain))
+> -		return 0;
+> -
+> -	landlock_log_denial(subject, &(struct landlock_request) {
+> -		.type = LANDLOCK_REQUEST_SCOPE_ABSTRACT_UNIX_SOCKET,
+> -		.audit = {
+> -			.type = LSM_AUDIT_DATA_NET,
+> -			.u.net = &(struct lsm_network_audit) {
+> -				.sk = other->sk,
+> -			},
+> -		},
+> -		.layer_plus_one = handle_layer + 1,
+> -	});
+> -	return -EPERM;
+> +	return check_socket_access(other->sk, subject, handle_layer);
+>  }
+>  
+>  static const struct access_masks signal_scope = {
 > -- 
 > 2.52.0
 > 
