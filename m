@@ -1,66 +1,95 @@
-Return-Path: <linux-security-module+bounces-14277-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14281-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oA2+EVWEemnx7AEAu9opvQ
-	(envelope-from <linux-security-module+bounces-14277-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Wed, 28 Jan 2026 22:49:09 +0100
+	id KDjmIuISe2mlBAIAu9opvQ
+	(envelope-from <linux-security-module+bounces-14281-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Thu, 29 Jan 2026 08:57:22 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id B06A6A939F
-	for <lists+linux-security-module@lfdr.de>; Wed, 28 Jan 2026 22:49:08 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7D59AD0C3
+	for <lists+linux-security-module@lfdr.de>; Thu, 29 Jan 2026 08:57:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A504830182BF
-	for <lists+linux-security-module@lfdr.de>; Wed, 28 Jan 2026 21:49:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4030930067A9
+	for <lists+linux-security-module@lfdr.de>; Thu, 29 Jan 2026 07:56:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12F0D2F5A22;
-	Wed, 28 Jan 2026 21:49:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9B76280327;
+	Thu, 29 Jan 2026 07:56:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="M1cVSPnt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Phee7q9+"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-bc0d.mail.infomaniak.ch (smtp-bc0d.mail.infomaniak.ch [45.157.188.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423992E62D1
-	for <linux-security-module@vger.kernel.org>; Wed, 28 Jan 2026 21:49:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12AC1371061
+	for <linux-security-module@vger.kernel.org>; Thu, 29 Jan 2026 07:56:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769636947; cv=none; b=Qaj8w4qWwR44ZsV/jfkz0VGW/bwnNE3lWAZhitGqw6q6lmTqO5l9muN8mUG6xO24EOawvqSs5kcmZVZpoQuqEK1qyabQUWSEo5EJwp9D6ghQFGeIlol+g+W6kxx8ZJ4TmSm/fU+p9J6Jvh920Gy5ApYn1qP75OSpxcF4roj2cno=
+	t=1769673406; cv=none; b=WCZ8eAMeeKiKQCcsKy6DfhGt/zy7qb1+DB4waU63Usmk/vwN+AgxKmrsCE2LC4p9BXsz6GnRIcjFsajBXSk2xV33SWI7YWa3tlU55vvbT7LD4TLTG2C7ROcsF3CvBRyHtQu1hjS5O64XDbMjKrlNFBlcszSy6sa7RTNtqkJ0SKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769636947; c=relaxed/simple;
-	bh=4aS8ZhSZAiIABJfxXD7j6jQSUPZNWw6khTBlY64G+Dg=;
+	s=arc-20240116; t=1769673406; c=relaxed/simple;
+	bh=N1k5Pgsor/7m83SDkTM9dDzLaVd5tMo0jzbWQ+RTtqo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YSliRYrPu1mKTXV2wvDFDJgyTx/lC5BEw6rfteMtnEbA8kOV4nU3cSTYglVExT1i9X7AS80HGR2HAR+SbHAwFCl+YCc+p0oTlhMIhwUbpPDN/S4E+jNkS5vt7D5oLJYNDbycqRe24tgufYpLwMaKrJfri+Kt9TzN5H7r0XGO+8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=M1cVSPnt; arc=none smtp.client-ip=45.157.188.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6c])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4f1bWf42TZzk3t;
-	Wed, 28 Jan 2026 22:49:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1769636942;
-	bh=Om/vEuoVO0NzQRVD7siTNDrxDHC+B+SaR9Br4TEw9Ng=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=M1cVSPntHhEYtcjsv45i1BweQhNWcQ1QYnTgZZ4a6TSnjk4uutFewf1DXAk/eW6EA
-	 k0rNS9DDaW/xwUfPA9M809FwjPzAkZjGF7FOn6xmRhuQB6LV6IApB8clOkl69oDhpx
-	 T6A1uZVshDU67QrkFoYeCc9lyg+DtPuDaYj0uZjY=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4f1bWd2tBYz7FC;
-	Wed, 28 Jan 2026 22:49:01 +0100 (CET)
-Date: Wed, 28 Jan 2026 22:49:00 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack3000@gmail.com>, 
-	Tingmao Wang <m@maowtm.org>
-Cc: linux-security-module@vger.kernel.org, 
-	Justin Suess <utilityemal77@gmail.com>, Samasth Norway Ananda <samasth.norway.ananda@oracle.com>, 
-	Matthieu Buffet <matthieu@buffet.re>, Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, 
-	konstantin.meskhidze@huawei.com
-Subject: Re: [RFC PATCH 2/2] landlock: transpose the layer masks data
- structure
-Message-ID: <20260128.jaeXie7ez2xu@digikod.net>
-References: <20251230103917.10549-3-gnoack3000@gmail.com>
- <20251230103917.10549-7-gnoack3000@gmail.com>
- <20260120.haeCh4li9Vae@digikod.net>
- <20260123.13e99fee0197@gnoack.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=FZ/CtWI+nJ78QfUBG9zSB94PypyXoCBtTXuWNhJun1MX3a7MD/YiKAha5/t2dCMZcnuv+CARPmTgVX4PPzk3zulL0XYYEAUgBawEq/WCQWQ6uVvIrYFL2lNEndEjQNqnk7CSNRsX8bOHACDQLnMXmIDs6VMt52ZCElSr2z9R3dI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Phee7q9+; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-47f5c2283b6so5020105e9.1
+        for <linux-security-module@vger.kernel.org>; Wed, 28 Jan 2026 23:56:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769673403; x=1770278203; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=j178g8zVMYE+jI/MB2yCSraVRg88oiFctZr49sf8QO4=;
+        b=Phee7q9+NYP1Vxm1OuorV4r91JHuE4Km8Gw+BH7jXmzAj6ZEKMEB9li479mz5D0Tlg
+         ppMIZygzW50caSnmlBMV6oTS3AAlBuFrwRmpV59ECIO/vFA0EulhQJaVwhNIVPF0rXJU
+         Y7o9IJcmd/NTZoGFoacAzmxVMlUMfsZQx1+MDCdDGNtmyl4yXdvB/Uh8CzadgwYp7kKu
+         eNRDUFcPKt8gksnDmiD5TrIL2vHUNwh+VHWnKd7uDLtsTVJzE2KT7+WC64nvIhDhfy48
+         S7vG/bdVZsciibkFWBWnYIk6YELOkDIRqlYCAWqLAmNNBN5rPgrzRe63iJNO4DEPiXO/
+         Sq/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769673403; x=1770278203;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j178g8zVMYE+jI/MB2yCSraVRg88oiFctZr49sf8QO4=;
+        b=m3z39zcseJMj5K6w5g0HXQE0c+ySqWk02h3qihsadUFxdpoxWqEFqeNadqKkPx/nG1
+         Kps5hxHT73wBpkmQNYWpb3scDgy9g0AUEfUSgBL7DE6GMdBj+jWKbDjgVD7ewpRSh0iC
+         02eeWzaSqZzVYkafW7iVuSV3zHu73FUHeVMp2LsUCOOFNxCRXhrklsUU72NK1UeQ8pYU
+         0IrzxKrDqD/GSe2BWM0mA/G5DJc3ndqB7C0d9/TozDKMy9/+Qy9v4oHOI8dQhzdjl+DU
+         8nkKrF8E++0n0HCjQOP9PxS5ykBlJgf2AmPzTL/IYtZfjAY8ohXqWRSM+Ujg0U5UH2Mp
+         190Q==
+X-Gm-Message-State: AOJu0YyBOVSYiWdHd/xGmqIGyZeFYqOWF94Ikhqaq8YTZR7ZQFQONTvM
+	E1R3chXVPzdSMdlgp8nFvps92B4x2f+ShQYUw5lM+PHpH+I88Dehk38J
+X-Gm-Gg: AZuq6aLLH7Th6/v94/BtRAtyQOfccjVJcU3car1G2o9HrY5Q3HrkQOmHr7xiuPVWGoC
+	kiPdXWZIerfJswpYxao3wuOV8lC4C2cO2a/WEFCdsa2sCJpKKkelFO6t93JcDtuT1U0jHOhsvll
+	NFVQ3t94zvjZLy08DJTVNQRmfduKCX2VRDuo4F3Ly4nYQZOoeI3sRFh4sqDhxQsj1t7z840Fc1H
+	RVF+6d55sfV6HalrQTtaLSO4PnlLGExaGkYHGBhyqbGklopRte9dBXCRw91mr7aRAhz/xMRb0is
+	xMxWbyd6CGUypfCBPQCExL196R0CB28SAURaCARmxOxXgJOOP9Lr+xo9FYPFK/5mggKWlF8mDRo
+	bY+XGZxJDnQkO4+Ts7+QLtfbNcKaxLIRrbWJULoR9cum1yG0ROA2Zu2p1GHSGN5CA37Nld7EVCS
+	XCYZpCTuzTk8u+j5dBxrGinu06ZHoarX3v/wks
+X-Received: by 2002:a05:600c:4f95:b0:477:af8d:203a with SMTP id 5b1f17b1804b1-48069c66b3bmr95134225e9.27.1769673403097;
+        Wed, 28 Jan 2026 23:56:43 -0800 (PST)
+Received: from localhost (ip87-106-108-193.pbiaas.com. [87.106.108.193])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e132368csm11568529f8f.31.2026.01.28.23.56.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jan 2026 23:56:42 -0800 (PST)
+Date: Thu, 29 Jan 2026 08:56:37 +0100
+From: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
+To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc: linux-security-module@vger.kernel.org, Tingmao Wang <m@maowtm.org>,
+	Justin Suess <utilityemal77@gmail.com>,
+	Samasth Norway Ananda <samasth.norway.ananda@oracle.com>,
+	Matthieu Buffet <matthieu@buffet.re>,
+	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>,
+	konstantin.meskhidze@huawei.com,
+	Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v2 3/3] landlock: transpose the layer masks data structure
+Message-ID: <20260129.691d9b85a887@gnoack.org>
+References: <20260125195853.109967-1-gnoack3000@gmail.com>
+ <20260125195853.109967-4-gnoack3000@gmail.com>
+ <20260128.quaido7ia0Xu@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -70,334 +99,166 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260123.13e99fee0197@gnoack.org>
-X-Infomaniak-Routing: alpha
+In-Reply-To: <20260128.quaido7ia0Xu@digikod.net>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.99 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MIXED_CHARSET(0.67)[subject];
-	R_DKIM_ALLOW(-0.20)[digikod.net:s=20191114];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,oracle.com,buffet.re,huawei-partners.com,huawei.com];
-	DKIM_TRACE(0.00)[digikod.net:+];
-	TAGGED_FROM(0.00)[bounces-14277-lists,linux-security-module=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[digikod.net];
-	FREEMAIL_TO(0.00)[gmail.com,maowtm.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,maowtm.org,gmail.com,oracle.com,buffet.re,huawei-partners.com,huawei.com,infradead.org];
+	TAGGED_FROM(0.00)[bounces-14281-lists,linux-security-module=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	FROM_NEQ_ENVFROM(0.00)[mic@digikod.net,linux-security-module@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gnoack3000@gmail.com,linux-security-module@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-security-module];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[digikod.net:mid,digikod.net:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,check-linux.sh:url,checkpatch.pl:url]
-X-Rspamd-Queue-Id: B06A6A939F
+	RCPT_COUNT_SEVEN(0.00)[9];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,gnoack.org:mid]
+X-Rspamd-Queue-Id: E7D59AD0C3
 X-Rspamd-Action: no action
 
-Re-CCing everyone since I guess they were accidentally removed.
+On Wed, Jan 28, 2026 at 10:34:02PM +0100, Mickaël Salaün wrote:
+> On Sun, Jan 25, 2026 at 08:58:53PM +0100, Günther Noack wrote:
+> > Tradeoffs:
+> > 
+> > This change improves performance, at a slight size increase to the
+> > layer masks data structure.
+> > 
+> > At the moment, for the filesystem access rights, the data structure
+> > has the same size as before, but once we introduce the 17th filesystem
+> > access right, it will double in size (from 32 to 64 bytes), as
+> 
+> ...for all access rights (e.g. even if there is no new network one)
 
-On Fri, Jan 23, 2026 at 10:33:42PM +0100, Günther Noack wrote:
-> Hello!
-> 
-> On Wed, Jan 21, 2026 at 11:22:28PM +0100, Mickaël Salaün wrote:
-> > The goal of the initial design was to minimize the amount of memory wrt
-> > the number of different access rights because the maximum number of
-> > layers is 16 whereas access rights could grow up to 64.
-> > 
-> > Transposing the matrix increases the memory footprint in theory but
-> > because we still need the struct layer_access_masks matrix, it should
-> > actually be better.  See stack usage delta with audit (generated with
-> > check-linux.sh):
-> 
-> Thanks for the review and for doing these measurements!
-> 
-> >   landlock_unmask_layers       208  80   -128
-> >   landlock_init_layer_masks    192  96   -96
-> >   landlock_log_denial          176  80   -96
-> >   current_check_access_path    336  304  -32
-> >   current_check_refer_path     592  560  -32
-> >   hook_file_open               352  320  -32
-> >   hook_file_send_sigiotask     176  160  -16
-> >   hook_file_truncate           112  96   -16
-> >   hook_move_mount              128  112  -16
-> >   hook_ptrace_access_check     192  176  -16
-> >   hook_ptrace_traceme          160  144  -16
-> >   hook_sb_mount                128  112  -16
-> >   hook_sb_pivotroot            128  112  -16
-> >   hook_sb_remount              128  112  -16
-> >   hook_sb_umount               128  112  -16
-> >   hook_task_kill               176  160  -16
-> >   current_check_access_socket  336  352  +16
-> >   is_access_to_paths_allowed   384  400  +16
-> > 
-> > ...and stack usage delta without audit:
-> > 
-> >   landlock_unmask_layers       208  80   -128
-> >   landlock_init_layer_masks    192  96   -96
-> >   hook_file_open               208  192  -16
-> >   current_check_access_socket  176  208  +32
-> 
-> These stack usage measurement look as expected.  With the current set
-> of 16 FS access rights, the matrix for the FS case is 16x16 bits (32
-> bytes), both in the old code and after the refactoring.
-> 
-> The differences we see above are therefore not savings in the data
-> structure itself, but due to the code simplifications in surrounding
-> functions where we now need fewer function parameters and local
-> variables.
-> 
-> > However, when we'll add the next access right, access_mask_t will be u32
-> > instead of u16, and stack usage delta will increase:
-> > 
-> >   current_check_access_socket  352  384  +32
-> >   hook_file_open               320  352  +32
-> >   current_check_access_path    304  352  +48
-> >   current_check_refer_path     560  608  +48
-> >   is_access_to_paths_allowed   400  464  +64
-> 
-> The data structure grows by 32 bytes, and access_mask_t grows by 2
-> bytes (but is as local variable probably aligned to 64 bit boundary).
-> These functions all have the layer masks as local variables, so it is
-> expected that they grow.
+Added.
 
-Yes, but we should keep in mind that this grows for all type of access
-rights: even if there is no new network access right, the cost will now
-be the same for FS and network access checks, which was not the case
-before (on purpose).
+> > --- a/security/landlock/audit.c
+> > +++ b/security/landlock/audit.c
+> > @@ -180,38 +180,21 @@ static void test_get_hierarchy(struct kunit *const test)
+> >  
+> >  #endif /* CONFIG_SECURITY_LANDLOCK_KUNIT_TEST */
+> >  
+> > +/* get_denied_layer - get the youngest layer that denied the access_request */
+> 
+> /* Get the youngest layer that denied the access_request. */
+
+OK, done.  I also changed to non-docstring style for the
+access_mask_subset() helper.
 
 > 
-> > 
-> > Even if the cumulative stack usage delta seems reasonable, the commit
-> > message should talk about these drawbacks.
-> > 
-> > I think the improved compiled code, and the overall simplification are
-> > worth it.
+> >  static size_t get_denied_layer(const struct landlock_ruleset *const domain,
+> >  			       access_mask_t *const access_request,
+> > -			       const layer_mask_t (*const layer_masks)[],
+> > -			       const size_t layer_masks_size)
+> > +			       const struct layer_access_masks *masks)
+> >  {
+> > -	const unsigned long access_req = *access_request;
+> > -	unsigned long access_bit;
+> > -	access_mask_t missing = 0;
+> > -	long youngest_layer = -1;
+> > -
+> > -	for_each_set_bit(access_bit, &access_req, layer_masks_size) {
+> > -		const layer_mask_t mask = (*layer_masks)[access_bit];
+> > -		long layer;
+> > -
+> > -		if (!mask)
+> > -			continue;
+> > -
+> > -		/* __fls(1) == 0 */
+> > -		layer = __fls(mask);
+> > -		if (layer > youngest_layer) {
+> > -			youngest_layer = layer;
+> > -			missing = BIT(access_bit);
+> > -		} else if (layer == youngest_layer) {
+> > -			missing |= BIT(access_bit);
+> > +	for (int i = ARRAY_SIZE(masks->access) - 1; i >= 0; i--) {
 > 
-> You are right, the 17th access right will change it somewhat and I
-> should add something to the commit message to explain my reasoning why
-> this is OK.
-> 
-> Abstractly speaking, we have a matrix with 1 bit per layer and access
-> right.  I illustrate below how this looks, it feels a bit simpler than
-> explaining it in words.  (I am marking the access right / layer
-> combinations with an "x" which are both an actual FS access right and
-> which are in the first layer - assuming that this is our most common
-> case.)
-> 
-> In the old way of representing that matrix, we are using a fixed 16
-> bits to represent the set of layers where an access right is still
-> needed (wasting 15/16 bits in the common case where only one layer is
-> active), but we store the right number of access rights.  Because this
-> representation was not using access_mask_t, the functions using it
-> required more loops and conditionals.
-> 
->                       layers
->                  fedcba98 76543210
->         access0  ________ _______x
->         access1  ________ _______x
->         access2  ________ _______x
->         access3  ________ _______x
->         access4  ________ _______x
->         access5  ________ _______x
->         access6  ________ _______x
->         access7  ________ _______x
->         access8  ________ _______x
->         access9  ________ _______x
->         accessa  ________ _______x
->         accessb  ________ _______x
->         accessc  ________ _______x
->         accessd  ________ _______x
->         accesse  ________ _______x
->         accessf  ________ _______x
-> 
-> In the new way of representing that matrix, we are using a fixed 16
-> (soon 32) bits for the access rights (wasting 0 (soon 15) bits for FS
-> access rights).  We also use a fixed number of layers (but this now
-> becomes tractable to change).  We get simplified code and improved
-> performance.
-> 
->                    access rights
->                  fedcba98 76543210
->          layer0  xxxxxxxx xxxxxxxx
->          layer1  ________ ________
->          layer2  ________ ________
->          layer3  ________ ________
->          layer4  ________ ________
->          layer5  ________ ________
->          layer6  ________ ________
->          layer7  ________ ________
->          layer8  ________ ________
->          layer9  ________ ________
->          layera  ________ ________
->          layerb  ________ ________
->          layerc  ________ ________
->          layerd  ________ ________
->          layere  ________ ________
->          layerf  ________ ________
-> 
-> Once we introduce the 17th FS access right, the matrix will use a
-> total of 64 instead of 32 bytes and look like this:
-> 
->                             access rights
->                  11111111 11111111 00000000 00000000
->                  fedcba98 76543210 fedcba98 76543210
->          layer0  ________ _______x xxxxxxxx xxxxxxxx
->          layer1  ________ ________ ________ ________
->          layer2  ________ ________ ________ ________
->          layer3  ________ ________ ________ ________
->          layer4  ________ ________ ________ ________
->          layer5  ________ ________ ________ ________
->          layer6  ________ ________ ________ ________
->          layer7  ________ ________ ________ ________
->          layer8  ________ ________ ________ ________
->          layer9  ________ ________ ________ ________
->          layera  ________ ________ ________ ________
->          layerb  ________ ________ ________ ________
->          layerc  ________ ________ ________ ________
->          layerd  ________ ________ ________ ________
->          layere  ________ ________ ________ ________
->          layerf  ________ ________ ________ ________
-> 
-> 
-> In my mind, it is a tradeoff where we get slightly better performance
-> and simpler code at the cost of a slightly increased stack space.  But
-> in my understanding, as long as we stay below the stack size limit,
-> this should be acceptable.  (Also, this is only 64 bytes extra, the
-> risk of exeeding stack space because of it seems low.)
-> 
-> 
-> (P.S. A thing that we can try as a follow-up is:
-> 
-> Now that this is an array indexed by layer, it becomes easier to only
-> look at the layers that are actually active.  In the common case,
-> that means that we would be able to skip looking at these layers,
-> and we might be able to save a few memory accesses.
-> 
-> Although, I am not sure it will improve performance - we should
-> better measure the performance impact carefully; the matrix still fits
-> in two cache lines.  It might not make a big difference how many of
-> the adjacent layers we access, and it could be offset by having to
-> pass the number of layers around and by loop unrolling tricks that the
-> compiler can't use any more.)
-> 
-> 
-> > On Tue, Dec 30, 2025 at 11:39:21AM +0100, Günther Noack wrote:
-> > > The layer masks data structure tracks the requested but unfulfilled
-> > > access rights during an operations security check.  It stores one bit
-> > 
-> > operation?
-> 
-> I missed the apostrophe: "operation's"
-> 
-> 
-> > > for each combination of access right and layer index.  If the bit is
-> > > set, that access right is not granted (yet) in the given layer and we
-> > > have to traverse the path further upwards to grant it.
-> 
-> 
-> > >  static size_t get_denied_layer(const struct landlock_ruleset *const domain,
-> > >  			       access_mask_t *const access_request,
-> > > -			       const layer_mask_t (*const layer_masks)[],
-> > > -			       const size_t layer_masks_size)
-> > > +			       const struct layer_access_masks *masks)
-> > >  {
-> > > -	const unsigned long access_req = *access_request;
-> > > -	unsigned long access_bit;
-> > > -	access_mask_t missing = 0;
-> > > -	long youngest_layer = -1;
-> > > -
-> > > -	for_each_set_bit(access_bit, &access_req, layer_masks_size) {
-> > > -		const access_mask_t mask = (*layer_masks)[access_bit];
-> > > -		long layer;
-> > > -
-> > > -		if (!mask)
-> > > -			continue;
-> > > -
-> > > -		/* __fls(1) == 0 */
-> > > -		layer = __fls(mask);
-> > > -		if (layer > youngest_layer) {
-> > > -			youngest_layer = layer;
-> > > -			missing = BIT(access_bit);
-> > > -		} else if (layer == youngest_layer) {
-> > > -			missing |= BIT(access_bit);
-> > > +	for (int i = LANDLOCK_MAX_NUM_LAYERS - 1; i >= 0; i--) {
-> > 
-> > All the loop indexes should be size_t (same as before).
-> > 
-> > Instead of LANDLOCK_MAX_NUM_LAYERS, ARRAY_SIZE(masks->access) would be
-> > better.
-> 
-> Done, will be fixed in next patch set version.
-> 
-> (I have also fixed all the other places where I could have used size_t
-> and ARRAY_SIZE().  Omitting them from this email for brevity, but I
-> looked at them all.)
-> 
-> (Remark on the side, I like being able to define the loop variable in
-> the for loop, but I notice that we have not done that much so far. I
-> assume this is OK?)
+> size_t i
 
-I think it is (was?) not in the guideline, but as long as checkpatch.pl
-doesn't complain, it looks good to me.  I guess it's officially OK since
-C11.
+This is one of the two places where this didn't work.
 
+The loop goes from top to bottom here, and the "i >= 0" check would
+always be true for a size_t.
+
+If there is a more idiomatic way to write that loop, I can switch to
+it, but would otherwise lean towards keeping it as it is?
+
+
+> > +		if (masks->access[i] & *access_request) {
+> > +			*access_request &= masks->access[i];
+> > +			return i;
+> >  		}
+> >  	}
+> >  
+> > -	for_each_set_bit(access_bit, &access_opt, layer_masks_size) {
+> > -		const layer_mask_t mask = (*layer_masks)[access_bit];
+> > +	for (int i = ARRAY_SIZE(masks->access) - 1; i >= 0; i--) {
 > 
-> > > +		if (masks->access[i] & *access_request) {
-> > > +			*access_request &= masks->access[i];
-> > > +			return i;
+> size_t i
+
+Ditto, the loop goes from top to bottom here.
+
+
+> > +		const access_mask_t denied = masks->access[i] & optional_access;
+> > +		const unsigned long newly_denied = denied & ~all_denied;
+> >  
+
+
+> > -static bool
+> > -scope_to_request(const access_mask_t access_request,
+> > -		 layer_mask_t (*const layer_masks)[LANDLOCK_NUM_ACCESS_FS])
+> > +static bool scope_to_request(const access_mask_t access_request,
+> > +			     struct layer_access_masks *masks)
+> >  {
+> > -	const unsigned long access_req = access_request;
+> > -	unsigned long access_bit;
+> > +	bool saw_unfulfilled_access = false;
+> >  
+> > -	if (WARN_ON_ONCE(!layer_masks))
+> > +	if (WARN_ON_ONCE(!masks))
+> >  		return true;
+> >  
+> > -	for_each_clear_bit(access_bit, &access_req, ARRAY_SIZE(*layer_masks))
+> > -		(*layer_masks)[access_bit] = 0;
+> > -
+> > -	return is_layer_masks_allowed(layer_masks);
+> > +	for (size_t i = 0; i < ARRAY_SIZE(masks->access); i++) {
+> > +		masks->access[i] &= access_request;
+> > +		if (masks->access[i])
 > 
+> {
 > 
-> > > -static size_t
-> > > -get_layer_from_deny_masks(access_mask_t *const access_request,
-> > > -			  const access_mask_t all_existing_optional_access,
-> > > -			  const deny_masks_t deny_masks)
-> > > +/*
-> > > + * get_layer_from_fs_deny_masks - get the layer which denied the access request
-> > > + *
-> > > + * As a side effect, stores the denied access rights from that layer(!) in
-> > > + * *access_request.
-> > > + */
-> > > +static size_t get_layer_from_fs_deny_masks(access_mask_t *const access_request,
-> > > +					   const deny_masks_t deny_masks)
-> > 
-> > I'm not a fan of this change.  We come from a generic approach to a
-> > specific and hardcoded one.  This is simpler *for now*, but could we get
-> > a better implementation?
-> > 
-> > Anyway, please create at least a dedicated patch for the
-> > non-transposition changes.
+> > +			saw_unfulfilled_access = true;
 > 
-> OK, I'll have a look into decoupling these aspects of the change.
-> (Not coded yet, but it's doable and would be cleaner for the patch
-> organization.)
-> 
-> 
-> > >  {
-> > > -	const unsigned long access_opt = all_existing_optional_access;
-> > > -	const unsigned long access_req = *access_request;
-> > > -	access_mask_t missing = 0;
-> > > +	const access_mask_t access_req = *access_request;
-> > >  	size_t youngest_layer = 0;
-> > > -	size_t access_index = 0;
-> > > -	unsigned long access_bit;
-> > > +	access_mask_t missing = 0;
-> > >  
-> > > -	/* This will require change with new object types. */
-> > > -	WARN_ON_ONCE(access_opt != _LANDLOCK_ACCESS_FS_OPTIONAL);
-> > > +	WARN_ON_ONCE((access_req | _LANDLOCK_ACCESS_FS_OPTIONAL) !=
-> > > +		     _LANDLOCK_ACCESS_FS_OPTIONAL);
-> > >  
-> > > -	for_each_set_bit(access_bit, &access_opt,
+> break;
+> }
+
+Two lines above, this loop mutates masks->access[...]:
+
+  masks->access[i] &= access_request
+
+If we break the loop early, we would not actually scope it down to the
+request entirely?  Is this safe?
+
+> > +	}
+> > +	return !saw_unfulfilled_access;
+> >  }
+
+–Günther
 
