@@ -1,430 +1,338 @@
-Return-Path: <linux-security-module+bounces-14354-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14358-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kI5hB116gGnE8wIAu9opvQ
-	(envelope-from <linux-security-module+bounces-14354-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Mon, 02 Feb 2026 11:20:13 +0100
+	id ODgUEt2DgGnE8wIAu9opvQ
+	(envelope-from <linux-security-module+bounces-14358-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Mon, 02 Feb 2026 12:00:45 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40032CAC87
-	for <lists+linux-security-module@lfdr.de>; Mon, 02 Feb 2026 11:20:12 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C45ACB62E
+	for <lists+linux-security-module@lfdr.de>; Mon, 02 Feb 2026 12:00:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 4B51D3010831
-	for <lists+linux-security-module@lfdr.de>; Mon,  2 Feb 2026 10:06:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 551E2302A6E9
+	for <lists+linux-security-module@lfdr.de>; Mon,  2 Feb 2026 10:53:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFBB72DE711;
-	Mon,  2 Feb 2026 10:06:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD4E627E054;
+	Mon,  2 Feb 2026 10:53:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z7SYgy4v"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="P/6kvKN5";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="M4flwB/Y"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8694C2727F3;
-	Mon,  2 Feb 2026 10:06:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770026816; cv=none; b=tzN7Twstsa9VmoX/rFRd0kYAElPNpRlQ9za0cDOtwfw4zjcyoHl/zqm7tjbssguHxUwzLPd93rIWyDlYx6auBhDZ1eMr4BOq9UUKebkOm7qS1fFjt78JkSrcQixgjfKUtFSHGBTYFC+v0Pl9H+Gk/e5Nki0ww32l2HGe//0DfgY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770026816; c=relaxed/simple;
-	bh=DlHoOTLxIxjAjwF5rSYvlt5G94iLnc2c4QiF0If3+SU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=t8OJi+wdqMmu8qgfhDC1G1kaVmKiS327dyRwn8PNMeBzBjvahTAnTegyVbgPFPzpUjsI8x8qYK74SR28OxiqOYqmuaJFxYOMTcEximddku/iV1+DeFpSWxpNUTgNcV3hiOqjrykmClkRblbLmg/AH7U4HFvzCBhbvM6NFpQUsKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z7SYgy4v; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 611DFC116D0;
-	Mon,  2 Feb 2026 10:06:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770026816;
-	bh=DlHoOTLxIxjAjwF5rSYvlt5G94iLnc2c4QiF0If3+SU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=Z7SYgy4v07w1AugBQ5PySBoJ5Ew8y2VILV4q+TXbJbgSA0KpfHpLuNExlQ1DT56bW
-	 TpinW8kxfX+Y9FWOzp1Ipg4NMzWUgxmVikG1asAF3MP4u2VTxqYM0SxoWxFaksQb0f
-	 5pwYNOWOq5rkrRx3UenvjAm7+bLAysTDYv53RV/Xksnwv4Ns4uNumHpoV8Ml2F1/RC
-	 Xv1PTuTZn1wgrxLtSIuJo8eIAmzPFcKcRRDrcccfDXjFjbMZcOQchhPQe8ofUspMvX
-	 lmUh0Ejhus8nx+FbJeHrXB+GRK2jPzA7e+jFf2+I5aAdfF9bGc1ZwzWxMdKMYB0v+9
-	 /jrdOL/XLZz+A==
-From: Andreas Hindborg <a.hindborg@kernel.org>
-To: Daniel Almeida <daniel.almeida@collabora.com>, Oliver Mangold
- <oliver.mangold@pm.me>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?utf-8?Q?Bj=C3=B6rn?= Roy
- Baron <bjorn3_gh@protonmail.com>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Benno Lossin <lossin@kernel.org>, Danilo
- Krummrich <dakr@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Dave Ertman <david.m.ertman@intel.com>, Ira
- Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>, "Rafael J.
- Wysocki" <rafael@kernel.org>, Maarten Lankhorst
- <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Lorenzo
- Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, Viresh Kumar <vireshk@kernel.org>, Nishanth
- Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, Bjorn Helgaas
- <bhelgaas@google.com>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?=
- <kwilczynski@kernel.org>, Paul
- Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>, Asahi Lina
- <lina+kernel@asahilina.net>, rust-for-linux@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v13 4/4] rust: Add `OwnableRefCounted`
-In-Reply-To: <A5A7C4C9-1504-439C-B4FF-C28482AF7444@collabora.com>
-References: <20251117-unique-ref-v13-0-b5b243df1250@pm.me>
- <20251117-unique-ref-v13-4-b5b243df1250@pm.me>
- <A5A7C4C9-1504-439C-B4FF-C28482AF7444@collabora.com>
-Date: Mon, 02 Feb 2026 11:06:02 +0100
-Message-ID: <87qzr3piid.fsf@t14s.mail-host-address-is-not-set>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04B4F359705
+	for <linux-security-module@vger.kernel.org>; Mon,  2 Feb 2026 10:53:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770029619; cv=fail; b=uaET27MgK+dexaCblznncEPZiFmYEFOC4m9unFpWCuUv04JxiTDsHkTB33Ya5abZ/7q0JAXG6bCM4JNnjZgO5dGFMpWdeJDvrh9xMSAsVZPviAI9IW293F5/GzX+/rRXikqQHgFc3rbdiYu/kvoUq4WwyggLBkRk/B9t15x8/os=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770029619; c=relaxed/simple;
+	bh=U/tYwqAsFMbd0qomIjIlcEuAPoHFXA3uzdwne1Riq3c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=DtBN+6PVPQVnLKRc5II9JiybVNBEqYjCsYDNT+X51cwQYP2uevoQq4epeQk02SVnrWMG3Ggk+QVg6Tia/YMgrR0XcOfuM7xcOTsvtvwHUxXYaU0oPelFwAyA+nfKZ2v8BlIOZSN6w47jwiFrhJxxTwfTJUsq2bUvCXcbUR6JiYo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=P/6kvKN5; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=M4flwB/Y; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6128udGd1383463;
+	Mon, 2 Feb 2026 10:53:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2025-04-25; bh=YEsUNx0ecuXxKD220W
+	6c5uxv7ydAOUwUvGp26zUXbCI=; b=P/6kvKN54dKbEkE++2xsU/WmQTmZWEyJd4
+	jvEHD9lso6vRpHgxzEywK6A2NG8kIPLc0P2gd6wMSFilffInn3/J2lb9dxlufwL9
+	MQ5jQlXdCnmTKD+WRrHh+ccIfi2Xt6n2LIgdN0jcUDEPWHOYsrli0wWSd9u3Qrrk
+	enGerHeOrrUH7XJKCYa5kWLn3LKGviosudramLt38gAZovbvHHM2eBALvYdP/Lbt
+	45aHGuYLIqd2QJ6aZ3WRZVWAT1ZZl0arv/aMSNhU5glA9yjwhPyuG+Y+vBkNaPDe
+	DcKZpEOxXTK88Pc858FB3o3vNHNGFhrTpDSDGBx6/UjNm4tBy3Jg==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4c1arhhy9j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 02 Feb 2026 10:53:32 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 612Aq6Pb002079;
+	Mon, 2 Feb 2026 10:53:31 GMT
+Received: from sa9pr02cu001.outbound.protection.outlook.com (mail-southcentralusazon11013017.outbound.protection.outlook.com [40.93.196.17])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4c186jrsay-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 02 Feb 2026 10:53:31 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=prS7313JgBQh+HSfu6kc+cTsleGbQ/ZN60I9ZNCGUmHd1/r/R57D4OopQgHcK/nTWhL9B2bHK4Cr52G8KNNPLg0SP8fw4ejyQ9o6JsTEq1MQHTei5h91AKt8K8H3XDrZoZZUmhO5fqh8VKTOy+uHLmSDxyILX7izGQekWnBReDA8fzRPzowW2jcaEv+ji6CEVaZH60kOqcrguhtSw3H3VLMiSVEgetKVf72tcITaPS8hGmHFy7Yq1QbMOzpzh/EX0TcCvvy7GRzVR1fy3Y+kiIldGCUasPFGbzkT8fE0Llum2LsCHN0vy3Zr0nLoBKOPaIHlAYe5dL5OA7Cp/GtGcw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YEsUNx0ecuXxKD220W6c5uxv7ydAOUwUvGp26zUXbCI=;
+ b=i10t2g0OysCMwRRq1Wt5pRS0/IsDu3CROOdxoHLRNJKhOciaY69TkJQ2LEPPNcvfg/2eR5ULksdd4oZN3tUmXjxwiu2TErnbQGwaVXSq+9YObA2y58D0SXloE9QsxK2xofwOO1eZNRkD2eCGU+tUAfOd3Y/BWORK+VfWmN2FihQt/sX3L8+w89i2iDzF/VNj/trwQ1WtPFPx6wL/mIaWXLempi7XO1CsalazF60ioMJI84kIsNug46asO4s+gEkQotoPURZMZElxUFhZ4XeCobGx2VJAcF2mu/9/IlXabDdZv92jcQSPixDpflZACR47FntsSZPRs2n59hDAjRt0sA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YEsUNx0ecuXxKD220W6c5uxv7ydAOUwUvGp26zUXbCI=;
+ b=M4flwB/YtCiQ0wjoIPp/BEZih4lKZEOKIODgsa1iH/TtrECc9IQyFXy1LHzSyo6nr1MFkvOa3gmEs7o5vN55x+L0CVcVPbid+UqSMwE3718IL0djvSU52iYZscmrulyrhKqCV3Jo8BNq9nyu46P0a7Ztq3El5QQxt8YyBPSGTjY=
+Received: from BL4PR10MB8229.namprd10.prod.outlook.com (2603:10b6:208:4e6::14)
+ by DS7PR10MB7373.namprd10.prod.outlook.com (2603:10b6:8:ef::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9564.16; Mon, 2 Feb 2026 10:53:29 +0000
+Received: from BL4PR10MB8229.namprd10.prod.outlook.com
+ ([fe80::552b:16d2:af:c582]) by BL4PR10MB8229.namprd10.prod.outlook.com
+ ([fe80::552b:16d2:af:c582%6]) with mapi id 15.20.9520.005; Mon, 2 Feb 2026
+ 10:53:29 +0000
+Date: Mon, 2 Feb 2026 10:53:28 +0000
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: linux-security-module@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH] lsm: preserve /proc/sys/vm/mmap_min_addr when
+ !CONFIG_SECURITY
+Message-ID: <38c9c9bf-3912-4e16-b15e-60890390e8dc@lucifer.local>
+References: <20260129225132.420484-2-paul@paul-moore.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260129225132.420484-2-paul@paul-moore.com>
+X-ClientProxiedBy: LO6P123CA0051.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:310::7) To BL4PR10MB8229.namprd10.prod.outlook.com
+ (2603:10b6:208:4e6::14)
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL4PR10MB8229:EE_|DS7PR10MB7373:EE_
+X-MS-Office365-Filtering-Correlation-Id: d963522c-6393-47a2-1c3a-08de62494ca3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?QnQtx9lH7thlaMNkTKZGoPfh9v5X8RAafMtROJ/nxX9T6VsLrhbsPnqn0al+?=
+ =?us-ascii?Q?clX+SOnt/SgyrR/lQIuyW6/Jxt+qX/XCo1lXvmWyyVn+B7MDXTnNfOlU+d47?=
+ =?us-ascii?Q?LdKPXOouWMjH4+P/g/SJaI7Ydf01MPPTtWHEKtxfBjbtCdl8JJ5ETbUV4RhE?=
+ =?us-ascii?Q?I7WNWQFmg+Vg+ZMCJAmXJSr0JnlKFODTJOg63XbIBX/1A7fPrgFtYVQOEluh?=
+ =?us-ascii?Q?pApgs7qJkae6YDjlZsq8jB9ZIU4eRXoUnYPMnxA4Q66cT01D56ktWu0V2Igs?=
+ =?us-ascii?Q?HxLBtzn5sPoS8RU9PFlMlKGxPpUdBUJ3YIncV66XL4/JTCD4ns6UTzqhH2iX?=
+ =?us-ascii?Q?fMC/wzqgjWSv5RhUL8D3gOaoLOkJ7DpEKmmjRpfCrWpjEGnd5UhVubNh8gva?=
+ =?us-ascii?Q?njjWktbn7O8PUy6BIh4foHJ37HPwsw25EncPoRsrN8h1ufjZeb7bNZi3uT5U?=
+ =?us-ascii?Q?hyC9mb/pYt4ZB8pr4jTMcFge6wy4dBkvnCAkaK6yAPAP4MlvpvjlaoPHMgNY?=
+ =?us-ascii?Q?aHFOiuMi4iXfhSfgSKvSLetYQ1S5Md0WmDtYKqYgN0lLwMLxU2EuG/CC8AcN?=
+ =?us-ascii?Q?XCRitR8N2gZ8Ff1jhRuvPpTyOubtO7qiyY8uigy4aPjzgDnNHOCdF4arMvMa?=
+ =?us-ascii?Q?DzeAcMPtgERAThX0SlbeoeYkpMm+PoLVDC09qbBM+xY37JKREVeQ6KZnZkcJ?=
+ =?us-ascii?Q?Nnbsc820Kv401Cl2f32Q0vwp92Sr34LEXAQ01d55mn0G6bOXGATOXWH1gLvs?=
+ =?us-ascii?Q?NsjkaQ8G7eC1DTNSYfp3jyGiAJbLuw/VfQXhpIHpXfTggOkOtaSDbg6Mti/i?=
+ =?us-ascii?Q?/OI20z4qJd6F4HUKznChSNb5cnpbHND6v5rlGTX3pDIMEpK29FGwYq9Z7Nm6?=
+ =?us-ascii?Q?QAaAgcnazDCC+J+1EirjL/NlWgz0HJhGVSs38lT1RfEg+LIK4wq6JvG8CUD6?=
+ =?us-ascii?Q?5+SJxm3iVuExun5zTHg8nIT1AUpfpEOXZL2gLwaq7oDlJxNPLZEt64V4GGsz?=
+ =?us-ascii?Q?L62XR/OE0Is9Ela+sbqM0iez87OPASwi4c82umNk5n9rdnXROj+DxjXvIc8H?=
+ =?us-ascii?Q?RLTq34N1HpDPiBIZvtlzrS8jtStN9IqbM566YxqVZlRfN+HJrtnORb/Lg0BQ?=
+ =?us-ascii?Q?YtT1DXrtJRq/N6mfKEZ1O8i+60kM7bRjnutpbvcRzUHlBKuAOSEBeqFWEkLR?=
+ =?us-ascii?Q?BaXyb4WXKc/Zg5U30bzLg1R4sJcSaX5QHWqKTxV5qhYzGWc+n6R+9/rY8Sz7?=
+ =?us-ascii?Q?xGJIzT6ynu/BoQPMxcl1UC6PzRTMPhen7lEUa5yNZOJwd1pdMnNnoCCIupwl?=
+ =?us-ascii?Q?RU7chV5DxIh2/0hcXP+1PWdYpznoSAOEMmGxRRZLrzp6ZmYE8uPl2JBZWkcQ?=
+ =?us-ascii?Q?a0x0aZoS1ZkBXK4GMrz/AZdBLIWohe4EANDuGL31S3nmP/vmij9i4efXtYh/?=
+ =?us-ascii?Q?j8Kq1aw0ff6XeTBQIppVqlqIMGoq7zHj/NWVNl8vdFKhrtYi2Cv/0cGNaao9?=
+ =?us-ascii?Q?VzPjVOCK4SgJ6D4B9gUIz1BsC86hhVvkUGRXKmAaK4BasZ1PnBIITq4I/f19?=
+ =?us-ascii?Q?JnXvGGBYRIuZfO7Rk6g=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL4PR10MB8229.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?MAyHSXXBKQm+w8lsD8lmG44Swr1jZKRYlKv+WYfkmXYA9blWZjcLgNDrNjNW?=
+ =?us-ascii?Q?HLOi3JigH2TFk0n9ksMVUXTsHYDpiZJ7glDMh7wESEQ4GJzO31yC8MYK1nHy?=
+ =?us-ascii?Q?2IYUzX7PAdBRHsRRveXr3jTSf8BTdv0iokuZf/wjQKA/u6o1fCYjfYybjKho?=
+ =?us-ascii?Q?XRSCiQBD5x82gjzBznN+Mq/8n7WvlicrpAD18yGhoDG9XHxGTmG3SO81O1P7?=
+ =?us-ascii?Q?5hvQzYSe4ALWWnuteR2i4OseO3OxDH4xp24aRuNwGKW6iAQQRCZDoQGCBM9a?=
+ =?us-ascii?Q?lBs2HoTgWzvuvIh2M+xY6t4KsHP7TqxY3BYWqu5UCfYCm2uQ3WVRAfanEORM?=
+ =?us-ascii?Q?aWzywh4Gb0UnuqClIXBTCm/9bKy0379u5JCD1LTvLuSWmP8clYWw+0qAQ3Mi?=
+ =?us-ascii?Q?mVS0o68r1qbc33SWuTeOqMkSpHMMtb+/QHkyQZ9SfSUE8s2iRrhmDZMqfdml?=
+ =?us-ascii?Q?/pS8XRFFq+y/ei3wClXp9P9daPX85qOUy4E1Y/Iuk82a6rUmbBLedi0+C7++?=
+ =?us-ascii?Q?pDhiTSInbnvPkfjulHFcgJ3R2xPxHQnq5LggpuSKw96u8OIDaOWhXJM6Qc5a?=
+ =?us-ascii?Q?skzunipImSVKGdtg0ioqwsIHnzD7mBs3Vtsj9Y5FSyQeKfvOpBMaVyP5QnUW?=
+ =?us-ascii?Q?Mc1DRTj7bLmUao569xl71RpPA3WKnWSyEETuMQ2NZheeHGvo48XkafW4/8VB?=
+ =?us-ascii?Q?KJqngEMc4LAIRYWVdAKPjV197XoEHUcsyMdKB/SRx8iyMhe9IcOfqasWGl3D?=
+ =?us-ascii?Q?ukhlM21vMjrbIJdOD3IZ/LZsbE1n+Kp3UeubQhZ28Vbr8OgF1UU2SnRElzq/?=
+ =?us-ascii?Q?pH7Ru0cuu+L2wrXVa73wIv/7ggJu6ISx580vyto5v5Tp94jNB0dq5qiWAjJZ?=
+ =?us-ascii?Q?OQS/S9vN1mWzeiD17J5GEvD11sdWi7PiF8QtqsFy3rFpCBv4xGLR99KdBpZS?=
+ =?us-ascii?Q?giOFXt/HQheY79UAZxM+TiIA24NiF07l8g/2Auh21zgjPfPOzpXWUJm3gp1W?=
+ =?us-ascii?Q?DvVq3s8IL6VKiQcmw2i4PhnhUy98ey+PNjOKSdGASSTxcoic8ci5ErEyrg3l?=
+ =?us-ascii?Q?VgnAxGBcj3zZfE0Eh04vh6OCFMElERU+UKeGH3cpBwEKP+wmz77BzAt7w4BV?=
+ =?us-ascii?Q?hM5Hxbn0lAeu7Asie9KW47hKXv1AGDepHifzArdVGv3Bb4UrsXQtSa7E2jgK?=
+ =?us-ascii?Q?vPFgHgefk0iUL+69fhsF1W4o/YOzg3KHXLTTFr4NQsaU2SVo29HTmQn0gCei?=
+ =?us-ascii?Q?ziAR2UXEh9vDly89rmyMGAuE5iaUcH/n9s8Y71Tzibwv04gVbfWtpy2XsaVp?=
+ =?us-ascii?Q?R2vuuqcu7eBUziIRBkHjW1ge1Lddmt05bsGiSl1RmX2+G6rOAvlPZLPEc7pS?=
+ =?us-ascii?Q?iDF8uHImlGrdx9itqSxVUGWICvgJwPYGrEPCKXPgzYVIFopoP+0bl4vOW05c?=
+ =?us-ascii?Q?we1ZLHs3860TIH0FMMf2bW/llWravuTMswyfNUm5VRFrwMPA+yLLW4CzVMGI?=
+ =?us-ascii?Q?ZlKtPW+/kCcNjEToGWBtDwTK+etREpSW7DDhrsX3kO7aculKeVDxISaPTtgD?=
+ =?us-ascii?Q?1+o5AU02OZ0srtzR7j9Xbzgp2XriZzhhqOn91UfSt4Tg60YZ8LM9xJJ4yn5Z?=
+ =?us-ascii?Q?HRzskQSwyhtJfCs7kS3MD/uGyF0Y1vSEg0/2gzfmQWuu0ZkigfNF+etNrNUf?=
+ =?us-ascii?Q?bopZwzFvBk0ljD+xXwTOLA3VmBNbarH8DO2WJ9wv/sm4im0CkcLPfz9Tm21P?=
+ =?us-ascii?Q?tboBK1W2oKQ1ltskTeerlACVLhsFbl0=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	667DzA4LhCo4klEP5lw5lOtyfY3QNnya4zs+VLLC1sfzAF/WX8HbYvM33kuwVlflDJNjtRUYs9S/bRdApXrBe7ZeSalhmYXwlxYh/zDDQhGU0YWSn39IzEzqLJADwcaf7rVnJF6g5rh2DRpYhxuSs3uCrqymScBepNvgVmFL9HTXHxTlilLTz/ayf6fSE0JEaysT8Z4efc8WVfIgl1fQn/k8RMHt17OuyCdApYFcyR7XoBq+ad9Zsef+FvgpV7KlHEvvfGzTKQbytXS2Qp63KmaP8femiPX4jSQxLe6//Qnmu3fisKNyxmaWBedtmJpGiPu/YjA4JMoJ+oIweHVGNljUduo5YwN0ftNZCz/5geHFWaI/nYSMB87E56cpooOAf0a/sD2W59pfkHHl5OzOyDmNMkQzr1JJyENd+0VyTpCJra395d+rbvbY/1lNfKrd1CmSFbAavmJoHVUb/DqzyVpIltlcLUkPh+Krx/wzUlgitcRTU+sHpfRSk8qQ9/OFatExNdrCDsGyaMAdDQcsXdDso55dC30vei+fRUULHEXT5OO/laMJZ2agJzIbbb8fGswvD1DCskg2XNRF6SKv+Q8qAymhkHKt/HrroI0GpCs=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d963522c-6393-47a2-1c3a-08de62494ca3
+X-MS-Exchange-CrossTenant-AuthSource: BL4PR10MB8229.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2026 10:53:29.3182
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: i7XjV2Q0UUD0Q8HgXCmnbUSekw2JhyToyKAildEFIx0JvEOgUHovbZFNQE/r0/b77uhb/SyEKcAf8xpLINkN4G6vCuDGpXtSOxbE7xsd4R0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB7373
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-02_03,2026-01-30_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0
+ malwarescore=0 mlxscore=0 adultscore=0 phishscore=0 mlxlogscore=999
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2601150000 definitions=main-2602020087
+X-Proofpoint-ORIG-GUID: al6XZq_0Kjx-A5E4AI4VZWx2lSX8g3vz
+X-Proofpoint-GUID: al6XZq_0Kjx-A5E4AI4VZWx2lSX8g3vz
+X-Authority-Analysis: v=2.4 cv=fdmgCkQF c=1 sm=1 tr=0 ts=6980822c b=1 cx=c_pps
+ a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=HzLeVaNsDn8A:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=yPCof4ZbAAAA:8 a=xVhDTqbCAAAA:8 a=6hJo0hV5HX86MnkomZAA:9 a=CjuIK1q_8ugA:10
+ a=GrmWmAYt4dzCMttCBZOh:22 cc=ntf awl=host:12104
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjAyMDA4NyBTYWx0ZWRfX1CwlflrVda4i
+ kzaQxIl1Hr/9z/wfJb8xjCjtZfVVRrSNHfylqAQUuJiOstCuIGf/hf5fHnuRlWWz6HMg7vbEEnP
+ Tc5hdYYT1wmkMrq4j1TaBd9c6ZrZilwt7eg8sHp9Txu4mUkzKrPwMak2wJqKCMZ2LsoA0kipbIn
+ 4NwcpV5AbGCCx2NFwh/Nm3x2BxcXzZ5JDD8MSneNNhQkcoA/5+58mI9Gikf0Zf12SdKpSG5nzyu
+ W/0oJWDfeksSgWbjLrrQ8+ckoyd3wL8VyZ9ueMgTPXP8iHl+9GBiNQkgzYZsc1h5AgYkIVw4OGi
+ GCI/+eCHK1k1lJfOvzGkmMgxSx8vzyAtIgeKErhbXYlivsWv7EYhkM+Enx7bKEoOafkhb8ybK9i
+ 6JSH7fVl87n3D1KCd4HYH0Vus9P+SBaCVHpy2ZutZdKZLL2UhZmhfWy3G5AX33d63NexT0/7n7y
+ gwf+CKP+s1IScWmd13Zkm+oSpJHpvSIdcL1VkKGY=
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
+	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25,oracle.onmicrosoft.com:s=selector2-oracle-onmicrosoft-com];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14354-lists,linux-security-module=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-14358-lists,linux-security-module=lfdr.de];
+	SUBJECT_HAS_EXCLAIM(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,gmail.com,garyguo.net,protonmail.com,google.com,umich.edu,linuxfoundation.org,intel.com,linux.intel.com,suse.de,ffwll.ch,zeniv.linux.org.uk,suse.cz,oracle.com,ti.com,paul-moore.com,asahilina.net,vger.kernel.org,lists.freedesktop.org,kvack.org];
-	RCPT_COUNT_TWELVE(0.00)[43];
+	RCPT_COUNT_THREE(0.00)[3];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[a.hindborg@kernel.org,linux-security-module@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-security-module,kernel];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lorenzo.stoakes@oracle.com,linux-security-module@vger.kernel.org];
+	DKIM_TRACE(0.00)[oracle.com:+,oracle.onmicrosoft.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-security-module];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[t14s.mail-host-address-is-not-set:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,collabora.com:email,pm.me:email]
-X-Rspamd-Queue-Id: 40032CAC87
+	RCVD_COUNT_SEVEN(0.00)[9]
+X-Rspamd-Queue-Id: 9C45ACB62E
 X-Rspamd-Action: no action
 
-Daniel Almeida <daniel.almeida@collabora.com> writes:
-
-> Hi Oliver,
+On Thu, Jan 29, 2026 at 05:51:33PM -0500, Paul Moore wrote:
+> While reworking the LSM initialization code the
+> /proc/sys/vm/mmap_min_addr handler was inadvertently caught up in the
+> change and the procfs entry wasn't setup when CONFIG_SECURITY was not
+> selected at kernel build time.  This patch restores the previous behavior
+> and ensures that the procfs entry is setup regardless of the
+> CONFIG_SECURITY state.
 >
->> On 17 Nov 2025, at 07:08, Oliver Mangold <oliver.mangold@pm.me> wrote:
->>=20
->> Types implementing one of these traits can safely convert between an
->> `ARef<T>` and an `Owned<T>`.
->>=20
->> This is useful for types which generally are accessed through an `ARef`
->> but have methods which can only safely be called when the reference is
->> unique, like e.g. `block::mq::Request::end_ok()`.
->>=20
->> Signed-off-by: Oliver Mangold <oliver.mangold@pm.me>
->> Co-developed-by: Andreas Hindborg <a.hindborg@kernel.org>
->> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
->> Reviewed-by: Andreas Hindborg <a.hindborg@kernel.org>
->> ---
->> rust/kernel/owned.rs     | 138 +++++++++++++++++++++++++++++++++++++++++=
-+++---
->> rust/kernel/sync/aref.rs |  11 +++-
->> rust/kernel/types.rs     |   2 +-
->> 3 files changed, 141 insertions(+), 10 deletions(-)
->>=20
->> diff --git a/rust/kernel/owned.rs b/rust/kernel/owned.rs
->> index a26747cbc13b..26ab2b00ada0 100644
->> --- a/rust/kernel/owned.rs
->> +++ b/rust/kernel/owned.rs
->> @@ -5,6 +5,7 @@
->> //! These pointer types are useful for C-allocated objects which by API-=
-contract
->> //! are owned by Rust, but need to be freed through the C API.
->>=20
->> +use crate::sync::aref::{ARef, RefCounted};
->> use core::{
->>     mem::ManuallyDrop,
->>     ops::{Deref, DerefMut},
->> @@ -14,14 +15,16 @@
->>=20
->> /// Type allocated and destroyed on the C side, but owned by Rust.
->> ///
->> -/// Implementing this trait allows types to be referenced via the [`Own=
-ed<Self>`] pointer type. This
->> -/// is useful when it is desirable to tie the lifetime of the reference=
- to an owned object, rather
->> -/// than pass around a bare reference. [`Ownable`] types can define cus=
-tom drop logic that is
->> -/// executed when the owned reference [`Owned<Self>`] pointing to the o=
-bject is dropped.
->> +/// Implementing this trait allows types to be referenced via the [`Own=
-ed<Self>`] pointer type.
->> +///  - This is useful when it is desirable to tie the lifetime of an ob=
-ject reference to an owned
->> +///    object, rather than pass around a bare reference.
->> +///  - [`Ownable`] types can define custom drop logic that is executed =
-when the owned reference
->> +///    of type [`Owned<_>`] pointing to the object is dropped.
->> ///
->> /// Note: The underlying object is not required to provide internal refe=
-rence counting, because it
->> /// represents a unique, owned reference. If reference counting (on the =
-Rust side) is required,
->> -/// [`RefCounted`](crate::types::RefCounted) should be implemented.
->> +/// [`RefCounted`] should be implemented. [`OwnableRefCounted`] should =
-be implemented if conversion
->> +/// between unique and shared (reference counted) ownership is needed.
->> ///
->> /// # Safety
->> ///
->> @@ -143,9 +146,7 @@ impl<T: Ownable> Owned<T> {
->>     ///   mutable reference requirements. That is, the kernel will not m=
-utate or free the underlying
->>     ///   object and is okay with it being modified by Rust code.
->>     pub unsafe fn from_raw(ptr: NonNull<T>) -> Self {
->> -        Self {
->> -            ptr,
->> -        }
->> +        Self { ptr }
->>     }
+> Future work will improve upon this, likely by moving the procfs handler
+> into the mm subsystem, but this patch should resolve the immediate
+> regression.
 >
-> Unrelated change?
+> Fixes: 4ab5efcc2829 ("lsm: consolidate all of the LSM framework initcalls")
+> Reported-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> Signed-off-by: Paul Moore <paul@paul-moore.com>
 
-Looks like a rustfmt thing. I'll split it out or remove it.
+(Sorry was at fosdem from fri)
 
+LGTM and tested locally confirming it works, thanks so much for the quick
+turnaround! Feel free to add:
+
+Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Tested-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+
+Cheers, Lorenzo
+
+> ---
+>  security/lsm.h      | 9 ---------
+>  security/lsm_init.c | 7 +------
+>  security/min_addr.c | 5 ++---
+>  3 files changed, 3 insertions(+), 18 deletions(-)
 >
->>=20
->>     /// Consumes the [`Owned`], returning a raw pointer.
->> @@ -193,3 +194,124 @@ fn drop(&mut self) {
->>         unsafe { T::release(self.ptr) };
->>     }
->> }
->> +
->> +/// A trait for objects that can be wrapped in either one of the refere=
-nce types [`Owned`] and
->> +/// [`ARef`].
->> +///
->> +/// # Examples
->> +///
->> +/// A minimal example implementation of [`OwnableRefCounted`], [`Ownabl=
-e`] and its usage with
->> +/// [`ARef`] and [`Owned`] looks like this:
->> +///
->> +/// ```
->> +/// # #![expect(clippy::disallowed_names)]
->> +/// # use core::cell::Cell;
->> +/// # use core::ptr::NonNull;
->> +/// # use kernel::alloc::{flags, kbox::KBox, AllocError};
->> +/// # use kernel::sync::aref::{ARef, RefCounted};
->> +/// # use kernel::types::{Owned, Ownable, OwnableRefCounted};
->> +///
->> +/// // Example internally refcounted struct.
+> diff --git a/security/lsm.h b/security/lsm.h
+> index 81aadbc61685..db77cc83e158 100644
+> --- a/security/lsm.h
+> +++ b/security/lsm.h
+> @@ -37,15 +37,6 @@ int lsm_task_alloc(struct task_struct *task);
 >
-> nit: IMHO the wording could improve ^
-
-/// // An internally refcounted struct for demonstration purposes.
-
+>  /* LSM framework initializers */
 >
->> +/// //
->> +/// // # Invariants
->> +/// //
->> +/// // - `refcount` is always non-zero for a valid object.
->> +/// // - `refcount` is >1 if there are more than 1 Rust reference to it.
->> +/// //
->> +/// struct Foo {
->> +///     refcount: Cell<usize>,
->> +/// }
->> +///
->> +/// impl Foo {
->> +///     fn new() -> Result<Owned<Self>, AllocError> {
->> +///         // We are just using a `KBox` here to handle the actual all=
-ocation, as our `Foo` is
->> +///         // not actually a C-allocated object.
->> +///         let result =3D KBox::new(
->> +///             Foo {
->> +///                 refcount: Cell::new(1),
->> +///             },
->> +///             flags::GFP_KERNEL,
->> +///         )?;
->> +///         let result =3D NonNull::new(KBox::into_raw(result))
->> +///             .expect("Raw pointer to newly allocation KBox is null, =
-this should never happen.");
->> +///         // SAFETY: We just allocated the `Self`, thus it is valid a=
-nd there cannot be any other
->> +///         // Rust references. Calling `into_raw()` makes us responsib=
-le for ownership and
->> +///         // we won't use the raw pointer anymore, thus we can transf=
-er ownership to the `Owned`.
->> +///         Ok(unsafe { Owned::from_raw(result) })
->> +///     }
->> +/// }
->> +///
->> +/// // SAFETY: We increment and decrement each time the respective func=
-tion is called and only free
->> +/// // the `Foo` when the refcount reaches zero.
->> +/// unsafe impl RefCounted for Foo {
->> +///     fn inc_ref(&self) {
->> +///         self.refcount.replace(self.refcount.get() + 1);
->> +///     }
->> +///
->> +///     unsafe fn dec_ref(this: NonNull<Self>) {
->> +///         // SAFETY: By requirement on calling this function, the ref=
-count is non-zero,
->> +///         // implying the underlying object is valid.
->> +///         let refcount =3D unsafe { &this.as_ref().refcount };
->> +///         let new_refcount =3D refcount.get() - 1;
->> +///         if new_refcount =3D=3D 0 {
->> +///             // The `Foo` will be dropped when `KBox` goes out of sc=
-ope.
->> +///             // SAFETY: The [`KBox<Foo>`] is still alive as the old =
-refcount is 1. We can pass
->> +///             // ownership to the [`KBox`] as by requirement on calli=
-ng this function,
->> +///             // the `Self` will no longer be used by the caller.
->> +///             unsafe { KBox::from_raw(this.as_ptr()) };
->> +///         } else {
->> +///             refcount.replace(new_refcount);
->> +///         }
->> +///     }
->> +/// }
->> +///
->> +/// impl OwnableRefCounted for Foo {
->> +///     fn try_from_shared(this: ARef<Self>) -> Result<Owned<Self>, ARe=
-f<Self>> {
->> +///         if this.refcount.get() =3D=3D 1 {
->> +///             // SAFETY: The `Foo` is still alive and has no other Ru=
-st references as the refcount
->> +///             // is 1.
->> +///             Ok(unsafe { Owned::from_raw(ARef::into_raw(this)) })
->> +///         } else {
->> +///             Err(this)
->> +///         }
->> +///     }
->> +/// }
->> +///
+> -#ifdef CONFIG_MMU
+> -int min_addr_init(void);
+> -#else
+> -static inline int min_addr_init(void)
+> -{
+> -	return 0;
+> -}
+> -#endif /* CONFIG_MMU */
+> -
+>  #ifdef CONFIG_SECURITYFS
+>  int securityfs_init(void);
+>  #else
+> diff --git a/security/lsm_init.c b/security/lsm_init.c
+> index 05bd52e6b1f2..573e2a7250c4 100644
+> --- a/security/lsm_init.c
+> +++ b/security/lsm_init.c
+> @@ -489,12 +489,7 @@ int __init security_init(void)
+>   */
+>  static int __init security_initcall_pure(void)
+>  {
+> -	int rc_adr, rc_lsm;
+> -
+> -	rc_adr = min_addr_init();
+> -	rc_lsm = lsm_initcall(pure);
+> -
+> -	return (rc_adr ? rc_adr : rc_lsm);
+> +	return lsm_initcall(pure);
+>  }
+>  pure_initcall(security_initcall_pure);
 >
-> We wouldn=E2=80=99t need this implementation if we added a =E2=80=9Crefco=
-unt()=E2=80=9D
-> member to this trait. This lets you abstract away this logic for all
-> implementors, which has the massive upside of making sure we hardcode (an=
-d thus
-> enforce) the refcount =3D=3D 1 check.
-
-This exist to allow reference counting schemes that are different from
-the general implementation. See [1] for an example.
-
-[1] https://github.com/metaspace/linux/blob/3e46e95f0707fa71259b1d241f68914=
-4ad61cc62/rust/kernel/block/mq/request.rs#L478
-
+> diff --git a/security/min_addr.c b/security/min_addr.c
+> index 0fde5ec9abc8..56e4f9d25929 100644
+> --- a/security/min_addr.c
+> +++ b/security/min_addr.c
+> @@ -5,8 +5,6 @@
+>  #include <linux/sysctl.h>
+>  #include <linux/minmax.h>
 >
+> -#include "lsm.h"
+> -
+>  /* amount of vm to protect from userspace access by both DAC and the LSM*/
+>  unsigned long mmap_min_addr;
+>  /* amount of vm to protect from userspace using CAP_SYS_RAWIO (DAC) */
+> @@ -54,10 +52,11 @@ static const struct ctl_table min_addr_sysctl_table[] = {
+>  	},
+>  };
 >
->> +/// // SAFETY: This implementation of `release()` is safe for any valid=
- `Self`.
->> +/// unsafe impl Ownable for Foo {
->> +///     unsafe fn release(this: NonNull<Self>) {
->> +///         // SAFETY: Using `dec_ref()` from [`RefCounted`] to release=
- is okay, as the refcount is
->> +///         // always 1 for an [`Owned<Foo>`].
->> +///         unsafe{ Foo::dec_ref(this) };
->> +///     }
->> +/// }
->> +///
->> +/// let foo =3D Foo::new().expect("Failed to allocate a Foo. This shoul=
-dn't happen");
+> -int __init min_addr_init(void)
+> +static int __init mmap_min_addr_init(void)
+>  {
+>  	register_sysctl_init("vm", min_addr_sysctl_table);
+>  	update_mmap_min_addr();
 >
-> All these =E2=80=9Cexpects()=E2=80=9D and custom error strings would go a=
-way if you
-> place this behind a fictional function that returns Result.
-
-I'll do that.
-
+>  	return 0;
+>  }
+> +pure_initcall(mmap_min_addr_init);
+> --
+> 2.52.0
 >
->> +/// let mut foo =3D ARef::from(foo);
->> +/// {
->> +///     let bar =3D foo.clone();
->> +///     assert!(Owned::try_from(bar).is_err());
->> +/// }
->> +/// assert!(Owned::try_from(foo).is_ok());
->> +/// ```
->> +pub trait OwnableRefCounted: RefCounted + Ownable + Sized {
->> +    /// Checks if the [`ARef`] is unique and convert it to an [`Owned`]=
- it that is that case.
->> +    /// Otherwise it returns again an [`ARef`] to the same underlying o=
-bject.
->> +    fn try_from_shared(this: ARef<Self>) -> Result<Owned<Self>, ARef<Se=
-lf>>;
->
-> Again, this method can go way if we add a method to expose the refcount.
->
->> +
->> +    /// Converts the [`Owned`] into an [`ARef`].
->> +    fn into_shared(this: Owned<Self>) -> ARef<Self> {
->> +        // SAFETY: Safe by the requirements on implementing the trait.
->> +        unsafe { ARef::from_raw(Owned::into_raw(this)) }
->> +    }
->> +}
->> +
->> +impl<T: OwnableRefCounted> TryFrom<ARef<T>> for Owned<T> {
->> +    type Error =3D ARef<T>;
->> +    /// Tries to convert the [`ARef`] to an [`Owned`] by calling
->> +    /// [`try_from_shared()`](OwnableRefCounted::try_from_shared). In c=
-ase the [`ARef`] is not
->> +    /// unique, it returns again an [`ARef`] to the same underlying obj=
-ect.
->> +    fn try_from(b: ARef<T>) -> Result<Owned<T>, Self::Error> {
->> +        T::try_from_shared(b)
->> +    }
->> +}
->> diff --git a/rust/kernel/sync/aref.rs b/rust/kernel/sync/aref.rs
->> index 937dcf6ed5de..2dbffe2ed1b8 100644
->> --- a/rust/kernel/sync/aref.rs
->> +++ b/rust/kernel/sync/aref.rs
->> @@ -30,7 +30,10 @@
->> /// Note: Implementing this trait allows types to be wrapped in an [`ARe=
-f<Self>`]. It requires an
->> /// internal reference count and provides only shared references. If uni=
-que references are required
->> /// [`Ownable`](crate::types::Ownable) should be implemented which allow=
-s types to be wrapped in an
->> -/// [`Owned<Self>`](crate::types::Owned).
->> +/// [`Owned<Self>`](crate::types::Owned). Implementing the trait
->> +/// [`OwnableRefCounted`](crate::types::OwnableRefCounted) allows to co=
-nvert between unique and
->> +/// shared references (i.e. [`Owned<Self>`](crate::types::Owned) and
->> +/// [`ARef<Self>`](crate::types::Owned)).
->> ///
->> /// # Safety
->> ///
->> @@ -180,6 +183,12 @@ fn from(b: &T) -> Self {
->>     }
->> }
->>=20
->> +impl<T: crate::types::OwnableRefCounted> From<crate::types::Owned<T>> f=
-or ARef<T> {
->> +    fn from(b: crate::types::Owned<T>) -> Self {
->> +        T::into_shared(b)
->> +    }
->> +}
->> +
->
-> Not sure why we=E2=80=99re using fully-qualified names here if we can imp=
-ort them, but your call.
-
-I'll import them.
-
-
-Best regards,
-Andreas Hindborg
-
-
 
