@@ -1,147 +1,446 @@
-Return-Path: <linux-security-module+bounces-14351-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14353-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OJYbKmxtgGl38AIAu9opvQ
-	(envelope-from <linux-security-module+bounces-14351-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Mon, 02 Feb 2026 10:25:00 +0100
+	id QL5fC8Z5gGne8gIAu9opvQ
+	(envelope-from <linux-security-module+bounces-14353-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Mon, 02 Feb 2026 11:17:42 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F1F8CA158
-	for <lists+linux-security-module@lfdr.de>; Mon, 02 Feb 2026 10:25:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AF57FCABDC
+	for <lists+linux-security-module@lfdr.de>; Mon, 02 Feb 2026 11:17:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 271A5301702E
-	for <lists+linux-security-module@lfdr.de>; Mon,  2 Feb 2026 09:21:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 51BCE30845D2
+	for <lists+linux-security-module@lfdr.de>; Mon,  2 Feb 2026 10:06:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4CD82C032E;
-	Mon,  2 Feb 2026 09:21:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B86C3563EE;
+	Mon,  2 Feb 2026 10:06:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jHTyuxqz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dgZfY3Xo"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B2E92C21DD
-	for <linux-security-module@vger.kernel.org>; Mon,  2 Feb 2026 09:21:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 255DA2D63F6;
+	Mon,  2 Feb 2026 10:06:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770024109; cv=none; b=mhzMKj7eQVPyFWqAqP+3qLLBUnQO01pgT9aYA+SttKdCHsHEbJyzv2u4WR9oSV8hBut0EVTHUi+eJ6jjmehabRgl8vlwzkRljC1cCY5KE5mQAyEuJIMKmHDqrKNQ32Fqo8Bt5ESLs4CZm/4EXoiDzJH46vLRXfMSoiHGqJ1z3wo=
+	t=1770026807; cv=none; b=N33VCEHfQGHJg8u/OEi27xn8bxbpd7b2n3LiCoubKyX223IDmMQPLKAhl5pzI+oTo9t7etYtuoPOsmbbdvN884W5Bx2CqVvW0EHvwoEl24LohWfCWsCHb2AuQbtVkYrZEGhsOOztbuqg109eBbyTin9XlES6fHNBZo3YPzLkcSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770024109; c=relaxed/simple;
-	bh=bwnBNgHbFIW/GKpzdSfu0j1YrOO311FSebJ7+HObXGE=;
-	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
-	 Content-Type:Date:Message-ID; b=icjxIqBWExyrOmpumy6aLlfWFg78OiIYLxev3/lNy23FHUGcwtDSyVbkzqiqB8Y7FeKSzr+GED3p/gHrQ0tENqtMUse8W5TeZaC6hkHSkFOQs6alD5FXlHCuHAtCIn227fo/uN2QSnCznhVzjT0WKAT4+eQos00x9HmQHxZ1cxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jHTyuxqz; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770024107;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5lbDw7o/RaxnPFlRJ1INa0R+IZJyXDgWQKuA97onDkQ=;
-	b=jHTyuxqza2o6VJqPxj3NjOwIoxDYZ7vdxggTh5GaLdsEtUGaEGnCer4l63gV1SwQSxpNem
-	Z9SmSTeTUeHkJjOes6YN5rFcDsVuL789I84igf//K7OfuqcnzEpPqEMTd+cxzxkpa9cv/+
-	nMIZXHJKtK8MAVcYkndR0yivWOoj8Ec=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-346-vRYKonroPPacvPvXG9Mi7g-1; Mon,
- 02 Feb 2026 04:21:43 -0500
-X-MC-Unique: vRYKonroPPacvPvXG9Mi7g-1
-X-Mimecast-MFC-AGG-ID: vRYKonroPPacvPvXG9Mi7g_1770024097
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 468A818002CE;
-	Mon,  2 Feb 2026 09:21:35 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.44.33.164])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 77AA43001DB7;
-	Mon,  2 Feb 2026 09:21:20 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-	Kingdom.
-	Registered in England and Wales under Company Registration No. 3798903
-From: David Howells <dhowells@redhat.com>
-In-Reply-To: <20260201201218.GA15755@quark>
-References: <20260201201218.GA15755@quark> <20260131073636.65494-1-mcaju95@gmail.com> <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net> <2316630.1769965788@warthog.procyon.org.uk>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: dhowells@redhat.com,
-    =?us-ascii?B?PT9VVEYtOD9xP01paGFpLURyb3NpPTIwQz1DMz1BMmp1Pz0=?= <mcaju95@gmail.com>,
-    linux@weissschuh.net, arnd@arndb.de, arnout@bzzt.net,
-    atomlin@atomlin.com, bigeasy@linutronix.de, chleroy@kernel.org,
-    christian@heusel.eu, corbet@lwn.net, coxu@redhat.com,
-    da.gomez@kernel.org, da.gomez@samsung.com, dmitry.kasatkin@gmail.com,
-    eric.snowberg@oracle.com, f.gruenbichler@proxmox.com,
-    jmorris@namei.org, kpcyrd@archlinux.org, linux-arch@vger.kernel.org,
-    linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
-    linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-    linux-modules@vger.kernel.org, linux-security-module@vger.kernel.org,
-    linuxppc-dev@lists.ozlabs.org, lkp@intel.com, maddy@linux.ibm.com,
-    mattia@mapreri.org, mcgrof@kernel.org, mpe@ellerman.id.au,
-    nathan@kernel.org, naveen@kernel.org,
-    nicolas.bouchinet@oss.cyber.gouv.fr, nicolas.schier@linux.dev,
-    npiggin@gmail.com, nsc@kernel.org, paul@paul-moore.com,
-    petr.pavlu@suse.com, roberto.sassu@huawei.com,
-    samitolvanen@google.com, serge@hallyn.com, xiujianfeng@huawei.com,
-    zohar@linux.ibm.com
-Subject: Re: [PATCH v4 00/17] module: Introduce hash-based integrity checking
+	s=arc-20240116; t=1770026807; c=relaxed/simple;
+	bh=w3FSTDzx7E8mraZaaDGyuP+0xN6GQpY+/GPOVYPPtfQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=WoEn70jhOEeP9ilMmI0M34pFc6GBwSP0vw7wHWn56eDCj73Pokv8fMjrmFCvBOQC3fI9XyqvXKdZc/bye4Xla5SF/gDMXdBedcJhUw+7r99jAvoOTPHaNbQLukrcfGhWRhyjBqTfwiIItHYKx3iDzo0+yavluCowpmhsFV5XhVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dgZfY3Xo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63F14C116C6;
+	Mon,  2 Feb 2026 10:06:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770026806;
+	bh=w3FSTDzx7E8mraZaaDGyuP+0xN6GQpY+/GPOVYPPtfQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=dgZfY3XoeXPfAlHYEFs2WdJH02wkLpOU1HKLIukQyXEEdGbPAdTtJNfOwFnpCb2jW
+	 8zNtZArjMtIikbuiITY22wYZkNa3GjvOQB2eLX52+HjVBRcBv2KbjGxaWmBJJRds00
+	 3Pdtavxjnj31/iZPiS8lkO8/7wHECWw7fSTee6ht+WWhC1jthkeMxWNdMOcADPE1F3
+	 ctiM49lKA4RbPh0boINSS9Wa5Fy7RWX4TuBBMuHEgTDDFw7RSgRsmNtVL+axBZIdRc
+	 KtSh02iXMz4dIwQqDWPOdFauOXFivQKx6vbJWiiyFPwzgWdMEWrOIK/cgiDe9OzoKi
+	 DJvNbLzeSLZNg==
+From: Andreas Hindborg <a.hindborg@kernel.org>
+To: Gary Guo <gary@garyguo.net>, Oliver Mangold <oliver.mangold@pm.me>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Boqun Feng <boqun.feng@gmail.com>, =?utf-8?Q?Bj=C3=B6rn?= Roy Baron
+ <bjorn3_gh@protonmail.com>, Alice
+ Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Benno Lossin
+ <lossin@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Dave Ertman
+ <david.m.ertman@intel.com>, Ira
+ Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>, "Rafael J.
+ Wysocki" <rafael@kernel.org>, Maarten Lankhorst
+ <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Lorenzo
+ Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett"
+ <Liam.Howlett@oracle.com>, Viresh Kumar <vireshk@kernel.org>, Nishanth
+ Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, Bjorn Helgaas
+ <bhelgaas@google.com>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?=
+ <kwilczynski@kernel.org>, Paul
+ Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>, Asahi Lina
+ <lina+kernel@asahilina.net>, rust-for-linux@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v13 1/4] rust: types: Add Ownable/Owned types
+In-Reply-To: <20251201155135.2b9c4084.gary@garyguo.net>
+References: <20251117-unique-ref-v13-0-b5b243df1250@pm.me>
+ <20251117-unique-ref-v13-1-b5b243df1250@pm.me>
+ <20251201155135.2b9c4084.gary@garyguo.net>
+Date: Mon, 02 Feb 2026 10:37:55 +0100
+Message-ID: <87343jqydo.fsf@t14s.mail-host-address-is-not-set>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2339368.1770024079.1@warthog.procyon.org.uk>
-Date: Mon, 02 Feb 2026 09:21:19 +0000
-Message-ID: <2339369.1770024079@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Content-Type: text/plain
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
-	CC_EXCESS_BASE64(1.50)[];
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[redhat.com,gmail.com,weissschuh.net,arndb.de,bzzt.net,atomlin.com,linutronix.de,kernel.org,heusel.eu,lwn.net,samsung.com,oracle.com,proxmox.com,namei.org,archlinux.org,vger.kernel.org,lists.ozlabs.org,intel.com,linux.ibm.com,mapreri.org,ellerman.id.au,oss.cyber.gouv.fr,linux.dev,paul-moore.com,suse.com,huawei.com,google.com,hallyn.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[42];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,protonmail.com,google.com,umich.edu,linuxfoundation.org,intel.com,linux.intel.com,suse.de,ffwll.ch,zeniv.linux.org.uk,suse.cz,oracle.com,ti.com,paul-moore.com,asahilina.net,vger.kernel.org,lists.freedesktop.org,kvack.org];
+	TAGGED_FROM(0.00)[bounces-14353-lists,linux-security-module=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14351-lists,linux-security-module=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[45];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_COUNT_THREE(0.00)[4];
 	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dhowells@redhat.com,linux-security-module@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-security-module];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[a.hindborg@kernel.org,linux-security-module@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-security-module,kernel];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[warthog.procyon.org.uk:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 0F1F8CA158
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[t14s.mail-host-address-is-not-set:mid,types.rs:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,asahilina.net:email,garyguo.net:email,pm.me:email]
+X-Rspamd-Queue-Id: AF57FCABDC
 X-Rspamd-Action: no action
 
-Eric Biggers <ebiggers@kernel.org> wrote:
+Gary Guo <gary@garyguo.net> writes:
 
-> With that being the case, why is there still effort being put into
-> adding more features to module signing?  I would think efforts should be
-> focused on hash-based module authentication, i.e. this patchset.
+> On Mon, 17 Nov 2025 10:07:40 +0000
+> Oliver Mangold <oliver.mangold@pm.me> wrote:
+>
+>> From: Asahi Lina <lina+kernel@asahilina.net>
+>> 
+>> By analogy to `AlwaysRefCounted` and `ARef`, an `Ownable` type is a
+>> (typically C FFI) type that *may* be owned by Rust, but need not be. Unlike
+>> `AlwaysRefCounted`, this mechanism expects the reference to be unique
+>> within Rust, and does not allow cloning.
+>> 
+>> Conceptually, this is similar to a `KBox<T>`, except that it delegates
+>> resource management to the `T` instead of using a generic allocator.
+>> 
+>> [ om:
+>>   - Split code into separate file and `pub use` it from types.rs.
+>>   - Make from_raw() and into_raw() public.
+>>   - Remove OwnableMut, and make DerefMut dependent on Unpin instead.
+>>   - Usage example/doctest for Ownable/Owned.
+>>   - Fixes to documentation and commit message.
+>> ]
+>> 
+>> Link: https://lore.kernel.org/all/20250202-rust-page-v1-1-e3170d7fe55e@asahilina.net/
+>> Signed-off-by: Asahi Lina <lina+kernel@asahilina.net>
+>> Co-developed-by: Oliver Mangold <oliver.mangold@pm.me>
+>> Signed-off-by: Oliver Mangold <oliver.mangold@pm.me>
+>> Co-developed-by: Andreas Hindborg <a.hindborg@kernel.org>
+>> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
+>> Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+>> ---
+>>  rust/kernel/lib.rs       |   1 +
+>>  rust/kernel/owned.rs     | 195 +++++++++++++++++++++++++++++++++++++++++++++++
+>>  rust/kernel/sync/aref.rs |   5 ++
+>>  rust/kernel/types.rs     |   2 +
+>>  4 files changed, 203 insertions(+)
+>> 
+>> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+>> index 3dd7bebe7888..e0ee04330dd0 100644
+>> --- a/rust/kernel/lib.rs
+>> +++ b/rust/kernel/lib.rs
+>> @@ -112,6 +112,7 @@
+>>  pub mod of;
+>>  #[cfg(CONFIG_PM_OPP)]
+>>  pub mod opp;
+>> +pub mod owned;
+>>  pub mod page;
+>>  #[cfg(CONFIG_PCI)]
+>>  pub mod pci;
+>> diff --git a/rust/kernel/owned.rs b/rust/kernel/owned.rs
+>> new file mode 100644
+>> index 000000000000..a2cdd2cb8a10
+>> --- /dev/null
+>> +++ b/rust/kernel/owned.rs
+>> @@ -0,0 +1,195 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +
+>> +//! Unique owned pointer types for objects with custom drop logic.
+>> +//!
+>> +//! These pointer types are useful for C-allocated objects which by API-contract
+>> +//! are owned by Rust, but need to be freed through the C API.
+>> +
+>> +use core::{
+>> +    mem::ManuallyDrop,
+>> +    ops::{Deref, DerefMut},
+>> +    pin::Pin,
+>> +    ptr::NonNull,
+>> +};
+>> +
+>> +/// Type allocated and destroyed on the C side, but owned by Rust.
+>
+> The example given in the documentation below shows a valid way of
+> defining a type that's handled on the Rust side, so I think this
+> message is somewhat inaccurate.
+>
+> Perhaps something like
+>
+> 	Types that specify their own way of performing allocation and
+> 	destruction. Typically, this trait is implemented on types from
+> 	the C side.
 
-Because it's not just signing of modules and it's not just modules built with
-the kernel.  Also a hash table just of module hashes built into the core
-kernel image will increase the size of the kernel by around a third of a meg
-(on Fedora 43 and assuming SHA512) with uncompressible data.
+Thanks, I'll use this.
 
-David
+>
+> ?
+>
+>> +///
+>> +/// Implementing this trait allows types to be referenced via the [`Owned<Self>`] pointer type. This
+>> +/// is useful when it is desirable to tie the lifetime of the reference to an owned object, rather
+>> +/// than pass around a bare reference. [`Ownable`] types can define custom drop logic that is
+>> +/// executed when the owned reference [`Owned<Self>`] pointing to the object is dropped.
+>> +///
+>> +/// Note: The underlying object is not required to provide internal reference counting, because it
+>> +/// represents a unique, owned reference. If reference counting (on the Rust side) is required,
+>> +/// [`AlwaysRefCounted`](crate::types::AlwaysRefCounted) should be implemented.
+>> +///
+>> +/// # Safety
+>> +///
+>> +/// Implementers must ensure that the [`release()`](Self::release) function frees the underlying
+>> +/// object in the correct way for a valid, owned object of this type.
+>> +///
+>> +/// # Examples
+>> +///
+>> +/// A minimal example implementation of [`Ownable`] and its usage with [`Owned`] looks like this:
+>> +///
+>> +/// ```
+>> +/// # #![expect(clippy::disallowed_names)]
+>> +/// # use core::cell::Cell;
+>> +/// # use core::ptr::NonNull;
+>> +/// # use kernel::sync::global_lock;
+>> +/// # use kernel::alloc::{flags, kbox::KBox, AllocError};
+>> +/// # use kernel::types::{Owned, Ownable};
+>> +///
+>> +/// // Let's count the allocations to see if freeing works.
+>> +/// kernel::sync::global_lock! {
+>> +///     // SAFETY: we call `init()` right below, before doing anything else.
+>> +///     unsafe(uninit) static FOO_ALLOC_COUNT: Mutex<usize> = 0;
+>> +/// }
+>> +/// // SAFETY: We call `init()` only once, here.
+>> +/// unsafe { FOO_ALLOC_COUNT.init() };
+>> +///
+>> +/// struct Foo {
+>> +/// }
+>> +///
+>> +/// impl Foo {
+>> +///     fn new() -> Result<Owned<Self>, AllocError> {
+>> +///         // We are just using a `KBox` here to handle the actual allocation, as our `Foo` is
+>> +///         // not actually a C-allocated object.
+>> +///         let result = KBox::new(
+>> +///             Foo {},
+>> +///             flags::GFP_KERNEL,
+>> +///         )?;
+>> +///         let result = NonNull::new(KBox::into_raw(result))
+>> +///             .expect("Raw pointer to newly allocation KBox is null, this should never happen.");
+>> +///         // Count new allocation
+>> +///         *FOO_ALLOC_COUNT.lock() += 1;
+>> +///         // SAFETY: We just allocated the `Self`, thus it is valid and there cannot be any other
+>> +///         // Rust references. Calling `into_raw()` makes us responsible for ownership and we won't
+>> +///         // use the raw pointer anymore. Thus we can transfer ownership to the `Owned`.
+>> +///         Ok(unsafe { Owned::from_raw(result) })
+>> +///     }
+>> +/// }
+>> +///
+>> +/// // SAFETY: What out `release()` function does is safe of any valid `Self`.
+>
+> I can't parse this sentence. Is "out" supposed to be a different word?
+
+I think it should be "our".
+
+>
+>> +/// unsafe impl Ownable for Foo {
+>> +///     unsafe fn release(this: NonNull<Self>) {
+>> +///         // The `Foo` will be dropped when `KBox` goes out of scope.
+>
+> I would just write `drop(unsafe { ... })` to make drop explicit instead
+> of commenting about the implicit drop.
+
+Agree, that is easier to read.
+
+>
+>> +///         // SAFETY: The [`KBox<Self>`] is still alive. We can pass ownership to the [`KBox`], as
+>> +///         // by requirement on calling this function, the `Self` will no longer be used by the
+>> +///         // caller.
+>> +///         unsafe { KBox::from_raw(this.as_ptr()) };
+>> +///         // Count released allocation
+>> +///         *FOO_ALLOC_COUNT.lock() -= 1;
+>> +///     }
+>> +/// }
+>> +///
+>> +/// {
+>> +///    let foo = Foo::new().expect("Failed to allocate a Foo. This shouldn't happen");
+>> +///    assert!(*FOO_ALLOC_COUNT.lock() == 1);
+>> +/// }
+>> +/// // `foo` is out of scope now, so we expect no live allocations.
+>> +/// assert!(*FOO_ALLOC_COUNT.lock() == 0);
+>> +/// ```
+>> +pub unsafe trait Ownable {
+>> +    /// Releases the object.
+>> +    ///
+>> +    /// # Safety
+>> +    ///
+>> +    /// Callers must ensure that:
+>> +    /// - `this` points to a valid `Self`.
+>> +    /// - `*this` is no longer used after this call.
+>> +    unsafe fn release(this: NonNull<Self>);
+>> +}
+>> +
+>> +/// An owned reference to an owned `T`.
+>> +///
+>> +/// The [`Ownable`] is automatically freed or released when an instance of [`Owned`] is
+>> +/// dropped.
+>> +///
+>> +/// # Invariants
+>> +///
+>> +/// - The [`Owned<T>`] has exclusive access to the instance of `T`.
+>> +/// - The instance of `T` will stay alive at least as long as the [`Owned<T>`] is alive.
+>> +pub struct Owned<T: Ownable> {
+>> +    ptr: NonNull<T>,
+>> +}
+>> +
+>> +// SAFETY: It is safe to send an [`Owned<T>`] to another thread when the underlying `T` is [`Send`],
+>> +// because of the ownership invariant. Sending an [`Owned<T>`] is equivalent to sending the `T`.
+>> +unsafe impl<T: Ownable + Send> Send for Owned<T> {}
+>> +
+>> +// SAFETY: It is safe to send [`&Owned<T>`] to another thread when the underlying `T` is [`Sync`],
+>> +// because of the ownership invariant. Sending an [`&Owned<T>`] is equivalent to sending the `&T`.
+>> +unsafe impl<T: Ownable + Sync> Sync for Owned<T> {}
+>> +
+>> +impl<T: Ownable> Owned<T> {
+>> +    /// Creates a new instance of [`Owned`].
+>> +    ///
+>> +    /// It takes over ownership of the underlying object.
+>> +    ///
+>> +    /// # Safety
+>> +    ///
+>> +    /// Callers must ensure that:
+>> +    /// - `ptr` points to a valid instance of `T`.
+>> +    /// - Ownership of the underlying `T` can be transferred to the `Self<T>` (i.e. operations
+>> +    ///   which require ownership will be safe).
+>> +    /// - No other Rust references to the underlying object exist. This implies that the underlying
+>> +    ///   object is not accessed through `ptr` anymore after the function call (at least until the
+>> +    ///   the `Self<T>` is dropped.
+>
+> Is this correct? If `Self<T>` is dropped then `T::release` is called so
+> the pointer should also not be accessed further?
+
+I can't follow you point here. Are you saying that the requirement is
+wrong because `T::release` will access the object by reference? If so,
+that is part of `Owned<_>::drop`, which is explicitly mentioned in the
+comment (until .. dropped).
+
+>
+>> +    /// - The C code follows the usual shared reference requirements. That is, the kernel will never
+>> +    ///   mutate or free the underlying object (excluding interior mutability that follows the usual
+>> +    ///   rules) while Rust owns it.
+>
+> The concept "interior mutability" doesn't really exist on the C side.
+> Also, use of interior mutability (by UnsafeCell) would be incorrect if
+> the type is implemented in the rust side (as this requires a
+> UnsafePinned).
+>
+> Interior mutability means things can be mutated behind a shared
+> reference -- however in this case, we have a mutable reference (either
+> `Pin<&mut Self>` or `&mut Self`)!
+>
+> Perhaps together with the next line, they could be just phrased like
+> this?
+>
+> - The underlying object must not be accessed (read or mutated) through
+>   any pointer other than the created `Owned<T>`.
+>   Opt-out is still possbile similar to a mutable reference (e.g. by
+>   using p`Opaque`]). 
+>
+> I think we should just tell the user "this is just a unique reference
+> similar to &mut". They should be able to deduce that all the `!Unpin`
+> that opts out from uniqueness of mutable reference applies here too.
+
+I agree. I would suggest updating the struct documentation:
+
+    @@ -108,7 +108,7 @@ pub unsafe trait Ownable {
+        unsafe fn release(this: NonNull<Self>);
+    }
+
+    -/// An owned reference to an owned `T`.
+    +/// An mutable reference to an owned `T`.
+    ///
+    /// The [`Ownable`] is automatically freed or released when an instance of [`Owned`] is
+    /// dropped.
+
+And then the safety requirement as
+
+ An `Owned<T>` is a mutable reference to the underlying object. As such,
+ the object must not be accessed (read or mutated) through any pointer
+ other than the created `Owned<T>`. Opt-out is still possbile similar to
+ a mutable reference (e.g. by using [`Opaque`]).
+
+
+>> +    /// - In case `T` implements [`Unpin`] the previous requirement is extended from shared to
+>> +    ///   mutable reference requirements. That is, the kernel will not mutate or free the underlying
+>> +    ///   object and is okay with it being modified by Rust code.
+>
+> - If `T` implements [`Unpin`], the structure must not be mutated for
+>   the entire lifetime of `Owned<T>`.
+
+Would it be OK to just write "If `T: Unpin`, the ..."?
+
+Again, opt out is possible, right?
+
+>
+>> +    pub unsafe fn from_raw(ptr: NonNull<T>) -> Self {
+>
+> This needs a (rather trivial) INVARIANT comment.
+
+OK.
+
+>
+>> +        Self {
+>> +            ptr,
+>> +        }
+>> +    }
+>> +
+>> +    /// Consumes the [`Owned`], returning a raw pointer.
+>> +    ///
+>> +    /// This function does not actually relinquish ownership of the object. After calling this
+>
+> Perhaps "relinquish" isn't the best word here? In my mental model
+> this function is pretty much relinquishing ownership as `Owned<T>` no
+> longer exists. It just doesn't release the object.
+
+How about this:
+
+
+    /// Consumes the [`Owned`], returning a raw pointer.
+    ///
+    /// This function does not drop the underlying `T`. When this function returns, ownership of the
+    /// underlying `T` is with the caller.
+
+
+Thanks for the comments!
+
+
+Best regards,
+Andreas Hindborg
+
+
 
 
