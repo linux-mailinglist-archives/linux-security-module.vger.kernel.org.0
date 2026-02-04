@@ -1,211 +1,218 @@
-Return-Path: <linux-security-module+bounces-14419-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14420-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cIz5McIeg2nWhwMAu9opvQ
-	(envelope-from <linux-security-module+bounces-14419-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Wed, 04 Feb 2026 11:26:10 +0100
+	id SP6dFmYmg2kxigMAu9opvQ
+	(envelope-from <linux-security-module+bounces-14420-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Wed, 04 Feb 2026 11:58:46 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EB03E4761
-	for <lists+linux-security-module@lfdr.de>; Wed, 04 Feb 2026 11:26:10 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5FA7E4D31
+	for <lists+linux-security-module@lfdr.de>; Wed, 04 Feb 2026 11:58:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E36EB303132A
-	for <lists+linux-security-module@lfdr.de>; Wed,  4 Feb 2026 10:25:41 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 823B9301451E
+	for <lists+linux-security-module@lfdr.de>; Wed,  4 Feb 2026 10:58:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8B713D522B;
-	Wed,  4 Feb 2026 10:25:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA5983D34B7;
+	Wed,  4 Feb 2026 10:58:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hUNKuB4y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P/rXH+g6"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A2E3D903A
-	for <linux-security-module@vger.kernel.org>; Wed,  4 Feb 2026 10:25:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3B1B39903E;
+	Wed,  4 Feb 2026 10:58:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770200741; cv=none; b=bI2XK2fP9Lssvq2Fa57XOc8fKUi21dEH7JJnXoLkil+4aMo/i9ukxbLtNTztUeajcoBUmTmJkxkqqFb00J5OutMAwPKiZR2WkBPc/h3/L2F5y28c/qPuhDiCdV805EwXr4Cj+JOeHJiQKUk0ddhrxwEyA8IbX5ASv/J7FcBGtKE=
+	t=1770202721; cv=none; b=DpdIpIKv48+G1be8XRNZ1Y01uf/bErvMnI4bJU+Vj5rWZ6WwTgL8ZE5VmgdKmhvdsypt5xoyDff9OK1a/4yfZL/W54oBGLg4Gr+Nbr9ulsIjdJ30E4azzB/NAA2qV4uV5Fd/jNqJu7MUFZJj4XJT+P4xmiHZZhHmwFMy9XTGV34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770200741; c=relaxed/simple;
-	bh=vIAYbL49p25ExRg+QYdlbw0Imd7iQ0xScAHgx9IcBvk=;
+	s=arc-20240116; t=1770202721; c=relaxed/simple;
+	bh=e4OYY/P0s+n3f6l0Un+2wnNzSCxA9PSWh2mQE2h/QLI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nIoqXhHAV8pAVIokG/3UjtQsEc2HShxeCo7kP0UDcDMRWEad2291wgDi9K2vnpjdZFhI7uOPHv9wtv14PIfP3yKZn24z3+cLApD6RQImFSi/75osm4J4Qu7apqNARvOWnmUdgmj1+kVLA3VM+PFH3SsrnfVMKncdgeTMt2m23C8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hUNKuB4y; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-435903c4040so4454461f8f.3
-        for <linux-security-module@vger.kernel.org>; Wed, 04 Feb 2026 02:25:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770200739; x=1770805539; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=z5cfc484zykYZ0mPb5c+zfv5UtgQ5YWzwUO/DNgxgU4=;
-        b=hUNKuB4yLA0YxtgxmXpwTDxq+j6kZEcU9LYJ2l4XzbwnKX/xbMyS29rBk+FFTo3ncc
-         Z6WRACxBdoFXfvqMc2fEgH4qYxesEDF2UGjrz2G/+kH+WBiS0kutrlkGeZRPBdZ2JnJ4
-         Z3Bvg7osVwUfBB4zENtNkEU8AisK6TWCvRO2PUFFDfRT7d9zBQUQlRpFLWOstS7LN6eG
-         c3yUDjBhjg1aeqU/7DgW4IDPTlaUlV0TIV55ISYDJOCtifasiliPPq3PNt+6OmcuWNUG
-         rug7tBR/x0T7tiBOn/yanl3olcbOs+ILUyiOnyrgGwEzFRHAz2uu5CRzrtVE/QFHCaqI
-         PqRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770200739; x=1770805539;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z5cfc484zykYZ0mPb5c+zfv5UtgQ5YWzwUO/DNgxgU4=;
-        b=UbwnQr1AVeP9CS11/juUlso58xYeLl+QNOkiohB7b3KycHuSlnTDZTY1j8hOEmasr8
-         b7AMYI7TL2wsPNydPAA20pL68VHD1ru4dX+tUaiRWGMMIV/PWkHNm0/Vn/75TNLiSnfq
-         yLjjAsqlHIQZz2FDYtA4oJ/hATQ1LigP7osTeU8RSRPp0NseKBtuAUfvuCJv5HLXpkYK
-         xozXKDXXUVufLh9AlKpre11uryZjR5QugjdVOG4g+MXZxnxDRS3ra5t/mOixm8l8iEQE
-         cdPMjLs2NydGMGwiO86pe8IeY/C36/iW8M9TFNl52jClBZfAM6AJqRdYzWkswJZzbnAk
-         sryw==
-X-Forwarded-Encrypted: i=1; AJvYcCWr9CVeZtmp6daMZHKjnWBeC+Pzry3bGCCFUm2oWlHPMs6bGsnC1SFAGN8EJ1hU4h+HyPyPWSWJU6/CpLEwv3w1TnRs3ZU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyltlliThWgnOdJTcnhb2cP4OhILOgxgCJfdXu7monjYFLDz6I4
-	mARHpO0g7TTDzHZ0yvVTWQd/BLcAO2g3InJX9oLgrs9r8JtuX2DtH4X8cejYf9a9/A==
-X-Gm-Gg: AZuq6aLcLfjvuRdhbU6St+pRu5BrqAWAz9Rr6Txsp+s6oHpqs4e6jgnZ7+6795bhO/6
-	wcLm8SXVrh1PHPuJ5yGsMOrWJRzeynryVfSYccV7JJxKZL54mCj/I9hoG4CJFF+IkY7QbOkKPSo
-	YfMdKHqP1UvcJdoLxpXueQcl1Eg+cU/FjJx02gyteM3WNO+0SAB4e/v02UWjoRHNCFJuO1kkKiD
-	K+zrC9+q1C0QmSX9ZZOi1dY/jrkRkhd2BosKfl7XAIkh9S9HXOoR0mwug3oY3pAVXONpkZELUE+
-	gO4lPeLZJDGIDCRWUF+YV+S6l5c5ZegYV665G2iFhg1JCOqgx8z0d0eFCFU17N5o4cuDfP2cHns
-	SEgLxZ8mmRCP2Z08FEtjpQUNbJEFyYWHf3FUC6B0CLkncIxk1zsrQJxwaogio0SBwv/ZNP5c+JJ
-	upgjYi+XOkNSvuQBmk7Cb+kOrpBlcjvNYutzdjBJH9Dw==
-X-Received: by 2002:a05:6000:2211:b0:435:db95:c2ce with SMTP id ffacd0b85a97d-43618061c60mr2812656f8f.55.1770200739223;
-        Wed, 04 Feb 2026 02:25:39 -0800 (PST)
-Received: from google.com ([2a00:79e0:288a:8:dc18:ae3c:a190:c516])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43617e3a3bbsm5405366f8f.15.2026.02.04.02.25.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Feb 2026 02:25:38 -0800 (PST)
-Date: Wed, 4 Feb 2026 11:25:33 +0100
-From: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>
-To: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack3000@gmail.com>,
-	Paul Moore <paul@paul-moore.com>,
-	John Johansen <john.johansen@canonical.com>,
-	Tingmao Wang <m@maowtm.org>
-Cc: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
-	James Morris <jmorris@namei.org>,
-	"Serge E . Hallyn" <serge@hallyn.com>,
-	Justin Suess <utilityemal77@gmail.com>,
-	linux-security-module@vger.kernel.org,
-	Samasth Norway Ananda <samasth.norway.ananda@oracle.com>,
-	Matthieu Buffet <matthieu@buffet.re>,
-	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>,
-	konstantin.meskhidze@huawei.com,
-	Demi Marie Obenour <demiobenour@gmail.com>,
-	Alyssa Ross <hi@alyssa.is>, Jann Horn <jannh@google.com>,
-	Tahera Fahimi <fahimitahera@gmail.com>,
-	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
+	 Content-Type:Content-Disposition:In-Reply-To; b=FfSqTBetpmnUBCBZUYYLO9V3Z35kpksT6kzY+xJhIlpc6tMwbrPvrD18nN/1gu+iHyWhiokZdqENJZl8v+quNXF0FT4eBDWpKS3EnD8lrlGXn7UYGWYfbBeYNzWw9jXpw0Ol6GxMEveGaTVkYYzhhzAFinlC5pbmmHBzcMjSc4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P/rXH+g6; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770202721; x=1801738721;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=e4OYY/P0s+n3f6l0Un+2wnNzSCxA9PSWh2mQE2h/QLI=;
+  b=P/rXH+g67RmGvsKf8fW9NdXPYHiQBhjsXbEl5xs9cdbkru+GcsMpIjPF
+   ZgAZq2ETt877WT5m1Nx94gr4d/N8pblUQCmq0mKcAFYCIgNnY/plSvsix
+   hRJI37HGYUCi6SsOHqLspIZPElnW8hWE1s7I4u8Jn5ukSrBFAhWLIpE3Q
+   /PbylfvfXNN1S6/ThdghhLi0XtxG+ti5kvtasAmdX1ChGVh0jl0Z5jj93
+   EcqXLKNG+XUJW/L18PkEMzfb7RMvEgbHyog1thFe9zVGQxO2yc22+6sth
+   uwrsDhQoDtZsGIHRiQ3nKCCICPIvXqgCFaQPD2nPLnkzN30pOaAj//87J
+   w==;
+X-CSE-ConnectionGUID: Uqeby7skSJGEmc0KRBFotA==
+X-CSE-MsgGUID: qm180nDqQvud+jqMORzq4Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="88807943"
+X-IronPort-AV: E=Sophos;i="6.21,272,1763452800"; 
+   d="scan'208";a="88807943"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2026 02:58:40 -0800
+X-CSE-ConnectionGUID: oBTx9fyySBW7CeLiYKyMow==
+X-CSE-MsgGUID: 6hswnyijS3qwmcCTJ28ksw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,272,1763452800"; 
+   d="scan'208";a="209230824"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 04 Feb 2026 02:58:17 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vnaaN-00000000hii-2R8J;
+	Wed, 04 Feb 2026 10:58:15 +0000
+Date: Wed, 4 Feb 2026 18:58:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: NeilBrown <neilb@ownmail.net>, Christian Brauner <brauner@kernel.org>,
 	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v3 1/5] lsm: Add hook security_unix_find
-Message-ID: <aYMenaSmBkAsFowd@google.com>
-References: <20260119203457.97676-2-gnoack3000@gmail.com>
- <20260119203457.97676-4-gnoack3000@gmail.com>
+	David Howells <dhowells@redhat.com>, Jan Kara <jack@suse.cz>,
+	Chuck Lever <chuck.lever@oracle.com>,
+	Jeff Layton <jlayton@kernel.org>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Amir Goldstein <amir73il@gmail.com>,
+	John Johansen <john.johansen@canonical.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	netfs@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org,
+	apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+	selinux@vger.kernel.org
+Subject: Re: [PATCH 04/13] Apparmor: Use simple_start_creating() /
+ simple_done_creating()
+Message-ID: <202602041851.x2RfFgKO-lkp@intel.com>
+References: <20260204050726.177283-5-neilb@ownmail.net>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260119203457.97676-4-gnoack3000@gmail.com>
+In-Reply-To: <20260204050726.177283-5-neilb@ownmail.net>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[digikod.net,namei.org,hallyn.com,gmail.com,vger.kernel.org,oracle.com,buffet.re,huawei-partners.com,huawei.com,alyssa.is,google.com,kernel.org,zeniv.linux.org.uk];
-	TAGGED_FROM(0.00)[bounces-14419-lists,linux-security-module=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com,paul-moore.com,canonical.com,maowtm.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[21];
+	TAGGED_FROM(0.00)[bounces-14420-lists,linux-security-module=lfdr.de];
+	FREEMAIL_TO(0.00)[ownmail.net,kernel.org,zeniv.linux.org.uk,redhat.com,suse.cz,oracle.com,szeredi.hu,gmail.com,canonical.com,paul-moore.com,namei.org,hallyn.com];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[google.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gnoack@google.com,linux-security-module@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[23];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-security-module];
-	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 5EB03E4761
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-security-module@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
+	NEURAL_HAM(-0.00)[-0.999];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TAGGED_RCPT(0.00)[linux-security-module];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[git-scm.com:url,intel.com:email,intel.com:dkim,intel.com:mid]
+X-Rspamd-Queue-Id: A5FA7E4D31
 X-Rspamd-Action: no action
 
-Hello!
+Hi NeilBrown,
 
+kernel test robot noticed the following build warnings:
 
-John:
+[auto build test WARNING on brauner-vfs/vfs.all]
+[also build test WARNING on viro-vfs/for-next linus/master v6.19-rc8 next-20260203]
+[cannot apply to pcmoore-selinux/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Friendly ping; as Paul said in [1], we would appreciate a look from
-the AppArmor side whether this path-based LSM hook makes sense for
-you.
+url:    https://github.com/intel-lab-lkp/linux/commits/NeilBrown/fs-proc-Don-t-lock-root-inode-when-creating-self-and-thread-self/20260204-131659
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
+patch link:    https://lore.kernel.org/r/20260204050726.177283-5-neilb%40ownmail.net
+patch subject: [PATCH 04/13] Apparmor: Use simple_start_creating() / simple_done_creating()
+config: arm-randconfig-r133-20260204 (https://download.01.org/0day-ci/archive/20260204/202602041851.x2RfFgKO-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260204/202602041851.x2RfFgKO-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602041851.x2RfFgKO-lkp@intel.com/
 
-Everyone:
+sparse warnings: (new ones prefixed by >>)
+>> security/apparmor/apparmorfs.c:295:16: sparse: sparse: Using plain integer as NULL pointer
 
-In [2], we are currently discussing how the UNIX restriction feature
-would work in the bigger scheme in Landlock, and the current plan is
-that long-term we would like to support semantics where a UNIX
-connection attempt is allowed if EITHER:
+vim +295 security/apparmor/apparmorfs.c
 
- (a) the path is allow-listed in the policy, OR
- (b) the server side we connect to is part of the same Landlock
-     sandbox ("domain")
+   247	
+   248	/**
+   249	 * aafs_create - create a dentry in the apparmorfs filesystem
+   250	 *
+   251	 * @name: name of dentry to create
+   252	 * @mode: permissions the file should have
+   253	 * @parent: parent directory for this dentry
+   254	 * @data: data to store on inode.i_private, available in open()
+   255	 * @link: if symlink, symlink target string
+   256	 * @fops: struct file_operations that should be used for
+   257	 * @iops: struct of inode_operations that should be used
+   258	 *
+   259	 * This is the basic "create a xxx" function for apparmorfs.
+   260	 *
+   261	 * Returns a pointer to a dentry if it succeeds, that must be free with
+   262	 * aafs_remove(). Will return ERR_PTR on failure.
+   263	 */
+   264	static struct dentry *aafs_create(const char *name, umode_t mode,
+   265					  struct dentry *parent, void *data, void *link,
+   266					  const struct file_operations *fops,
+   267					  const struct inode_operations *iops)
+   268	{
+   269		struct dentry *dentry;
+   270		struct inode *dir;
+   271		int error;
+   272	
+   273		AA_BUG(!name);
+   274		AA_BUG(!parent);
+   275	
+   276		if (!(mode & S_IFMT))
+   277			mode = (mode & S_IALLUGO) | S_IFREG;
+   278	
+   279		error = simple_pin_fs(&aafs_ops, &aafs_mnt, &aafs_count);
+   280		if (error)
+   281			return ERR_PTR(error);
+   282	
+   283		dir = d_inode(parent);
+   284	
+   285		dentry = simple_start_creating(parent, name);
+   286		if (IS_ERR(dentry)) {
+   287			error = PTR_ERR(dentry);
+   288			goto fail;
+   289		}
+   290	
+   291		error = __aafs_setup_d_inode(dir, dentry, mode, data, link, fops, iops);
+   292		simple_done_creating(dentry);
+   293		if (error)
+   294			goto fail;
+ > 295		return 0;
+   296	fail:
+   297		simple_release_fs(&aafs_mnt, &aafs_count);
+   298		return ERR_PTR(error);
+   299	}
+   300	
 
-
-With the currently proposed hook, (a) can be checked in the
-security_unix_find() hook, and (b) can be checked in the
-security_hook_socket_connect() hook.  Unfortunately, it also would
-mean that if the (a) check fails, we would have to store that
-information on the side (struct sock LSM blob?), return 0 from (a) and
-then later use that information in hook (b), so that we can check
-whether maybe the second possible condition is met.
-
-Q: The passing of information across multiple LSM hooks is slightly
-more complicated than I had hoped; is this an approach that is
-recommended?
-
-Therefore, in [2], Tingmao is suggesting that we change the
-security_unix_find() hook and pass the "other" struct sock instead of
-the type.
-
-There is obviously a balance between hooks that are very generic and
-usable across multiple LSMs and hooks that are convenient to use for
-every LSM.  
-
-Paul:
-
-You have previously said that you would like hooks to be generic and
-ideally reflect the arguments of the same function that they are
-called from [3].
-
-Q: Would it be acceptable to change the hook arguments, if we can then
-avoid passing additional data between hooks through that side-storage?
-You can see Tingmao's proposal for that in [2].  TL;DR: It moves the
-call to security_unix_find() just after the place where the sk
-variable ("other"-side socket) is looked up and then calls the hook
-with the sk as argument instead of with the type.  That way, we can do
-both check (a) and (b) from above in the same hook and do not need to
-store data on the side.  Is that an acceptable trade-off for the LSM
-interface?
-
-Thanks,
-—Günther
-
-[1] https://lore.kernel.org/all/CAHC9VhQZ_J9316Us0squV_f-MjYXPcex34BnJ14vEBxS9Jyjbg@mail.gmail.com/
-[2] https://lore.kernel.org/all/e6b6b069-384c-4c45-a56b-fa54b26bc72a@maowtm.org/
-[3] https://lore.kernel.org/all/CAHC9VhQ234xihpndTs4e5ToNJ3tGCsP7AVtXuz8GajG-_jn3Ow@mail.gmail.com/
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
