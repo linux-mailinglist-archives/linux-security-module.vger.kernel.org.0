@@ -1,305 +1,163 @@
-Return-Path: <linux-security-module+bounces-14630-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14635-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sNc0IBdHimmAJAAAu9opvQ
-	(envelope-from <linux-security-module+bounces-14630-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Mon, 09 Feb 2026 21:44:07 +0100
+	id yLZmFYBViml9JgAAu9opvQ
+	(envelope-from <linux-security-module+bounces-14635-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Mon, 09 Feb 2026 22:45:36 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EB62114802
-	for <lists+linux-security-module@lfdr.de>; Mon, 09 Feb 2026 21:44:07 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB2AE114EC0
+	for <lists+linux-security-module@lfdr.de>; Mon, 09 Feb 2026 22:45:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 36696301FAA2
-	for <lists+linux-security-module@lfdr.de>; Mon,  9 Feb 2026 20:44:05 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 56952300644A
+	for <lists+linux-security-module@lfdr.de>; Mon,  9 Feb 2026 21:45:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E20E313535;
-	Mon,  9 Feb 2026 20:44:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7641B30FC34;
+	Mon,  9 Feb 2026 21:45:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tXt5ZzuV"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="pD6R3ufE"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic308-15.consmr.mail.ne1.yahoo.com (sonic308-15.consmr.mail.ne1.yahoo.com [66.163.187.38])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF142FDC30;
-	Mon,  9 Feb 2026 20:43:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41E1F30F93A
+	for <linux-security-module@vger.kernel.org>; Mon,  9 Feb 2026 21:45:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.187.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770669841; cv=none; b=kqQ1Bb65S/iXWq9a9QpqodeOyWsT06mnyRWaf1U9/UR6vAHZMDNyshugvWAxX9NENX19xnyP/vbHVXxu3kOnrD37t7PcWw6f9QJNL5TmVYfdB6GxrSFAYFBaZwG4MbEHfFOUmbEim83xjBoQhbeTW+27mjTm+HKSWEwlDVgKl4M=
+	t=1770673533; cv=none; b=iIymfLBS7FMECeStWnioRTikZ9h/iDl/SLDQUjC//upPMg+wO0FaoKHNLzH13UIh3rfLowLSxxbifuoZd7YKlE2SQE0U46I06AZrNZwdXgLPo6eCHPTY5S11XSi+jK73fc/GlfkOzFyk4P4FaQbEKiz+db+Z9VCCfZvfMLt6oSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770669841; c=relaxed/simple;
-	bh=OBCAinmo1/yXNiuFG0jZDJieIwicQOFYy+5fr2wrbas=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=OWCR/sePtNM2tgft2Lu83OTgg6r31cV8F/hy2YZ66LupzyrEzjUIrPsFN6w0n02VB0jvOZk7GGHtJJlQ7tWo0TEPjBLcRBNM0LVRmmOUr7u81xL63SU8o5IHPZz1iTk69bZmWZuThNLZLyx/nrrX0ulpBFu4kiaPc7n4xWzm2gc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tXt5ZzuV; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 619HKqDO883546;
-	Mon, 9 Feb 2026 20:43:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=dop6p6
-	rsLZKac/t5TeQjfJbjHcYGRmra2zjnHrlmz0E=; b=tXt5ZzuV3+5JXRaWSz9tDa
-	QC6QZNurjqjxngLuSU7Td7b+kuQPXdq6I7ydsO/3slOeWxP8EtRrCgf/mCgbaDAk
-	067Q3pJ49VfR9ZQM7irZ4CVDCttaeuF9BFiJSFaG5w519Xf4lXFWpNQfuVoA+Ozm
-	/6BB98tjaF6b5tqr8bLO5jTtB+HoUjxDOkIXHsyAvH6z2Sh11xlNBCv3UeE2NNA0
-	Ukn8mlzjnuKF5MKWbbp19/J/ULp1D7aUWhRgi87P3pNsspl1FjNGgDTw1JC+cqXo
-	6LyJBUjHdo+8aA/F8NvJh0HH10WQfUf4jxImct3BSSow0YfbDQVUVgzyq5FSjYQQ
-	==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c696u96fr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 09 Feb 2026 20:43:13 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 619ISMot012616;
-	Mon, 9 Feb 2026 20:43:12 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4c6h7k6ja8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 09 Feb 2026 20:43:12 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 619KhBL265012132
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 9 Feb 2026 20:43:11 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D41F25805D;
-	Mon,  9 Feb 2026 20:43:10 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 16A9558055;
-	Mon,  9 Feb 2026 20:43:09 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.108.92])
-	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  9 Feb 2026 20:43:09 +0000 (GMT)
-Message-ID: <66f9d13875e81a965984e2a661e992a3fe43c516.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 1/3] integrity: Make arch_ima_get_secureboot
- integrity-wide
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Coiby Xu <coxu@redhat.com>, linux-integrity@vger.kernel.org
-Cc: Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Egorenkov	
- <egorenar@linux.ibm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Dave Hansen	
- <dave.hansen@intel.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Madhavan
- Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin	 <npiggin@gmail.com>,
-        "Christophe Leroy (CS GROUP)"
- <chleroy@kernel.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev
- <agordeev@linux.ibm.com>,
-        Christian Borntraeger	
- <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas
- Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov
- <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86
- ARCHITECTURE (32-BIT AND 64-BIT)"	 <x86@kernel.org>,
-        "H. Peter Anvin"
- <hpa@zytor.com>,
-        Dmitry Kasatkin	 <dmitry.kasatkin@gmail.com>,
-        Eric
- Snowberg <eric.snowberg@oracle.com>,
-        Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn"	 <serge@hallyn.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        open list	
- <linux-kernel@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND
- 64-BIT)" <linuxppc-dev@lists.ozlabs.org>,
-        "open list:S390 ARCHITECTURE"
- <linux-s390@vger.kernel.org>,
-        "open list:EXTENSIBLE FIRMWARE INTERFACE
- (EFI)"	 <linux-efi@vger.kernel.org>,
-        "open list:SECURITY SUBSYSTEM"	
- <linux-security-module@vger.kernel.org>,
-        "open
- list:KEYS/KEYRINGS_INTEGRITY"	 <keyrings@vger.kernel.org>
-In-Reply-To: <20260203041434.872784-2-coxu@redhat.com>
-References: <20260203041434.872784-1-coxu@redhat.com>
-	 <20260203041434.872784-2-coxu@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 09 Feb 2026 15:43:08 -0500
+	s=arc-20240116; t=1770673533; c=relaxed/simple;
+	bh=GcmdybO0Jing3L0zpEkoP3KH3BMy5JxR2YEE7hU4y8g=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type:
+	 References; b=KNTrtY57QelpY0wvgMeM/k0g0FLn7QZVKJkey9B9r8fIWRNnrcGKjmttg/GKUGoypdmz8xa7nhZgjAtPpLf8EPtNBUav0+zSsPOtaL/sGPXcrPwaL7+1spDi+rDCqDt1wGel5JTlGI2Z7R7CNdkMkF7g6VaUeC3aV1YA2O5H+C4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=pD6R3ufE; arc=none smtp.client-ip=66.163.187.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1770673528; bh=9D0DZb3VA4R2DIkRbb1/klD4uT/vz2/8iSPdu1LA3WU=; h=Date:To:Cc:From:Subject:References:From:Subject:Reply-To; b=pD6R3ufE+bWueIRBRF2r2v37pKMBSS5yduTxhqyUjZBoICmfxEYiRRSHM42bs41nZAx3CczBxXc4lDcm8WP8XUwIIk4qvXTm6zEfC/944kgEYLKCcIGkFdFt2WBp25loNC+G5BZsE177H311Z0QPVUhObEmldp5VDKppeYsrbJPzrgWP8GOGx+Kjhy8wKQoekXmh8DiHD764qBAMHVlkeVQoxQPP/Y/Ysi4YBA1yKaAMn+0YnbH5+eUhhBKXnXS3EhrfNVXqXwruU8vOI00DXKlkIO3dVy0HCOqprWkE3UkytIjbNFn/Ei53hU6hx+e9fZE2GzwRsdKgLRSQq+W8rA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1770673528; bh=gYmkZwc0Swb0mKVSmEGNcNzm9Bc+68pNMcV6inPdhSy=; h=X-Sonic-MF:Date:To:From:Subject:From:Subject; b=Mt8aHYQyN0ndYtJ5uUwFKyBeLvfLadG6QUdUKqMI9+g6Je0atLcrHXIaQRJsgtI1D4jGod5LO4HnFScv67UUdS+jxqwfdjqpvb2w+cCHWRdcnYbhBjnSKuKOBGNVWo+OPeJrmnDqZ1/GHv5MU4A0eTNiNLurzjcd/KZQPE+XrNRdJ9mAXf+louZRmea2PSGbCOI7H7GB2IhTL2Wdk53NJpTMn7qz7rrbQVfROElXRBXNWGM295pS4NbQJhQ1Sga74yMOpIezRG0mxiajHCuMu7nkeyrHuRvFSz5FW6iCwvy+0Y9bctiGaoF7JOMo4pefu5zDN0qe4pCKhijj5NVGiQ==
+X-YMail-OSG: gu_.Ia0VM1nIxG9dYCc2SPRPmeal69JrJpFKCLJXiw4P6sqVrPbXxGAduJwcw9o
+ fXQLqrjExJPH4RzgNuSWPul46EXTvZp2rhGzPeI6MOaOLeHJmnjiy_i6bfNw_ToSsnWDGJWT1nqf
+ .UGBMptXXFw9YL1sCAVjYQd54tT6ej6ocN20zkAnmnSTe7EwofB8kQMb0UrPWwMblZqJuI2xoZk4
+ VomLnmq9jEz2s6h._jfEuBcMVFU6txc.7nNVWEA9E9KUxjfZrGEEAuOXeRsPg2AthArMWC9ru507
+ U9sDk467c1pD.Nr1T95fHXN7QQf3Ylp8W3R7M0Ymf5BoBVUDhe3D6EzFqFan85jAemUNBOpM0vc1
+ BV61CRRRGadDAdckEnf2wf8VDN6blrVa4qHclP4xDeOjZ190kknITd1WKt1sM_AgAsGVocbZnHN1
+ 5M4b_rgrCp81wC0cA7P9vlaHFCofWmFlv5C3MAl8IZbaYGJbcb4NlE9zriNHKJJJUXRYJGQMVRfn
+ JO4Nx9qYLjm4ctD10CmVhWXZxKTnIoqf1jOQ6a2Jk.Mk9jTxQQ.KLIPyqnEQy8Jd5sXLX_uh0TC5
+ f9i7RF0HjCvRa.xGCcDOEdBoL3mjQmGkM1i9RNemRpClEq0YgQAXg3FIuB4c.7ZDik_cjU9Wk4Wq
+ WGzbWQ_cWSJtpenXotMroLupzHLWhDE2IhOAh4POEZHGtK5rrKQRY0RaECjtiX9FyffpwjtekwnC
+ C0.pQKEvgPAi1u8yTkKFBBmhs0oRG9_JT5OHwbQ_vzy7fgdQP7AMk6vCoAN82H78Ny9KOr6sosvN
+ 0.KYBqnZEQ9Jh.V2hE.JfpULjiVIVlIG62wzqBe26KuzS0G6b1bmhDKk1dPlYou.A90qg4DRl8St
+ V6ZopmLk5P5MPKH52xZYz1YRimgfHWKcQOzoozj2npvgS6JUzAAjHOkZlMcbmPZ6D5WJDmYzpe4w
+ VEDl5sk.IESIiJ.TzYIMf5Z0RxH_TUcp86mKAyFjkLtAiMvedbevb10gkMFBGgeRu68OoVU5fH5f
+ 1txQKlrIl20IeacTxbgSIp5dmDaCPB3wiMsX6D0KWSemLzg7VaH4KlkoO4VmebIBRwHXZNZe_4x0
+ b4QvQOOnGFylqt58JyiH.myZEYPZO6KbDzSOL4pZ3S8Og2O8UvtaiwbEBDD3LACMomJv4e0mz2W0
+ htU.BiO3_UQQ65p6P5GnyfidPyU4hIgkl5GiAXY9NSKIvUzQWo8LbuGajKIHlamekjzBvG4qBFJ9
+ PnPV6bXydSASejc2YdStbVpN4bF7666rlO0R2TPIkobhrnpXfq94XDtMkOyo9g7PrxVVvFtvvIb_
+ DVfLm3pe4gFSWy.kWmgzsmBR6_mHzZ.1Uk8vQHyQOeiq3lNeFHEUVWrpRBVueGoe3z1vBoB_gPqm
+ dlE8DL_VJaJNqAS51.AJOPXvbcnf9B3p4gNa_6B9pV_WH2qpaJDN6rdeti0aOtL2S0dZpAwID9Vr
+ kgPhg3K2osd.zSKSXrHEQ_eGjfJ_prjqXQiiEuuyu7xVeR.DqLqUtUp0hgwy90aVzZkjGsAH.gwA
+ t.pdMFtX8DEieZVWBviiI8ztRbd2AvDov4tBRyzP086vu_o6wPR8rXdJFLJyUsSUSo9Cs2KsOr.E
+ fFMkHGDCxs6RHdcWtSWLePK_AhiExFPPPG5IW983m4OZWshGT42qoFwWxY5bSf76Sjc0WcZzqFhy
+ KKzOegczfrlG81c4fb3I2q_j6f7wmaF1VuE7uN3cYtUpMHYbIEieYi4wOZ33L.kQ3wbf2hzz0En9
+ pZ8yZr2VNCxV.eJJ.wmiNGYldW.SyDzC1Fggyn0if7HW5De2O.MIXwe8IlTcySygjA_EDAIS70kD
+ 3GJyxhaLnvs5zbHcB.3CB9HldTSr.lclHtB3Ul1hdahptmSZdSsviGxPKooBNxeX6_EYQpZhZupw
+ ZJRk_HgHcIFNIA8ZyUc.u_sF2vhFb92JuKa2Aw2KOC2aEs64ZwsUU_r0Elos_9zHTV9grm7ZfDKA
+ rcbVv6mRa7FLHA2KZJCF5AY2NZJ420rIgYSN9lhjOW1GOQjPFeNqgWP0hqUqaTgDuDFEfu21M4Uv
+ CzSoItZ7EivLUYUFlgJK43TdHatNjUNC13BCl6SDiuc9WLBOlBumb8YhheuSxWyr29M6Uff.BkML
+ .dzExOIOOvnCVfgqhso0_wuB1Famd34G4RTMnzNtyE.faavq6PuayfnY3XJQsQPpLlbSJEFg5YRP
+ ybmF4AFVo.cGyOTB6E.VpONvlyw6ZrKRtK61vMp6Hmtgr6c664cojx_OjYzurW2vK6yyRKeGvwvI
+ nKOgjyHTgwMmghYlnCaNF65U-
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: a9ed23c0-2c0b-4acd-868b-8376c2995044
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Mon, 9 Feb 2026 21:45:28 +0000
+Received: by hermes--production-gq1-86969b76cd-f7q7z (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID d4a7a8fb6e72cdf9e3ce5a8c7b38cd51;
+          Mon, 09 Feb 2026 21:15:02 +0000 (UTC)
+Message-ID: <28dea16f-18c3-4a2f-821c-e85b660125ed@schaufler-ca.com>
+Date: Mon, 9 Feb 2026 13:15:00 -0800
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=KZnfcAYD c=1 sm=1 tr=0 ts=698a46e2 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8
- a=i0EeH86SAAAA:8 a=20KFwNOVAAAA:8 a=4cj3x1ySzUcWov3_WBgA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjA5MDE2NyBTYWx0ZWRfX8NzdX8SjuD/z
- Jr6LoY8ySh8S2uljRfOdx3N6Y3IZkgvwOvV3vQ+MBs1IeAtCvNusu0RQligiYQ+OBLf92h6a+Q4
- s+tteIdVwupKFPapl7+ybHOa9dYBmVixKW368DUjb0UhC1/QlNRB/dvb2eWG9mO6lOGDZJWVS/e
- CyyEZdfMTE3fRMYSYNDXsQzAj5T/r210A4ZJvVuMAm1t5sQd+VW+hq7E3oON/pcJ1qk9NRTDI0z
- k4iWPmA3gQxZZ1osSzKF/0WmU7RmDRwXLUNGyzUy5DvxwDLO+YRDz9IkdBSznR9qvF8kPGQpuJI
- P5arwaGKksQkJc+uoOWXO7ZNb6MEz6BPUrTosOsTr3oYuKLkrkOC1PTEQ6yck6aFZfXH/OOdg+n
- BKRyuo7qOvIOIMda8QPQEK+WfsvptoSJQxaxeBTGRgYSzO7sO7SbQRhSneTExGmyXbIH0nQh+Y1
- vYmYuM5hpCdClYTI1yg==
-X-Proofpoint-ORIG-GUID: qFeWjB0THaoEJqNN4oNEEH-uukJg8mvI
-X-Proofpoint-GUID: EW8OSGEJoKAL3MfAfS-L_UR2r-2UpTiB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-09_01,2026-02-09_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 impostorscore=0 bulkscore=0 priorityscore=1501 adultscore=0
- clxscore=1011 suspectscore=0 phishscore=0 malwarescore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602090167
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: LSM List <linux-security-module@vger.kernel.org>,
+ Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+ Konstantin Andreev <andreev@swemel.ru>,
+ Taimoor Zaeem <taimoorzaeem@gmail.com>,
+ Casey Schaufler <casey@schaufler-ca.com>
+From: Casey Schaufler <casey@schaufler-ca.com>
+Subject: [GIT PULL] Smack patches for 7.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+References: <28dea16f-18c3-4a2f-821c-e85b660125ed.ref@schaufler-ca.com>
+X-Mailer: WebService/1.1.25178 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
+	R_DKIM_ALLOW(-0.20)[yahoo.com:s=s2048];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14630-lists,linux-security-module=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[33];
+	TAGGED_FROM(0.00)[bounces-14635-lists,linux-security-module=lfdr.de];
+	TO_DN_ALL(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DMARC_NA(0.00)[schaufler-ca.com: no valid DMARC record];
+	FREEMAIL_CC(0.00)[vger.kernel.org,swemel.ru,gmail.com,schaufler-ca.com];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[linux.ibm.com,kernel.org,intel.com,huawei.com,ellerman.id.au,gmail.com,redhat.com,alien8.de,linux.intel.com,zytor.com,oracle.com,paul-moore.com,namei.org,hallyn.com,vger.kernel.org,lists.ozlabs.org];
-	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[zohar@linux.ibm.com,linux-security-module@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[ibm.com:+];
+	DKIM_TRACE(0.00)[yahoo.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[casey@schaufler-ca.com,linux-security-module@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-security-module];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[11]
-X-Rspamd-Queue-Id: 3EB62114802
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: EB2AE114EC0
 X-Rspamd-Action: no action
 
-On Tue, 2026-02-03 at 12:14 +0800, Coiby Xu wrote:
-> EVM and other LSMs need the ability to query the secure boot status of
-> the system, without directly calling the IMA arch_ima_get_secureboot
-> function. Refactor the secure boot status check into a general function
-> named arch_get_secureboot.
->=20
-> Reported-and-suggested-by: Mimi Zohar <zohar@linux.ibm.com>
-> Suggested-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Signed-off-by: Coiby Xu <coxu@redhat.com>
+Hello Linus,
 
-Thanks, Coiby.  Other than unnecessarily splitting a line, the patch set lo=
-oks
-good.  As soon as the open window closes, I'll queue these patches for linu=
-x-
-next.
+Here is the Smack pull request for v7.0.
 
-> diff --git a/security/integrity/ima/ima_efi.c b/security/integrity/ima/im=
-a_efi.c
-> index 138029bfcce1..27521d665d33 100644
-> --- a/security/integrity/ima/ima_efi.c
-> +++ b/security/integrity/ima/ima_efi.c
-> @@ -2,52 +2,9 @@
->  /*
->   * Copyright (C) 2018 IBM Corporation
->   */
-> -#include <linux/efi.h>
->  #include <linux/module.h>
->  #include <linux/ima.h>
-> -#include <asm/efi.h>
-> -
-> -#ifndef arch_ima_efi_boot_mode
-> -#define arch_ima_efi_boot_mode efi_secureboot_mode_unset
-> -#endif
-> -
-> -static enum efi_secureboot_mode get_sb_mode(void)
-> -{
-> -	enum efi_secureboot_mode mode;
-> -
-> -	if (!efi_rt_services_supported(EFI_RT_SUPPORTED_GET_VARIABLE)) {
-> -		pr_info("ima: secureboot mode unknown, no efi\n");
-> -		return efi_secureboot_mode_unknown;
-> -	}
-> -
-> -	mode =3D efi_get_secureboot_mode(efi.get_variable);
-> -	if (mode =3D=3D efi_secureboot_mode_disabled)
-> -		pr_info("ima: secureboot mode disabled\n");
-> -	else if (mode =3D=3D efi_secureboot_mode_unknown)
-> -		pr_info("ima: secureboot mode unknown\n");
-> -	else
-> -		pr_info("ima: secureboot mode enabled\n");
-> -	return mode;
-> -}
-> -
-> -bool arch_ima_get_secureboot(void)
-> -{
-> -	static enum efi_secureboot_mode sb_mode;
-> -	static bool initialized;
-> -
-> -	if (!initialized && efi_enabled(EFI_BOOT)) {
-> -		sb_mode =3D arch_ima_efi_boot_mode;
-> -
-> -		if (sb_mode =3D=3D efi_secureboot_mode_unset)
-> -			sb_mode =3D get_sb_mode();
-> -		initialized =3D true;
-> -	}
-> -
-> -	if (sb_mode =3D=3D efi_secureboot_mode_enabled)
-> -		return true;
-> -	else
-> -		return false;
-> -}
-> +#include <linux/secure_boot.h>
-> =20
->  /* secureboot arch rules */
->  static const char * const sb_arch_rules[] =3D {
-> @@ -67,7 +24,8 @@ static const char * const sb_arch_rules[] =3D {
-> =20
->  const char * const *arch_get_ima_policy(void)
->  {
-> -	if (IS_ENABLED(CONFIG_IMA_ARCH_POLICY) && arch_ima_get_secureboot()) {
-> +	if (IS_ENABLED(CONFIG_IMA_ARCH_POLICY) &&
-> +	    arch_get_secureboot()) {
+There's nothing exciting. Two improvements to the code for setting
+the CIPSO Domain Of Interpretation (DOI), a seldom used feature,
+and a formatting change. All tested and included in next for some time.
 
-No need to split the line here or below.
+The following changes since commit f8f9c1f4d0c7a64600e2ca312dec824a0bc2f1da:
 
+  Linux 6.19-rc3 (2025-12-28 13:24:26 -0800)
 
->  		if (IS_ENABLED(CONFIG_MODULE_SIG))
->  			set_module_sig_enforced();
->  		if (IS_ENABLED(CONFIG_KEXEC_SIG))
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/i=
-ma_main.c
-> index 5770cf691912..6d093ac82a45 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -949,8 +949,8 @@ static int ima_load_data(enum kernel_load_data_id id,=
- bool contents)
-> =20
->  	switch (id) {
->  	case LOADING_KEXEC_IMAGE:
-> -		if (IS_ENABLED(CONFIG_KEXEC_SIG)
-> -		    && arch_ima_get_secureboot()) {
-> +		if (IS_ENABLED(CONFIG_KEXEC_SIG) &&
-> +		    arch_get_secureboot()) {
+are available in the Git repository at:
 
-=3D=3D=3D>
+  https://github.com/cschaufler/smack-next tags/Smack-for-7.0
 
-Mimi
+for you to fetch changes up to 33d589ed60ae433b483761987b85e0d24e54584e:
 
->  			pr_err("impossible to appraise a kernel image without a file descript=
-or; try using kexec_file_load syscall.\n");
->  			return -EACCES;
->  		}
+  smack: /smack/doi: accept previously used values (2025-12-30 12:17:15 -0800)
+
+----------------------------------------------------------------
+Smack fixes for DOI specification.
+
+----------------------------------------------------------------
+Konstantin Andreev (2):
+      smack: /smack/doi must be > 0
+      smack: /smack/doi: accept previously used values
+
+Taimoor Zaeem (1):
+      security: smack: fix indentation in smack_access.c
+
+ security/smack/smack_access.c |  2 +-
+ security/smack/smackfs.c      | 79 +++++++++++++++++++++++++++----------------
+ 2 files changed, 51 insertions(+), 30 deletions(-)
+
 
