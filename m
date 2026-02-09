@@ -1,60 +1,67 @@
-Return-Path: <linux-security-module+bounces-14609-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14611-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kCojIn4ZimkjHAAAu9opvQ
-	(envelope-from <linux-security-module+bounces-14609-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Mon, 09 Feb 2026 18:29:34 +0100
+	id iKVWOukbimmtHAAAu9opvQ
+	(envelope-from <linux-security-module+bounces-14611-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Mon, 09 Feb 2026 18:39:53 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02F011130E2
-	for <lists+linux-security-module@lfdr.de>; Mon, 09 Feb 2026 18:29:33 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 541DE1131FA
+	for <lists+linux-security-module@lfdr.de>; Mon, 09 Feb 2026 18:39:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CC2173019052
-	for <lists+linux-security-module@lfdr.de>; Mon,  9 Feb 2026 17:28:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 77DAB301CF94
+	for <lists+linux-security-module@lfdr.de>; Mon,  9 Feb 2026 17:37:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B68738885B;
-	Mon,  9 Feb 2026 17:28:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FC9C3815FA;
+	Mon,  9 Feb 2026 17:37:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="pJZNJ9W+"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="Pba72qfo"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [84.16.66.174])
+Received: from smtp-bc0b.mail.infomaniak.ch (smtp-bc0b.mail.infomaniak.ch [45.157.188.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA83C3806DB
-	for <linux-security-module@vger.kernel.org>; Mon,  9 Feb 2026 17:28:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1182B38171F
+	for <linux-security-module@vger.kernel.org>; Mon,  9 Feb 2026 17:36:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770658102; cv=none; b=ZyMpWBqEB7pH9MVjtdU7Yx1Q4b6wl83fZ+UKlkklNomfHzcL4zI4vAIF9G7VJEHoio2t/tkTXThwprV/kfW2ETsRAE7mYbhh9J0YK4DIfdjO2FWOEsr+aNBQEI5mrEPNX0lqHxh2rF+YtevqX9vq8Wa9ID55Vt0ZWThZ1sRJUKI=
+	t=1770658621; cv=none; b=NdAIPW1PoUTv5pYs/tDmlWXtUJMd7Gy8s4XgSnqKOyLQWEZEJvbl4XlVSv7WzygXvjG3TrsmGlPX7ic62kHAqqG08n7cORB0rI0hnXJ3UmoMm5nYsoUkFXNhHlre4chyUHO4W1K6qMXTfDEFeqIfTPLzyCuzuFcdwsOupQ4Va3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770658102; c=relaxed/simple;
-	bh=6gXvKJAjqcdidYKxK1Kqtn6IlV9+aL3dZgg/6L0BwDc=;
+	s=arc-20240116; t=1770658621; c=relaxed/simple;
+	bh=wU06l4AZmsjVxc12fvuyFvaDbMeQqOXvWjDH+Yx14k4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tSVvZA19GtsMYw/br7W9HRgtfCkIxxIJyHSFUiwJb3znl/hSpRV7NawUhP6qYW5U+/IiTkeE3JY9NPcHI8TpZxiQLZ4c8fjr3CQ3S/rN5Oz/kR5RVN/3sePvJNgUPZOaLJU1InZV1Vs/1tiZ3WFIcB4AgcTYNvsY1FamjXRxOWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=pJZNJ9W+; arc=none smtp.client-ip=84.16.66.174
+	 Content-Type:Content-Disposition:In-Reply-To; b=qgG0+ho6O+bNLCCKzy9JMbuXTV70RmqQ7kVNUY9q+98emRFwGdV4WzmGO2i5esXdmg9YMQOCK7lWP0JevVNKaynJFQL4x79YVrt4c/c4Hy7mP2yZX1woQ0kXTnv52g+o2fRFnpy/F9fI7msEOy+/Vv45P7gRV8R7qq8RdW+eO4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=Pba72qfo; arc=none smtp.client-ip=45.157.188.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246b])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4f8s975tQ4zxZp;
-	Mon,  9 Feb 2026 18:28:11 +0100 (CET)
+Received: from smtp-4-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6c])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4f8s9R0vfpznlC;
+	Mon,  9 Feb 2026 18:28:27 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1770658091;
-	bh=3gqUhixltclqIPX1OXG+VLBKMkJ07fmwSbxtaajMQF4=;
+	s=20191114; t=1770658106;
+	bh=Wg8I223cyoiMF55Vvtdc/KvgQcFxp+SlbYahMWf0qWA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pJZNJ9W+wf3ve/Y51pFeIBLDUzsY6Sgcto7YDYjm0cB9o4icf4tZpiOv8GlUeSSkB
-	 XxZZyoQqb5SxW3f1aDOfL7cuxcEuPC27+CN17aOtM4jimqC80OmsjhOGAwkob8BC5G
-	 Ei+hdaix87Y3SjW7K6lTRdyxoYwKRivklNGKcfjk=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4f8s971vrhzNPq;
-	Mon,  9 Feb 2026 18:28:11 +0100 (CET)
-Date: Mon, 9 Feb 2026 18:28:05 +0100
+	b=Pba72qfo1buAo/OCH8t3uK69kvN/iQjNB4irqG1TfdV2kBhmnsS2jDXJcr5rWYbyS
+	 jYIv2qkXcDkwvxAPCNlyMp+2uwpJuKgnEYI1tgZpbW71bfJEM6x/0PtJtjwZTOaWBY
+	 nSrrun1IS2VO7gGxbcOnQlrJAeoIb1i/OvlGMZwY=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4f8s9Q38pnzVSt;
+	Mon,  9 Feb 2026 18:28:26 +0100 (CET)
+Date: Mon, 9 Feb 2026 18:28:24 +0100
 From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Tingmao Wang <m@maowtm.org>
-Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH] landlock: Add counted_by and fix comment in
- landlock_ruleset
-Message-ID: <20260209.aexahm7thuoR@digikod.net>
-References: <20260208235449.1124354-1-m@maowtm.org>
+To: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>
+Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack3000@gmail.com>, 
+	John Johansen <john.johansen@canonical.com>, Tingmao Wang <m@maowtm.org>, 
+	Justin Suess <utilityemal77@gmail.com>, Jann Horn <jannh@google.com>, 
+	linux-security-module@vger.kernel.org, Samasth Norway Ananda <samasth.norway.ananda@oracle.com>, 
+	Matthieu Buffet <matthieu@buffet.re>, Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, 
+	konstantin.meskhidze@huawei.com, Demi Marie Obenour <demiobenour@gmail.com>, 
+	Alyssa Ross <hi@alyssa.is>, Tahera Fahimi <fahimitahera@gmail.com>
+Subject: Re: [PATCH v4 2/6] landlock: Control pathname UNIX domain socket
+ resolution by path
+Message-ID: <20260209.IWeigh1theik@digikod.net>
+References: <20260208231017.114343-1-gnoack3000@gmail.com>
+ <20260208231017.114343-3-gnoack3000@gmail.com>
+ <aYm1RWtV6Af-zEHf@google.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -63,86 +70,98 @@ List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260208235449.1124354-1-m@maowtm.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aYm1RWtV6Af-zEHf@google.com>
 X-Infomaniak-Routing: alpha
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.89 / 15.00];
+X-Spamd-Result: default: False [-1.07 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MIXED_CHARSET(0.77)[subject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_MIXED_CHARSET(0.59)[subject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[digikod.net:s=20191114];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DMARC_NA(0.00)[digikod.net];
-	TAGGED_FROM(0.00)[bounces-14609-lists,linux-security-module=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-14611-lists,linux-security-module=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[digikod.net:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FREEMAIL_CC(0.00)[gmail.com,canonical.com,maowtm.org,google.com,vger.kernel.org,oracle.com,buffet.re,huawei-partners.com,huawei.com,alyssa.is];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	DMARC_NA(0.00)[digikod.net];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[digikod.net:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	FROM_NEQ_ENVFROM(0.00)[mic@digikod.net,linux-security-module@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-security-module];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,digikod.net:mid,digikod.net:dkim]
-X-Rspamd-Queue-Id: 02F011130E2
+	DBL_BLOCKED_OPENRESOLVER(0.00)[digikod.net:mid,digikod.net:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 541DE1131FA
 X-Rspamd-Action: no action
 
-Thanks!
+On Mon, Feb 09, 2026 at 11:21:57AM +0100, Günther Noack wrote:
+> On Mon, Feb 09, 2026 at 12:10:12AM +0100, Günther Noack wrote:
+> > +static int hook_unix_find(const struct path *const path, struct sock *other,
+> > +			  int flags)
+> > +{
+> > +	const struct landlock_ruleset *dom_other;
+> > +	const struct landlock_cred_security *subject;
+> > +	struct layer_access_masks layer_masks;
+> > +	struct landlock_request request = {};
+> > +	static const struct access_masks fs_resolve_unix = {
+> > +		.fs = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
+> > +	};
+> > +	int type = other->sk_type;
+> > +
+> > +	/* Lookup for the purpose of saving coredumps is OK. */
+> > +	if (flags & SOCK_COREDUMP)
+> > +		return 0;
+> > +
+> > +	/* Only stream, dgram and seqpacket sockets are restricted. */
+> > +	if (type != SOCK_STREAM && type != SOCK_DGRAM && type != SOCK_SEQPACKET)
+> > +		return 0;
+> 
+> FYI: This is a (highly speculative) safeguard, because these three
+> socket types are the only ones that exist in AF_UNIX (compare unix(7),
+> 2nd paragraph).
+> 
+> In the (highly unlikely) case that someone adds a fourth AF_UNIX
+> socket type, this means that Landlock will start permitting
+> connections to these sockets unconditionally.
+> 
+> I am unsure whether the safeguard is useful, or whether we should
+> rather group that (highly unlikely) future socket type together with
+> the existing ones.  *If you have opinions, I'd be interested.*
+> 
+> The fact that these are the only existing AF_UNIX socket types is also
+> the reason why it does not matter that we are now (in v4) taking the
+> type value from the server-side sk instead of the client socket.  The
+> check will either way always pass as long as only these three types
+> are the only ones.
+> 
+> For now (and probably for another few decades :)), as long as these
+> are the only AF_UNIX types, it does not make a difference though
+> whether the check is there or not.
 
-On Sun, Feb 08, 2026 at 11:54:48PM +0000, Tingmao Wang wrote:
-> For a domain, this array stores the access masks for each layer (of
-> which there are num_layers of them).  For an unmerged ruleset, we have
-> one "layer", and one element in this array.  This annotation serves as
-> useful documentation.
-> 
-> This also removes a comment saying that num_layers = 0 for unmerged
-> rulesets, which is incorrect (it is 1).
-> 
-> Signed-off-by: Tingmao Wang <m@maowtm.org>
-> ---
-> 
-> I'm not sure if I should add a Fixes tag, but if I should had, it would
-> be ae271c1b14 ("landlock: Add ruleset and domain management").
-> 
->  security/landlock/ruleset.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/security/landlock/ruleset.h b/security/landlock/ruleset.h
-> index 9d6dc632684c..7005840ac641 100644
-> --- a/security/landlock/ruleset.h
-> +++ b/security/landlock/ruleset.h
-> @@ -168,8 +168,7 @@ struct landlock_ruleset {
->  			/**
->  			 * @num_layers: Number of layers that are used in this
->  			 * ruleset.  This enables to check that all the layers
-> -			 * allow an access request.  A value of 0 identifies a
-> -			 * non-merged ruleset (i.e. not a domain).
-> +			 * allow an access request.
->  			 */
->  			u32 num_layers;
->  			/**
-> @@ -184,7 +183,8 @@ struct landlock_ruleset {
->  			 * layers are set once and never changed for the
->  			 * lifetime of the ruleset.
->  			 */
-> -			struct access_masks access_masks[];
-> +			struct access_masks
-> +				access_masks[] __counted_by(num_layers);
->  		};
->  	};
->  };
-> 
-> base-commit: f179e1859c711214412876c57f56f9b0cfb13264
-> -- 
-> 2.53.0
-> 
+You can remove these type checks.  We're building Landlock access
+control wrt to the (moving) current state of Linux, and the goal is to
+cover most/useful access types that currently make sense.  Once access
+type is implemented, it should handle (by default) future features
+related to the kernel object to make sure a sandbox is well covered.
+This LANDLOCK_ACCESS_FS_RESOLVE_UNIX right is really about UNIX sockets
+that can be resolved through the filesystem, so this should handle
+current and potential future UNIX sockets as well.
+
+If a new named UNIX socket type is created, Landlock should handle that
+with this access right, unless there is a specific semantic (e.g.
+coredump), in which case we'll update the access right, and potentially
+add a new one if it makes sense.
+
+I was thinking about calling WARN_ON_ONCE() but this is not worth it.
 
