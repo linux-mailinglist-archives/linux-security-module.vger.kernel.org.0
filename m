@@ -1,66 +1,67 @@
-Return-Path: <linux-security-module+bounces-14610-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14612-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mPcSF5cZimkjHAAAu9opvQ
-	(envelope-from <linux-security-module+bounces-14610-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Mon, 09 Feb 2026 18:29:59 +0100
+	id kGloNKseimmtHAAAu9opvQ
+	(envelope-from <linux-security-module+bounces-14612-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Mon, 09 Feb 2026 18:51:39 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA0A71130EB
-	for <lists+linux-security-module@lfdr.de>; Mon, 09 Feb 2026 18:29:58 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5A9F11339E
+	for <lists+linux-security-module@lfdr.de>; Mon, 09 Feb 2026 18:51:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3EA5E30177B6
-	for <lists+linux-security-module@lfdr.de>; Mon,  9 Feb 2026 17:29:25 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 5995330008BB
+	for <lists+linux-security-module@lfdr.de>; Mon,  9 Feb 2026 17:51:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBB2338887C;
-	Mon,  9 Feb 2026 17:29:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4027C2D9EE4;
+	Mon,  9 Feb 2026 17:51:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="BCvDqeJS"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="HCCOQ+uF"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-8fa9.mail.infomaniak.ch (smtp-8fa9.mail.infomaniak.ch [83.166.143.169])
+Received: from smtp-190d.mail.infomaniak.ch (smtp-190d.mail.infomaniak.ch [185.125.25.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD22238885B
-	for <linux-security-module@vger.kernel.org>; Mon,  9 Feb 2026 17:29:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C680C261B80
+	for <linux-security-module@vger.kernel.org>; Mon,  9 Feb 2026 17:51:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770658164; cv=none; b=YIRDMIEqTeZeIfCMRTQ60r6ZzxoVdglsHTtSuNfvAP3ssD8wUAog9WOyzaam3Rr1B98G/OLh6C42U75PJK5wVlS8jR22/uMWwv9SJEcCPjfn3+Aa/LClkuFZQu5iRilW4EKVZjAxYu7ZG3HNrHc3ZsBgecJRYZVfRVJG8mCx0gA=
+	t=1770659495; cv=none; b=gliagqGKEPUWHZbRueUgM2FSPyDyql0pGV7E+6RcijzeOFGx3dBUXItYqLpwbyoyJpNEHQgqCFNZAnRPgjNfDHMvq7676/rpDaZKeCaJCLbQzV34o49t20V5gOZ3RTMUdh1eXV/Ry8vr15VmKpuidXC/ObFOpIxVD+U9s4LbLXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770658164; c=relaxed/simple;
-	bh=RT2Xrpa0wrOjdOluDw2VyG1IMYUH7mSUhnkucBG0fAs=;
+	s=arc-20240116; t=1770659495; c=relaxed/simple;
+	bh=JYzv9E94IkXmjniou/e10LbOmoZj80DqckJ2LgzhWNE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iBmEwQBZZxOi+vzJ+bT9lDelibQ81Xkg4PLdMHsg9wAqoMwY+NndUxdcuv7dzqtzivG7zjJFDMKXxl8TQm4RQ7Njph+1FtLd1plhgtFjqhB10jqJUCNV1Em9l2R+eRIpwoESmryEWTWMWObtSV3tNHwPZoQOt51hOX2SzoDYemA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=BCvDqeJS; arc=none smtp.client-ip=83.166.143.169
+	 Content-Type:Content-Disposition:In-Reply-To; b=rbl/UgQGWd4wWvP8UWEAhPKAYUdWeGixek6d13tLegOrHtp75YK67fe2OaYqxAEkY0U6Awt+/IJf9Ye0Y9M+RTZTelWZ9vdY/TAt3F3TufjiPda53oJ8EELyiweNZjmP+4CDZ08VEJXYTpI0wZQeNkns7e/Zydt23XxFi8+1zV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=HCCOQ+uF; arc=none smtp.client-ip=185.125.25.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6b])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4f8sBM5blFzr5k;
-	Mon,  9 Feb 2026 18:29:15 +0100 (CET)
+Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch [10.7.10.108])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4f8sgy3Wnkz49P;
+	Mon,  9 Feb 2026 18:51:26 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1770658155;
-	bh=bJosAoYnKvGNArsOWT1QLuXu9Ve3NglP9OWn6/qNN3w=;
+	s=20191114; t=1770659486;
+	bh=BBYhcLwsTs9OhGHaQVQ/SWzdyTzVaDUYDHQ0lCXjoYc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BCvDqeJSOAQ30fRbl+PSIwFL1WqN0sUX+Odu9QwrSscIBDvUSkp/K/nmfxhx9GJ0m
-	 uK/caGqWS1Y+v5Ojll6Cc6JyTyycmT0FKdi4NsrpxUdDuC6w+ZBYEs93HlnKiCbkPI
-	 Dwx+W/JC823FficWJMazOA89M9rhL650e6nLQhOE=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4f8sBM1LbtzTcZ;
-	Mon,  9 Feb 2026 18:29:15 +0100 (CET)
-Date: Mon, 9 Feb 2026 18:29:13 +0100
+	b=HCCOQ+uFlE3610zU1m1PJMXUXdw16rzusoKTVwbWiqvGpNwmdJPCaEh1V2AUWg4le
+	 WdKt8jIhcysSwSB4DxGbgIL3+yY8rIj4ilqL0/XC2n+bwqiz8unJdQCUZ8f6zNGzR+
+	 qr4qzVEKkVTlMSCBL0FFI+0YodrWTM9+Xdz3w9Pg=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4f8sgx2DlHzZl4;
+	Mon,  9 Feb 2026 18:51:25 +0100 (CET)
+Date: Mon, 9 Feb 2026 18:51:21 +0100
 From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
 To: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack3000@gmail.com>
 Cc: John Johansen <john.johansen@canonical.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E . Hallyn" <serge@hallyn.com>, Tingmao Wang <m@maowtm.org>, 
 	Justin Suess <utilityemal77@gmail.com>, linux-security-module@vger.kernel.org, 
-	Tingmao Wang <m@maowtm.org>, Samasth Norway Ananda <samasth.norway.ananda@oracle.com>, 
-	Matthieu Buffet <matthieu@buffet.re>, Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, 
-	konstantin.meskhidze@huawei.com, Demi Marie Obenour <demiobenour@gmail.com>, 
-	Alyssa Ross <hi@alyssa.is>, Jann Horn <jannh@google.com>, 
-	Tahera Fahimi <fahimitahera@gmail.com>
-Subject: Re: [PATCH v4 4/6] landlock/selftests: Test named UNIX domain socket
- restrictions
-Message-ID: <20260209.Noh6thae5cho@digikod.net>
+	Samasth Norway Ananda <samasth.norway.ananda@oracle.com>, Matthieu Buffet <matthieu@buffet.re>, 
+	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, konstantin.meskhidze@huawei.com, 
+	Demi Marie Obenour <demiobenour@gmail.com>, Alyssa Ross <hi@alyssa.is>, Jann Horn <jannh@google.com>, 
+	Tahera Fahimi <fahimitahera@gmail.com>, Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v4 1/6] lsm: Add LSM hook security_unix_find
+Message-ID: <20260209.yeeh3ieDuz9u@digikod.net>
 References: <20260208231017.114343-1-gnoack3000@gmail.com>
- <20260208231017.114343-5-gnoack3000@gmail.com>
+ <20260208231017.114343-2-gnoack3000@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -70,28 +71,28 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260208231017.114343-5-gnoack3000@gmail.com>
+In-Reply-To: <20260208231017.114343-2-gnoack3000@gmail.com>
 X-Infomaniak-Routing: alpha
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.03 / 15.00];
+X-Spamd-Result: default: False [-0.89 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MIXED_CHARSET(0.63)[subject];
+	R_MIXED_CHARSET(0.77)[subject];
 	R_DKIM_ALLOW(-0.20)[digikod.net:s=20191114];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14610-lists,linux-security-module=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14612-lists,linux-security-module=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FREEMAIL_TO(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[canonical.com,gmail.com,vger.kernel.org,maowtm.org,oracle.com,buffet.re,huawei-partners.com,huawei.com,alyssa.is,google.com];
-	RCPT_COUNT_TWELVE(0.00)[13];
+	FREEMAIL_CC(0.00)[canonical.com,paul-moore.com,namei.org,hallyn.com,maowtm.org,gmail.com,vger.kernel.org,oracle.com,buffet.re,huawei-partners.com,huawei.com,alyssa.is,google.com,kernel.org,zeniv.linux.org.uk];
+	RCPT_COUNT_TWELVE(0.00)[20];
 	DMARC_NA(0.00)[digikod.net];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[digikod.net:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	MISSING_XM_UA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
@@ -101,465 +102,150 @@ X-Spamd-Result: default: False [-1.03 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-security-module];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,digikod.net:mid,digikod.net:dkim,digikod.net:email]
-X-Rspamd-Queue-Id: DA0A71130EB
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: E5A9F11339E
 X-Rspamd-Action: no action
 
-On Mon, Feb 09, 2026 at 12:10:14AM +0100, Günther Noack wrote:
-> * Exercise the access right for connect() and sendmsg() on named UNIX
->   domain sockets, in various combinations of Landlock domains and
->   socket types.
-> * Extract common helpers from an existing IOCTL test that
->   also uses pathname unix(7) sockets.
+On Mon, Feb 09, 2026 at 12:10:11AM +0100, Günther Noack wrote:
+> From: Justin Suess <utilityemal77@gmail.com>
 > 
-> The tested combinations are the cross product of these sets of fixture
-> fields:
+> Add a LSM hook security_unix_find.
 > 
-> * {{.handled=RESOLVE_UNIX},
->    {.handled=RESOLVE_UNIX, .allowed=RESOLVE_UNIX}}
-> * {{.sock_type=SOCK_STREAM},
->    {.sock_type=SOCK_DGRAM},
->    {.sock_type=SOCK_DGRAM, .use_sendto=true},
->    {.sock_type=SOCK_SEQPACKET}}
-> * {{.server_in_same_domain=false},
->    {.server_in_same_domain=true}}
-
-It would improve test clarity to follow the same approach as Tingmao to
-check the scope, especially to use the scoped_base_variant.h:
-https://lore.kernel.org/all/88de5bed60b06ba97088d87803f7bb3dbcc9a808.1767115163.git.m@maowtm.org/
-Even if there is no more explicit scoped flag anymore, this test suite
-is still relevant.
-
-The fs_test.c part would then mostly check the
-LANDLOCK_ACCESS_FS_RESOLVE_UNIX rules/exceptions.
-
+> This hook is called to check the path of a named unix socket before a
+> connection is initiated. The peer socket may be inspected as well.
 > 
-> Some additional fixtures exercise scenarios with two nested domains.
+> Why existing hooks are unsuitable:
 > 
-> Cc: Justin Suess <utilityemal77@gmail.com>
-> Cc: Mickaël Salaün <mic@digikod.net>
-> Signed-off-by: Günther Noack <gnoack3000@gmail.com>
+> Existing socket hooks, security_unix_stream_connect(),
+> security_unix_may_send(), and security_socket_connect() don't provide
+> TOCTOU-free / namespace independent access to the paths of sockets.
+> 
+> (1) We cannot resolve the path from the struct sockaddr in existing hooks.
+> This requires another path lookup. A change in the path between the
+> two lookups will cause a TOCTOU bug.
+> 
+> (2) We cannot use the struct path from the listening socket, because it
+> may be bound to a path in a different namespace than the caller,
+> resulting in a path that cannot be referenced at policy creation time.
+> 
+> Cc: Günther Noack <gnoack3000@gmail.com>
+> Cc: Tingmao Wang <m@maowtm.org>
+> Signed-off-by: Justin Suess <utilityemal77@gmail.com>
 > ---
->  tools/testing/selftests/landlock/fs_test.c | 381 ++++++++++++++++++++-
->  1 file changed, 365 insertions(+), 16 deletions(-)
+>  include/linux/lsm_hook_defs.h |  5 +++++
+>  include/linux/security.h      | 11 +++++++++++
+>  net/unix/af_unix.c            |  9 +++++++++
+>  security/security.c           | 20 ++++++++++++++++++++
+>  4 files changed, 45 insertions(+)
 > 
-> diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-> index b318627e7561..9d3f5dab4567 100644
-> --- a/tools/testing/selftests/landlock/fs_test.c
-> +++ b/tools/testing/selftests/landlock/fs_test.c
-> @@ -4358,30 +4358,61 @@ TEST_F_FORK(layout1, named_pipe_ioctl)
->  	ASSERT_EQ(child_pid, waitpid(child_pid, NULL, 0));
->  }
+> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+> index 8c42b4bde09c..7a0fd3dbfa29 100644
+> --- a/include/linux/lsm_hook_defs.h
+> +++ b/include/linux/lsm_hook_defs.h
+> @@ -317,6 +317,11 @@ LSM_HOOK(int, 0, post_notification, const struct cred *w_cred,
+>  LSM_HOOK(int, 0, watch_key, struct key *key)
+>  #endif /* CONFIG_SECURITY && CONFIG_KEY_NOTIFICATIONS */
 >  
-> +/*
-> + * set_up_named_unix_server - Create a pathname unix socket
-> + *
-> + * If the socket type is not SOCK_DGRAM, also invoke listen(2).
-> + *
-> + * Return: The listening FD - it is the caller responsibility to close it.
-> + */
-> +static int set_up_named_unix_server(struct __test_metadata *const _metadata,
-> +				    int type, const char *const path)
+> +#if defined(CONFIG_SECURITY_NETWORK) && defined(CONFIG_SECURITY_PATH)
+> +LSM_HOOK(int, 0, unix_find, const struct path *path, struct sock *other,
+> +	 int flags)
+> +#endif /* CONFIG_SECURITY_NETWORK && CONFIG_SECURITY_PATH */
+> +
+>  #ifdef CONFIG_SECURITY_NETWORK
+>  LSM_HOOK(int, 0, unix_stream_connect, struct sock *sock, struct sock *other,
+>  	 struct sock *newsk)
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index 83a646d72f6f..99a33d8eb28d 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -1931,6 +1931,17 @@ static inline int security_mptcp_add_subflow(struct sock *sk, struct sock *ssk)
+>  }
+>  #endif	/* CONFIG_SECURITY_NETWORK */
+>  
+> +#if defined(CONFIG_SECURITY_NETWORK) && defined(CONFIG_SECURITY_PATH)
+> +
+> +int security_unix_find(const struct path *path, struct sock *other, int flags);
+> +
+> +#else /* CONFIG_SECURITY_NETWORK && CONFIG_SECURITY_PATH */
+> +static inline int security_unix_find(const struct path *path, struct sock *other, int flags)
 > +{
-> +	int fd;
-> +	struct sockaddr_un addr = {
-> +		.sun_family = AF_UNIX,
-> +	};
-> +
-> +	fd = socket(AF_UNIX, type, 0);
-> +	ASSERT_LE(0, fd);
-> +
-> +	strncpy(addr.sun_path, path, sizeof(addr.sun_path));
-> +	ASSERT_EQ(0, bind(fd, (struct sockaddr *)&addr, sizeof(addr)));
-> +
-> +	if (type != SOCK_DGRAM)
-> +		ASSERT_EQ(0, listen(fd, 10 /* qlen */));
-> +	return fd;
-> +}
-> +
-> +/*
-> + * test_connect_named_unix - connect to the given named UNIX socket
-> + *
-> + * Return: The errno from connect(), or 0
-> + */
-> +static int test_connect_named_unix(int fd, const char *const path)
-> +{
-> +	struct sockaddr_un addr = {
-> +		.sun_family = AF_UNIX,
-> +	};
-> +	strncpy(addr.sun_path, path, sizeof(addr.sun_path));
-> +
-> +	if (connect(fd, (struct sockaddr *)&addr, sizeof(addr)) == -1)
-> +		return errno;
 > +	return 0;
 > +}
+> +#endif /* CONFIG_SECURITY_NETWORK && CONFIG_SECURITY_PATH */
 > +
->  /* For named UNIX domain sockets, no IOCTL restrictions apply. */
->  TEST_F_FORK(layout1, named_unix_domain_socket_ioctl)
->  {
->  	const char *const path = file1_s1d1;
->  	int srv_fd, cli_fd, ruleset_fd;
-> -	struct sockaddr_un srv_un = {
-> -		.sun_family = AF_UNIX,
-> -	};
-> -	struct sockaddr_un cli_un = {
-> -		.sun_family = AF_UNIX,
-> -	};
->  	const struct landlock_ruleset_attr attr = {
->  		.handled_access_fs = LANDLOCK_ACCESS_FS_IOCTL_DEV,
->  	};
+>  #ifdef CONFIG_SECURITY_INFINIBAND
+>  int security_ib_pkey_access(void *sec, u64 subnet_prefix, u16 pkey);
+>  int security_ib_endport_manage_subnet(void *sec, const char *name, u8 port_num);
+> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+> index d0511225799b..db9d279b3883 100644
+> --- a/net/unix/af_unix.c
+> +++ b/net/unix/af_unix.c
+> @@ -1226,10 +1226,19 @@ static struct sock *unix_find_bsd(struct sockaddr_un *sunaddr, int addr_len,
+>  	if (!S_ISSOCK(inode->i_mode))
+>  		goto path_put;
 >  
->  	/* Sets up a server */
->  	ASSERT_EQ(0, unlink(path));
-> -	srv_fd = socket(AF_UNIX, SOCK_STREAM, 0);
-> -	ASSERT_LE(0, srv_fd);
-> -
-> -	strncpy(srv_un.sun_path, path, sizeof(srv_un.sun_path));
-> -	ASSERT_EQ(0, bind(srv_fd, (struct sockaddr *)&srv_un, sizeof(srv_un)));
-> -
-> -	ASSERT_EQ(0, listen(srv_fd, 10 /* qlen */));
-> +	srv_fd = set_up_named_unix_server(_metadata, SOCK_STREAM, path);
+> +	err = -ECONNREFUSED;
+
+We don't see it in this patch but err is already set to -ECONNREFUSED.
+This line might be confusing, and unrelated to the goal of this patch,
+so we should remove it.
+
+
+>  	sk = unix_find_socket_byinode(inode);
+>  	if (!sk)
+>  		goto path_put;
 >  
->  	/* Enables Landlock. */
->  	ruleset_fd = landlock_create_ruleset(&attr, sizeof(attr), 0);
-> @@ -4393,9 +4424,7 @@ TEST_F_FORK(layout1, named_unix_domain_socket_ioctl)
->  	cli_fd = socket(AF_UNIX, SOCK_STREAM, 0);
->  	ASSERT_LE(0, cli_fd);
+> +	/*
+> +	 * We call the hook because we know that the inode is a socket
+> +	 * and we hold a valid reference to it via the path.
+
+This comment can be alligned with 80 columns.
+
+> +	 */
+> +	err = security_unix_find(&path, sk, flags);
+
+This hook makes sense and is quite generic.
+
+> +	if (err)
+> +		goto sock_put;
+> +
+>  	err = -EPROTOTYPE;
+>  	if (sk->sk_type == type)
+>  		touch_atime(&path);
+> diff --git a/security/security.c b/security/security.c
+> index 31a688650601..9e9515955098 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -4731,6 +4731,26 @@ int security_mptcp_add_subflow(struct sock *sk, struct sock *ssk)
 >  
-> -	strncpy(cli_un.sun_path, path, sizeof(cli_un.sun_path));
-> -	ASSERT_EQ(0,
-> -		  connect(cli_fd, (struct sockaddr *)&cli_un, sizeof(cli_un)));
-> +	ASSERT_EQ(0, test_connect_named_unix(cli_fd, path));
+>  #endif	/* CONFIG_SECURITY_NETWORK */
 >  
->  	/* FIONREAD and other IOCTLs should not be forbidden. */
->  	EXPECT_EQ(0, test_fionread_ioctl(cli_fd));
-> @@ -4570,6 +4599,326 @@ TEST_F_FORK(ioctl, handle_file_access_file)
->  	ASSERT_EQ(0, close(file_fd));
->  }
->  
-> +/* clang-format off */
-> +FIXTURE(unix_socket) {};
-> +
-> +FIXTURE_SETUP(unix_socket) {};
-> +
-> +FIXTURE_TEARDOWN(unix_socket) {};
-> +/* clang-format on */
-> +
-> +FIXTURE_VARIANT(unix_socket)
-> +{
-> +	const __u64 handled;
-> +	const __u64 allowed;
-> +	const __u64 handled2;
-> +	const __u64 allowed2;
-> +	const int sock_type;
-> +	const int expected;
-> +	const bool use_sendto;
-> +	const bool server_in_same_domain;
-> +};
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(unix_socket, stream_handled_not_allowed)
-> +{
-> +	/* clang-format on */
-> +	.handled = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed = 0,
-> +	.sock_type = SOCK_STREAM,
-> +	.expected = EACCES,
-> +};
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(unix_socket, stream_handled_and_allowed)
-> +{
-> +	/* clang-format on */
-> +	.handled = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.sock_type = SOCK_STREAM,
-> +	.expected = 0,
-> +};
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(unix_socket, dgram_handled_not_allowed)
-> +{
-> +	/* clang-format on */
-> +	.handled = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed = 0,
-> +	.sock_type = SOCK_DGRAM,
-> +	.expected = EACCES,
-> +};
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(unix_socket, dgram_handled_and_allowed)
-> +{
-> +	/* clang-format on */
-> +	.handled = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.sock_type = SOCK_DGRAM,
-> +	.expected = 0,
-> +};
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(unix_socket, dgram_sendto_handled_not_allowed)
-> +{
-> +	/* clang-format on */
-> +	.handled = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed = 0,
-> +	.sock_type = SOCK_DGRAM,
-> +	.use_sendto = true,
-> +	.expected = EACCES,
-> +};
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(unix_socket, dgram_sendto_handled_and_allowed)
-> +{
-> +	/* clang-format on */
-> +	.handled = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.sock_type = SOCK_DGRAM,
-> +	.use_sendto = true,
-> +	.expected = 0,
-> +};
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(unix_socket, seqpacket_handled_not_allowed)
-> +{
-> +	/* clang-format on */
-> +	.handled = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed = 0,
-> +	.sock_type = SOCK_SEQPACKET,
-> +	.expected = EACCES,
-> +};
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(unix_socket, seqpacket_handled_and_allowed)
-> +{
-> +	/* clang-format on */
-> +	.handled = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.sock_type = SOCK_SEQPACKET,
-> +	.expected = 0,
-> +};
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(unix_socket, stream_handled_not_allowed_and_same_scope)
-> +{
-> +	/* clang-format on */
-> +	.handled = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed = 0,
-> +	.sock_type = SOCK_STREAM,
-> +	.expected = 0,
-> +	.server_in_same_domain = true,
-> +};
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(unix_socket, stream_handled_and_allowed_and_same_scope)
-> +{
-> +	/* clang-format on */
-> +	.handled = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.sock_type = SOCK_STREAM,
-> +	.expected = 0,
-> +	.server_in_same_domain = true,
-> +};
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(unix_socket, dgram_handled_not_allowed_and_same_scope)
-> +{
-> +	/* clang-format on */
-> +	.handled = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed = 0,
-> +	.sock_type = SOCK_DGRAM,
-> +	.expected = 0,
-> +	.server_in_same_domain = true,
-> +};
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(unix_socket, dgram_handled_and_allowed_and_same_scope)
-> +{
-> +	/* clang-format on */
-> +	.handled = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.sock_type = SOCK_DGRAM,
-> +	.expected = 0,
-> +	.server_in_same_domain = true,
-> +};
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(unix_socket, dgram_sendto_handled_not_allowed_and_same_scope)
-> +{
-> +	/* clang-format on */
-> +	.handled = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed = 0,
-> +	.sock_type = SOCK_DGRAM,
-> +	.use_sendto = true,
-> +	.expected = 0,
-> +	.server_in_same_domain = true,
-> +};
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(unix_socket, dgram_sendto_handled_and_allowed_and_same_scope)
-> +{
-> +	/* clang-format on */
-> +	.handled = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.sock_type = SOCK_DGRAM,
-> +	.use_sendto = true,
-> +	.expected = 0,
-> +	.server_in_same_domain = true,
-> +};
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(unix_socket, seqpacket_handled_not_allowed_and_same_scope)
-> +{
-> +	/* clang-format on */
-> +	.handled = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed = 0,
-> +	.sock_type = SOCK_SEQPACKET,
-> +	.expected = 0,
-> +	.server_in_same_domain = true,
-> +};
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(unix_socket, seqpacket_handled_and_allowed_and_same_scope)
-> +{
-> +	/* clang-format on */
-> +	.handled = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.sock_type = SOCK_SEQPACKET,
-> +	.expected = 0,
-> +	.server_in_same_domain = true,
-> +};
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(unix_socket, stream_nested_domains_scope_path)
-> +{
-> +	/* clang-format on */
-> +	.handled = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed = 0,
-> +	.server_in_same_domain = true,
-> +	.handled2 = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed2 = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.sock_type = SOCK_STREAM,
-> +	.expected = 0,
-> +};
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(unix_socket, stream_nested_domains_path_scope)
-> +{
-> +	/* clang-format on */
-> +	.handled = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.server_in_same_domain = true,
-> +	.handled2 = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed2 = 0,
-> +	.sock_type = SOCK_STREAM,
-> +	.expected = EACCES,
-> +};
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(unix_socket, stream_nested_domains_scope_scope)
-> +{
-> +	/* clang-format on */
-> +	.handled = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed = 0,
-> +	.server_in_same_domain = true,
-> +	.handled2 = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed2 = 0,
-> +	.sock_type = SOCK_STREAM,
-> +	.expected = EACCES,
-> +};
-> +
-> +/* clang-format off */
-> +FIXTURE_VARIANT_ADD(unix_socket, stream_nested_domains_path_path)
-> +{
-> +	/* clang-format on */
-> +	.handled = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.server_in_same_domain = true,
-> +	.handled2 = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.allowed2 = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	.sock_type = SOCK_STREAM,
-> +	.expected = 0,
-> +};
-> +
+> +#if defined(CONFIG_SECURITY_NETWORK) && defined(CONFIG_SECURITY_PATH)
 > +/*
-> + * test_sendto_named_unix - sendto to the given named UNIX socket
+
+This should be a docstring like other hooks: /**
+
+> + * security_unix_find() - Check if a named AF_UNIX socket can connect
+> + * @path: path of the socket being connected to
+> + * @other: peer sock
+> + * @flags: flags associated with the socket
 > + *
-> + * sendto() is equivalent to sendmsg() in this respect.
+> + * This hook is called to check permissions before connecting to a named
+> + * AF_UNIX socket.
 > + *
-> + * Return: The errno from sendto(), or 0
+> + * Return: Returns 0 if permission is granted.
 > + */
-> +static int test_sendto_named_unix(int fd, const char *const path)
+> +int security_unix_find(const struct path *path, struct sock *other, int flags)
 > +{
-> +	static const char buf[] = "dummy";
-> +	struct sockaddr_un addr = {
-> +		.sun_family = AF_UNIX,
-> +	};
-> +	strncpy(addr.sun_path, path, sizeof(addr.sun_path));
-> +
-> +	if (sendto(fd, buf, sizeof(buf), 0, (struct sockaddr *)&addr,
-> +		   sizeof(addr)) == -1)
-> +		return errno;
-> +	return 0;
+> +	return call_int_hook(unix_find, path, other, flags);
 > +}
+> +EXPORT_SYMBOL(security_unix_find);
 > +
-> +TEST_F_FORK(unix_socket, test)
-> +{
-> +	const char *const path = "sock";
-> +	int cli_fd, srv_fd, ruleset_fd, res;
-> +	struct rule rules[] = {
-> +		{
-> +			.path = ".",
-> +			.access = variant->allowed,
-> +		},
-> +		{},
-> +	};
+> +#endif	/* CONFIG_SECURITY_NETWORK && CONFIG_SECURITY_PATH */
 > +
-> +	/* Sets up a server (in the case where the server is in the parent domain) */
-> +	if (!variant->server_in_same_domain)
-> +		srv_fd = set_up_named_unix_server(_metadata, variant->sock_type,
-> +						  path);
-> +
-> +	/* Enables Landlock. */
-> +	ruleset_fd = create_ruleset(_metadata, variant->handled, rules);
-> +	ASSERT_LE(0, ruleset_fd);
-> +	enforce_ruleset(_metadata, ruleset_fd);
-> +	ASSERT_EQ(0, close(ruleset_fd));
-> +
-> +	/* Sets up a server (in the case where the server is in the same domain) */
-> +	if (variant->server_in_same_domain)
-> +		srv_fd = set_up_named_unix_server(_metadata, variant->sock_type,
-> +						  path);
-> +
-> +	if (variant->handled2) {
-> +		/* Enables Landlock another time, if needed. */
-> +		rules[0].access = variant->allowed2;
-> +		ruleset_fd =
-> +			create_ruleset(_metadata, variant->handled2, rules);
-> +		ASSERT_LE(0, ruleset_fd);
-> +		enforce_ruleset(_metadata, ruleset_fd);
-> +		ASSERT_EQ(0, close(ruleset_fd));
-> +	}
-> +
-> +	/* Sets up a client connection to it */
-> +	cli_fd = socket(AF_UNIX, variant->sock_type, 0);
-> +	ASSERT_LE(0, cli_fd);
-> +
-> +	/* Connecting or sendto to the Unix socket is denied. */
-> +	if (variant->use_sendto)
-> +		res = test_sendto_named_unix(cli_fd, path);
-> +	else
-> +		res = test_connect_named_unix(cli_fd, path);
-> +	EXPECT_EQ(variant->expected, res);
-> +
-> +	/* Clean up. */
-> +	EXPECT_EQ(0, close(cli_fd));
-> +	EXPECT_EQ(0, close(srv_fd));
-> +	EXPECT_EQ(0, unlink(path));
-> +}
-> +
->  /* clang-format off */
->  FIXTURE(layout1_bind) {};
->  /* clang-format on */
+>  #ifdef CONFIG_SECURITY_INFINIBAND
+>  /**
+>   * security_ib_pkey_access() - Check if access to an IB pkey is allowed
 > -- 
 > 2.52.0
 > 
