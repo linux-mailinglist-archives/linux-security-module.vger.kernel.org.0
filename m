@@ -1,88 +1,88 @@
-Return-Path: <linux-security-module+bounces-14682-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14684-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kGzABqylkWmWlAEAu9opvQ
-	(envelope-from <linux-security-module+bounces-14682-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Sun, 15 Feb 2026 11:53:32 +0100
+	id cM+fEa+lkWmWlAEAu9opvQ
+	(envelope-from <linux-security-module+bounces-14684-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Sun, 15 Feb 2026 11:53:35 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACCC613E878
-	for <lists+linux-security-module@lfdr.de>; Sun, 15 Feb 2026 11:53:31 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E425A13E887
+	for <lists+linux-security-module@lfdr.de>; Sun, 15 Feb 2026 11:53:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 15CD1301379F
-	for <lists+linux-security-module@lfdr.de>; Sun, 15 Feb 2026 10:52:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 53E1B3013AB3
+	for <lists+linux-security-module@lfdr.de>; Sun, 15 Feb 2026 10:52:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5755627B327;
-	Sun, 15 Feb 2026 10:52:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 325C1242D67;
+	Sun, 15 Feb 2026 10:52:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LoHvBX2D"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aG0/vNfW"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
+Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF6B629D275
-	for <linux-security-module@vger.kernel.org>; Sun, 15 Feb 2026 10:52:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC2C129D275
+	for <linux-security-module@vger.kernel.org>; Sun, 15 Feb 2026 10:52:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771152769; cv=none; b=hiQoCwWTYT00cMhbIxSwxqwOU06gQRKgomeidjyif1uO1ZjWkoy+C5HEytpmulINTts6DedgWcimTTFiu9vhvh6NxzkZhTsYcb67mmHCwdZHyDU8EmHcD3C+54poY8UwUU6ZBXcEcT78bOeUNAoSSfxeoEL2B/CUAKaSU/lL2VI=
+	t=1771152771; cv=none; b=ePOUCF24Mj7hncvlYCeBQAbrxgvYSQrp8p8z9y+4G71rdTcx0PM42hfhW5RDfpp/+kbI8moXZeh+yXUdSITrB9b567MVaGd1mlxn9IslDjPTU2T0KxUIAd3fhP1EfU1TDa2HoglSMdU95btZERB6vDTLPVWB085Av4GuEht7qV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771152769; c=relaxed/simple;
-	bh=ZbVK+8pBr5xeYnZaIo3CQyYa8Q3kgiyu/MsamnZItIw=;
+	s=arc-20240116; t=1771152771; c=relaxed/simple;
+	bh=H95up0PdF0wT3xiTVLsjcbw/FTqiwcIzLRTN7EvNT9U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=B5z4Z6XRWmcphIK8gc8/0BkzyGoMjGy07hwsGydme6ozKhNVSJsNW7ji0mSGkoQ9BxCl/dGnbLSl6de71Enycn73YpDWltPqPzg978MArnbsUF/m21RPV/s5f2beID5hKbFvEFLX4+5k58PWrKkIM12JOILEKkiQaAJeiyDI6Q8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LoHvBX2D; arc=none smtp.client-ip=209.85.128.66
+	 MIME-Version:Content-Type; b=dD2vlpBgW2sn8m/2ELJyabjjEN9TVZPGHIabXKo49i1oCPQScq82uWcXOKUbvmunRYsQyPc39enJ8XzPM9925yBg7L5ONNiVW3yqKZqIYcMCwBjprl/Fq0Xp2gDaSjaSNATxWQxwFM2mfOoARj3Ok4WRqOpFRSTiQt8TF3XDfbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aG0/vNfW; arc=none smtp.client-ip=209.85.128.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-4837907f535so10865045e9.3
-        for <linux-security-module@vger.kernel.org>; Sun, 15 Feb 2026 02:52:47 -0800 (PST)
+Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-4836f4cbe0bso16814705e9.3
+        for <linux-security-module@vger.kernel.org>; Sun, 15 Feb 2026 02:52:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771152766; x=1771757566; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771152768; x=1771757568; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yGWhWsCxMYkvicF33836VUAINQXBaIg696pKAr594Pc=;
-        b=LoHvBX2DlGJnRKIJ2KFJd8srX/8X65+E8MZP7dUs1jKoDRmDAZiUXD1ugKUex75plI
-         9AM0NiyaLNq4cdaQMDAUEh3byvVJfnk9+Fe9tqssLV/+CiEZxGaO0I8tBvIr0YmBhF/3
-         uKKdSKi+XGsAy/qooymbLw62bMI3nJiRBTgZy5BVKAfcOBEIojQ72P4okg1xQME7hxnR
-         tHZTtIFL7IMSlyJCNOWM5HQ+6uUWQK+DdSrzqR8q55W+GCLUvOu9izrkyfw1DuCWk49+
-         H+tYye4fF/n9l3hCAddKVk3zQaf2F/3b5XQce8wJWRLiD6/BuU2udI+1W7Yna9+cxkpZ
-         4xAA==
+        bh=uuQwtV+v7wYKCTQx1ckWEl3T2al+gSB4N7kOmT9I2y8=;
+        b=aG0/vNfW1/hkFGKjJljP5ZK19NRhTcoxM7fxSV04llX+3HKV9vlIBy186fLoLZsARX
+         6bLJzVUtltpLhQnRHVGmFjjJKgZlPYAnMKNUTDgTI9Ap4ceZEwwqxr8zPr88yMavu+Cv
+         KuDXdR+gGWCo3MdQeugnc6N0IwxOpRmny5A9ry3Y7tQx6FkD4b4JBPEnRUTgM675COD7
+         AuLOd/kXcEkUBhsy/TzDtzL7B7y7aXBTX5vhBg8Yn3Q78aAIGx1yDo0/ldzXbF6qP1hB
+         IJGnwA0VA2OK2EOuOletx26/H5ZGtutVcYfMZDiTIRD6hJX8uDZcwY6tHy5z6zpbcRnI
+         wd0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771152766; x=1771757566;
+        d=1e100.net; s=20230601; t=1771152768; x=1771757568;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=yGWhWsCxMYkvicF33836VUAINQXBaIg696pKAr594Pc=;
-        b=WkGsoD0XTr8bMNDvI/E9F3EfYcq2dhY5JyhGoKKj4ZUWy087FGSnGLzv7+nMy1u7S2
-         S2dOUzvMDkaI54TTu8a3LAzvXYX3dbuF/2IKBJR8KneYppqKYPCqbrlYbEMLMV3faxvL
-         thSS5yZBf2enkW3lPnCkm38nztfWPmSF9fXnBfNXiWXTxfMuoFEyoqYED4ndDdPg4Fk8
-         I2mPKaPvPRteS2z2G3959+i3g56BGy1lNuULyJSmsKbCF4OouKI8VYfq+NqT+qVw3y0d
-         fmab7I2hf1z3u1yRWRmBuoihc1pTcZ6TDlvPEAxIiVfB5NGB1TT2vBIuXxy3cjT4cBkJ
-         fDlg==
-X-Forwarded-Encrypted: i=1; AJvYcCW1Gj1u/CQUmRK4dqhaYsFmsqiagTMtpPRmJWfwPOpYvR3o0LwTJ3l4DbYTiF78YHc6ZqbAIyXzryZgAKVk40MKlay6lws=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcC6BrNfG4ttq0MgDlzfif4bT4DuUw9JlQFK6ryoUlGFRsxnYh
-	N8ShL/Z/nXdUX0/UkJ2KaCL+rylI/E5mM+B11aZOlYGu8uhCqgzvrWri
-X-Gm-Gg: AZuq6aIEN7f2WMIRUhCLf2pvsZicj38BKyi8H+CGqmQdZOnQglnh2rm3j4SvTu4/eoU
-	jZvA9cTWzl+IqGEyvwa7fmCLuHta6e2H8HNuPSYG0c0AFEEIwS0qD1rxhOSCcBxYGLf7RQa32Ep
-	7ymznolacuOwirz6Nrl2bBPFPD/wpvQI7mtnSGCiN9n+Fd58ORZ/dAY/+SvuxeksiDFZShHweEp
-	T5X4iTR42TXY0bPenfRA0gQqukFwx+ImdN6kGCQb3RMGHXUq/Cpys9TQU1yGxwsPyhrsYWchktX
-	qNryI6BQElzy2q4tEFSKuMjj056PnykXFcW2PKj19NK6SwA5dAEVYZrLB8cop7vIep2R7Jk823Q
-	SrIQ8mGsIfThidYne9wTrInzy116uppxqVaazmZWma66Ek/65y9kLTGoFZBtFyH4XggJTFySQlp
-	LdVAwxmBjsVbWCtswXgyIH7eb3mDLTkktSqPCGdyryKrlyMvMH
-X-Received: by 2002:a05:600c:8709:b0:480:1c53:2085 with SMTP id 5b1f17b1804b1-48379bd731emr80632405e9.19.1771152766026;
-        Sun, 15 Feb 2026 02:52:46 -0800 (PST)
+        bh=uuQwtV+v7wYKCTQx1ckWEl3T2al+gSB4N7kOmT9I2y8=;
+        b=JBHdv7KQzcMjJoD5dbYKrqb0V3o6VjQLPH5wtxvGx74TnpxGxkdJ/5sxEaqyftW7nb
+         sDZ5zn2rEdbmITLE1g/xahK45WMFjlWiuxA1USRS+SmHP1AsbJXEDTS3QTFW1wQiWdj6
+         PgtoehuPHPqjACfNu5sUNUa3hmx5Y7MjecO5A8BOvFBvc43kKksH3nrIQZf4Lfcj1VLf
+         xJwn0FvdcYK/Xk5PgyqvWFTr0mRV2dVcl1tMf6SFB7v0B33/+j5lF5dC/izFOaBABL/G
+         hB1D3IqozPvMxdZV93i/whQ9y8yfjWPg96GVmDK6cBqblSYG30DwsIaWr/55jtBQyFSd
+         fNkA==
+X-Forwarded-Encrypted: i=1; AJvYcCXYPGG2CNFH6hLcaC3REZzq8Nv6Wkh1lETyGyQM2ZD/DpgAghbvFXO+XLwnxoA4eViaokMFeKuIFwyEUGZ6zK4r3An3qxA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwexZL1TwjD2sIk9jVZGk1yBCLunFU1ZQA8jTFPXpllq9YMTTGT
+	cKULH8Br1xzUgRFFBNLzzyij2+Ho17Ocl3eG+9+7iGtB5xhFV6WofEtH
+X-Gm-Gg: AZuq6aLoASkU4M3z6sQEQb0DYilHxy0B40SlnaEPrnLftfASmOGHIWJNSFT0JU9PlWI
+	UHbKIRse/7lrj7gyPTsS9V0W9Aq7bZOi7Uq00yYi2An7JnaGWzD1c29LZYpKkskUERVAw439Dpv
+	VTyx1yzrZaOYxXqSHX2aYWzKl/iLdAlkwUkMm03eURSIqfJvx3sa4JSVw3+jsYV+geA6/1N2JBr
+	M7qvCJEdrXiqqFGwKn0LSLTCtv0WGbEGK4ZwPTJI7MnpDw5PDsjbcqn4CEH0W/knL1GOEk42iXq
+	xECR/gv8KvWadjhYvNPDhqL3tH5capN/9YO/MrGrxTv3CMU1RwdF+9XtPCpKt7h014fD6OS1U+q
+	O+rWSSb3YOpW0eIejK072ZnXKIoPSKtKPEUzegcCSDSqr7wJkmFGMTNXvozXTU1cKsQm6hFPPqT
+	rAhDuqGpzMAfSmcCh81XmCS58pigbJDtlEk10PAxDdSJHAiyjR
+X-Received: by 2002:a05:600c:5246:b0:45d:d97c:236c with SMTP id 5b1f17b1804b1-48373a5d078mr140609455e9.21.1771152767917;
+        Sun, 15 Feb 2026 02:52:47 -0800 (PST)
 Received: from localhost (ip87-106-108-193.pbiaas.com. [87.106.108.193])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4837e565f5esm138095105e9.10.2026.02.15.02.52.45
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43796abc9b2sm17591886f8f.21.2026.02.15.02.52.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Feb 2026 02:52:45 -0800 (PST)
+        Sun, 15 Feb 2026 02:52:47 -0800 (PST)
 From: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack3000@gmail.com>
 To: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	"John Johansen" <john.johansen@canonical.com>
 Cc: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack3000@gmail.com>,
-	Justin Suess <utilityemal77@gmail.com>,
 	linux-security-module@vger.kernel.org,
 	"Tingmao Wang" <m@maowtm.org>,
+	"Justin Suess" <utilityemal77@gmail.com>,
 	"Samasth Norway Ananda" <samasth.norway.ananda@oracle.com>,
 	"Matthieu Buffet" <matthieu@buffet.re>,
 	"Mikhail Ivanov" <ivanov.mikhail1@huawei-partners.com>,
@@ -91,9 +91,9 @@ Cc: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack3000@gmail.com>,
 	"Alyssa Ross" <hi@alyssa.is>,
 	"Jann Horn" <jannh@google.com>,
 	"Tahera Fahimi" <fahimitahera@gmail.com>
-Subject: [PATCH v5 8/9] landlock: Document FS access right for pathname UNIX sockets
-Date: Sun, 15 Feb 2026 11:51:56 +0100
-Message-ID: <20260215105158.28132-9-gnoack3000@gmail.com>
+Subject: [PATCH v5 9/9] landlock: Document design rationale for scoped access rights
+Date: Sun, 15 Feb 2026 11:51:57 +0100
+Message-ID: <20260215105158.28132-10-gnoack3000@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260215105158.28132-1-gnoack3000@gmail.com>
 References: <20260215105158.28132-1-gnoack3000@gmail.com>
@@ -111,13 +111,13 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org,maowtm.org,oracle.com,buffet.re,huawei-partners.com,huawei.com,alyssa.is,google.com];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14682-lists,linux-security-module=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14684-lists,linux-security-module=lfdr.de];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -131,59 +131,70 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[5];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-security-module];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: ACCC613E878
+X-Rspamd-Queue-Id: E425A13E887
 X-Rspamd-Action: no action
 
-Cc: Justin Suess <utilityemal77@gmail.com>
-Cc: Mickaël Salaün <mic@digikod.net>
+Document the (possible future) interaction between scoped flags and
+other access rights in struct landlock_ruleset_attr, and summarize the
+rationale, as discussed in code review leading up to [1].
+
+Link[1]: https://lore.kernel.org/all/20260205.8531e4005118@gnoack.org/
 Signed-off-by: Günther Noack <gnoack3000@gmail.com>
 ---
- Documentation/userspace-api/landlock.rst | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ Documentation/security/landlock.rst | 38 +++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/userspace-api/landlock.rst
-index 13134bccdd39..3ba73afcbc4b 100644
---- a/Documentation/userspace-api/landlock.rst
-+++ b/Documentation/userspace-api/landlock.rst
-@@ -77,7 +77,8 @@ to be explicit about the denied-by-default access rights.
-             LANDLOCK_ACCESS_FS_MAKE_SYM |
-             LANDLOCK_ACCESS_FS_REFER |
-             LANDLOCK_ACCESS_FS_TRUNCATE |
--            LANDLOCK_ACCESS_FS_IOCTL_DEV,
-+            LANDLOCK_ACCESS_FS_IOCTL_DEV |
-+            LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-         .handled_access_net =
-             LANDLOCK_ACCESS_NET_BIND_TCP |
-             LANDLOCK_ACCESS_NET_CONNECT_TCP,
-@@ -127,6 +128,12 @@ version, and only use the available subset of access rights:
-         /* Removes LANDLOCK_SCOPE_* for ABI < 6 */
-         ruleset_attr.scoped &= ~(LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET |
-                                  LANDLOCK_SCOPE_SIGNAL);
-+        __attribute__((fallthrough));
-+    case 7:
-+        __attribute__((fallthrough));
-+    case 8:
-+        /* Removes LANDLOCK_ACCESS_FS_RESOLVE_UNIX for ABI < 8 */
-+        ruleset_attr.handled_access_fs &= ~LANDLOCK_ACCESS_FS_RESOLVE_UNIX;
-     }
+diff --git a/Documentation/security/landlock.rst b/Documentation/security/landlock.rst
+index 3e4d4d04cfae..49ef02d5e272 100644
+--- a/Documentation/security/landlock.rst
++++ b/Documentation/security/landlock.rst
+@@ -89,6 +89,44 @@ this is required to keep access controls consistent over the whole system, and
+ this avoids unattended bypasses through file descriptor passing (i.e. confused
+ deputy attack).
  
- This enables the creation of an inclusive ruleset that will contain our rules.
-@@ -685,6 +692,13 @@ enforce Landlock rulesets across all threads of the calling process
- using the ``LANDLOCK_RESTRICT_SELF_TSYNC`` flag passed to
- sys_landlock_restrict_self().
- 
-+Pathname UNIX sockets (ABI < 9)
-+-------------------------------
++Interaction between scoped flags and other access rights
++--------------------------------------------------------
 +
-+Starting with the Landlock ABI version 9, it is possible to restrict
-+connections to pathname UNIX domain sockets (:manpage:`unix(7)`) using
-+the new ``LANDLOCK_ACCESS_FS_RESOLVE_UNIX`` right.
++The ``scoped`` flags in ``struct landlock_ruleset_attr`` restrict the
++use of *outgoing* IPC from the created Landlock domain, while they
++permit reaching out to IPC endpoints *within* the created Landlock
++domain.
 +
- .. _kernel_support:
++In the future, scoped flags *may* interact with other access rights,
++e.g. so that abstract UNIX sockets can be allow-listed by name, or so
++that signals can be allow-listed by signal number or target process.
++
++When introducing ``LANDLOCK_ACCESS_FS_RESOLVE_UNIX``, we defined it to
++implicitly have the same scoping semantics as a
++``LANDLOCK_SCOPE_PATHNAME_UNIX_SOCKET`` flag would have: connecting to
++UNIX sockets within the same domain (where
++``LANDLOCK_ACCESS_FS_RESOLVE_UNIX`` is used) is unconditionally
++allowed.
++
++The reasoning is:
++
++* Like other IPC mechanisms, connecting to named UNIX sockets in the
++  same domain should be expected and harmless.  (If needed, users can
++  further refine their Landlock policies with nested domains or by
++  restricting ``LANDLOCK_ACCESS_FS_MAKE_SOCK``.)
++* We reserve the option to still introduce
++  ``LANDLOCK_SCOPE_PATHNAME_UNIX_SOCKET`` in the future.  (This would
++  be useful if we wanted to have a Landlock rule to permit IPC access
++  to other Landlock domains.)
++* But we can postpone the point in time when users have to deal with
++  two interacting flags visible in the userspace API.  (In particular,
++  it is possible that it won't be needed in practice, in which case we
++  can avoid the second flag altogether.)
++* If we *do* introduce ``LANDLOCK_SCOPE_PATHNAME_UNIX_SOCKET`` in the
++  future, setting this scoped flag in a ruleset does *not reduce* the
++  restrictions, because access within the same scope is already
++  allowed based on ``LANDLOCK_ACCESS_FS_RESOLVE_UNIX``.
++
+ Tests
+ =====
  
- Kernel support
 -- 
 2.52.0
 
