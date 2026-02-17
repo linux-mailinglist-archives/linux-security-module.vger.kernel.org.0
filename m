@@ -1,115 +1,166 @@
-Return-Path: <linux-security-module+bounces-14707-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14708-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UN0xBVM3lGlpAgIAu9opvQ
-	(envelope-from <linux-security-module+bounces-14707-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Tue, 17 Feb 2026 10:39:31 +0100
+	id cCVzJHlMlGkNCQIAu9opvQ
+	(envelope-from <linux-security-module+bounces-14708-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Tue, 17 Feb 2026 12:09:45 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68FCA14A7CA
-	for <lists+linux-security-module@lfdr.de>; Tue, 17 Feb 2026 10:39:30 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E96BA14B2AE
+	for <lists+linux-security-module@lfdr.de>; Tue, 17 Feb 2026 12:09:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 916DB3008766
-	for <lists+linux-security-module@lfdr.de>; Tue, 17 Feb 2026 09:38:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E59ED301E3D6
+	for <lists+linux-security-module@lfdr.de>; Tue, 17 Feb 2026 11:09:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE34330F805;
-	Tue, 17 Feb 2026 09:38:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 586DD32FA17;
+	Tue, 17 Feb 2026 11:09:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rvVPfUb6"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="l/boOSMj";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="6/jN8nR+";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="l/boOSMj";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="6/jN8nR+"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8E7430F552;
-	Tue, 17 Feb 2026 09:38:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED1B92E4274
+	for <linux-security-module@vger.kernel.org>; Tue, 17 Feb 2026 11:09:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771321117; cv=none; b=fyi7rb0s1cfyEClve3zRa7Q06xqikUAeh/oQ+ySRZiwJm2PoByBm9KYO1r1uJLZ+1+RMvtpDXmjYZDELYovIpj5i1OZuZJoHSnph6PvfBehNCb8JwM6WQJV8BLU+nT48D9wTbvDzUkmh8tPE8D2Mh4powrCGk72+977dro8/ACc=
+	t=1771326580; cv=none; b=IsB6hGZDn4o+vCLqraJRbLHCYpqMSgHoQChS92pqd6AJGVbXTXLVYJDiTVxsXF0aIbJQyUt1QN3Sm3JU7D+c/yMMPF7lhbElMoUtSYT5QpLu1MYyP1gCTiYaB5wRfciZ4faIjGcB6LIU7QpdxX+xkpP57Wya6bsG8LczvC2ZIuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771321117; c=relaxed/simple;
-	bh=axSJ2gC8Rn7tlVNjob9xVqKHbQVyw9TBS+RRUPCUwZU=;
+	s=arc-20240116; t=1771326580; c=relaxed/simple;
+	bh=NE/5LCZzD5YpZaWhjqr+V8JtlSALaRPBoGa6uKJyxTU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Na4Ce8Rv89HigHhM3Q9yGXgAsPUctX2742qCY9qYG5DHxhyusUdyOF+ESuvvAmEI0UYyo7OBe6QXHE4m+Y7oNFB7iML2iVxS1ukGfHMvaY5NnGrSNvqKbihfgiPNbJ+axuuKpMISm3H9lCaOa6+4v0Rlk9OBpBTNabiwnd2lfXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rvVPfUb6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11284C4CEF7;
-	Tue, 17 Feb 2026 09:38:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771321117;
-	bh=axSJ2gC8Rn7tlVNjob9xVqKHbQVyw9TBS+RRUPCUwZU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rvVPfUb6ejBStqjzD7N16rmj6UrDO5JuR2aP+XilSV13mxCjoNRzZiXqaKIso5Tdc
-	 22jRJ/HLyNmvrJPmpoR+Xmx8uDELM7ugZ+hDJ0WCvEmCLWokzSKXNpz4vwibm78p4K
-	 a2hIczZv9LgxR63/KG10N44my2h1DqXSyxy2C+8nllIZ3rVlT+z5JdS/rlN73pgo9O
-	 VuNEX9C5FzoMG8+hXpQb4mDeBU1lcUJ53la8xRcJfPg92t1NaPq0UKK/2pjEpTn9eS
-	 S4WNPClkm/yAPsLHMm7NGy2L5UkjVTKVho9EJTN6Mkh/xWhVYy387RTLSEOxyXRPdB
-	 7vB8tGQwq0gQA==
-Date: Tue, 17 Feb 2026 10:38:33 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Casey Schaufler <casey@schaufler-ca.com>
-Cc: Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] security: add LSM blob and hooks for namespaces
-Message-ID: <20260217-glasur-hinnimmt-ac72b3e67661@brauner>
-References: <20260216-work-security-namespace-v1-1-075c28758e1f@kernel.org>
- <fb40e938-f6b2-45cf-b8ab-246cd6939582@schaufler-ca.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=oM32GFCZKCFaK95gN8j1lIS9hUqo33EXY0Nr6PyWgP2HMnBYoBascey9RlzabcUBwfEWWEAiccB31XTfabLJgQBLiSdtpmZAOgoJnaJPQm+QeAJby0TcaSOPp8HnhshKBsVE+QQl080eK+0KIS2Ghk0fh8eeT4uC+6S8aIFkxDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=l/boOSMj; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=6/jN8nR+; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=l/boOSMj; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=6/jN8nR+; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 30F4F5BCE6;
+	Tue, 17 Feb 2026 11:09:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1771326577; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kTcxvKkWfZyMBzgLOkORKhbu36AO8Bpt/QgZrBLtsYA=;
+	b=l/boOSMj7Ev8+4RuvK5lNLKoHW2ZswakwBQ6CAUTQ6b9KlyiLtt94BayLkBv4HCGmMsU/s
+	sqfHLKeTtF8tXjtjvAiJEJh8bB8speq9fsEGHy17hwEGs+icKdYnxNdNsGzDRPIFy9ktEL
+	huWxuXSPkjaunOOWX/MGrwGUAg/+zR4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1771326577;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kTcxvKkWfZyMBzgLOkORKhbu36AO8Bpt/QgZrBLtsYA=;
+	b=6/jN8nR+4r5WFIlsgTtZr0iAM3Rc4Q4VnTmeO7HM6NudWlO9hmUxg9cU2Hg/UNka4J0i4l
+	qV8vZJSSySGQyDAQ==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b="l/boOSMj";
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b="6/jN8nR+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1771326577; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kTcxvKkWfZyMBzgLOkORKhbu36AO8Bpt/QgZrBLtsYA=;
+	b=l/boOSMj7Ev8+4RuvK5lNLKoHW2ZswakwBQ6CAUTQ6b9KlyiLtt94BayLkBv4HCGmMsU/s
+	sqfHLKeTtF8tXjtjvAiJEJh8bB8speq9fsEGHy17hwEGs+icKdYnxNdNsGzDRPIFy9ktEL
+	huWxuXSPkjaunOOWX/MGrwGUAg/+zR4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1771326577;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kTcxvKkWfZyMBzgLOkORKhbu36AO8Bpt/QgZrBLtsYA=;
+	b=6/jN8nR+4r5WFIlsgTtZr0iAM3Rc4Q4VnTmeO7HM6NudWlO9hmUxg9cU2Hg/UNka4J0i4l
+	qV8vZJSSySGQyDAQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B46293EA65;
+	Tue, 17 Feb 2026 11:09:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id ItgbLHBMlGmoDwAAD6G6ig
+	(envelope-from <jack@suse.cz>); Tue, 17 Feb 2026 11:09:36 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 2FE24A08CF; Tue, 17 Feb 2026 12:09:34 +0100 (CET)
+Date: Tue, 17 Feb 2026 12:09:34 +0100
+From: Jan Kara <jack@suse.cz>
+To: Ondrej Mosnacek <omosnace@redhat.com>
+Cc: Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>, 
+	Matthew Bobrowski <repnop@google.com>, linux-fsdevel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] fanotify: avid some premature LSM checks
+Message-ID: <yk2qcux2ee7afr24xw6p7wp4t3islu64ttfsrheac2zwr6odnw@kmagnqbldb3f>
+References: <20260216150625.793013-1-omosnace@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fb40e938-f6b2-45cf-b8ab-246cd6939582@schaufler-ca.com>
+In-Reply-To: <20260216150625.793013-1-omosnace@redhat.com>
+X-Spam-Flag: NO
+X-Spam-Score: -4.01
+X-Spam-Level: 
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.34 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14707-lists,linux-security-module=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14708-lists,linux-security-module=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	DMARC_NA(0.00)[suse.cz];
+	FREEMAIL_CC(0.00)[suse.cz,gmail.com,google.com,vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[brauner@kernel.org,linux-security-module@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-security-module];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[jack@suse.cz,linux-security-module@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-security-module];
 	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5]
-X-Rspamd-Queue-Id: 68FCA14A7CA
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: E96BA14B2AE
 X-Rspamd-Action: no action
 
-On Mon, Feb 16, 2026 at 09:34:57AM -0800, Casey Schaufler wrote:
-> On 2/16/2026 5:52 AM, Christian Brauner wrote:
-> > All namespace types now share the same ns_common infrastructure. Extend
-> > this to include a security blob so LSMs can start managing namespaces
-> > uniformly without having to add one-off hooks or security fields to
-> > every individual namespace type.
+On Mon 16-02-26 16:06:23, Ondrej Mosnacek wrote:
+> Restructure some of the validity and security checks in
+> fs/notify/fanotify/fanotify_user.c to avoid generating LSM access
+> denials in the audit log where hey shouldn't be.
 > 
-> The implementation appears sound.
+> Ondrej Mosnacek (2):
+>   fanotify: avoid/silence premature LSM capability checks
+>   fanotify: call fanotify_events_supported() before path_permission()
+>     and security_path_notify()
 > 
-> I have to question whether having LSM controls on namespaces is reasonable.
+>  fs/notify/fanotify/fanotify_user.c | 50 ++++++++++++++----------------
+>  1 file changed, 23 insertions(+), 27 deletions(-)
 
-This is already in active use today but only in a very limited capacity.
-This generalizes it.
+The series looks good to me as well. Thanks! I'll commit the series to my
+tree once the merge window closes and fixup the comment formatting on
+commit. No need to resend.
 
-> I suppose that you could have a system where (for example) SELinux runs
-> in permissive mode except within a specific user namespace, where it would
-> enforce policy. Do you have a use case in mind?
-
-We will use it in systemd services and containers to monitor and
-supervise namespaces.
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
 
