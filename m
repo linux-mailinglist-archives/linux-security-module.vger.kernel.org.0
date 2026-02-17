@@ -1,144 +1,212 @@
-Return-Path: <linux-security-module+bounces-14710-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14712-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MBQlANRYlGkXDAIAu9opvQ
-	(envelope-from <linux-security-module+bounces-14710-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Tue, 17 Feb 2026 13:02:28 +0100
+	id +L+4NAZglGnODAIAu9opvQ
+	(envelope-from <linux-security-module+bounces-14712-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Tue, 17 Feb 2026 13:33:10 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F8F014BB8E
-	for <lists+linux-security-module@lfdr.de>; Tue, 17 Feb 2026 13:02:27 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1F2614BFE8
+	for <lists+linux-security-module@lfdr.de>; Tue, 17 Feb 2026 13:33:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 15EF93011C5A
-	for <lists+linux-security-module@lfdr.de>; Tue, 17 Feb 2026 12:01:38 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 8571D3004699
+	for <lists+linux-security-module@lfdr.de>; Tue, 17 Feb 2026 12:33:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45EB233557C;
-	Tue, 17 Feb 2026 12:01:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA1B8347FE6;
+	Tue, 17 Feb 2026 12:33:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HSF4Dk0o"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="WUEuRRDc"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-190c.mail.infomaniak.ch (smtp-190c.mail.infomaniak.ch [185.125.25.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21B5C32C33D;
-	Tue, 17 Feb 2026 12:01:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11FA8245029
+	for <linux-security-module@vger.kernel.org>; Tue, 17 Feb 2026 12:33:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771329697; cv=none; b=eYc6IJn7PSswlf6bBd9lZyg3iXWPXReEq7SgPpUxzkSOs+AoX4rMqr9eXmMr1pFFJveRibTHbw6ztoCVqcvN5WEvlViC+jZwGmNM1ajrsbekJE18Ebfkdz8puGihM2ryHmsJFIzWCgp0NV+KKRtAkTPtXGlRmq76tC7Jnr5xlok=
+	t=1771331584; cv=none; b=AhzIRICuA7UBL8tuFv6kfJZifawa8DKVAJVgTBA+IO7yJYoWizOmg5UCDEydmJpQiJWgreiOhmIOWge9RFCTkQcjYi9dzP31Mx/gMM4DlZ1GYPUvqE5Nqb+w66VWmPti1mqOQYBat7gxBAITK9zvqeAA3X64WrKNGSqU9m7x7T4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771329697; c=relaxed/simple;
-	bh=87110GAXLqxdBCfG4XAbyUPM+jV4Yr/SrlSTRgKoWfA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RZ0si+hht5Y0dHKxX8pduvq7jb67DWUOBBQ4q3K5Eke+OEtnoyZJlyvJ+BLDPqX2WNliXqAV7AfvnN9pzKq0QpplTiYtCBUeB2ICCFSIGJyNR5vwD0UOqrvHItvwKlq4eakeCpm+df3RGpPJew7/brWCzC0pIH5SzWpKvFCmepw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HSF4Dk0o; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FBF1C4CEF7;
-	Tue, 17 Feb 2026 12:01:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771329696;
-	bh=87110GAXLqxdBCfG4XAbyUPM+jV4Yr/SrlSTRgKoWfA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HSF4Dk0ouulB3cq0WIY+q9T9iqcGGzYebmI8MIRNB2OGqzK5YZm7DwqCxatf9JXrz
-	 B2ev5fDIrI7xEDQvmHxbCHSL1juJ4xIk769kkcmXvJjMlxbUu+4eN991G+RF9W2CFF
-	 ES5ItpPvf90w5K9ogzdXnEkRBPx3UEgm/9U11C3mtJouO5P0pATiEXkGlgUZ2vj5/K
-	 416KGlIX5BQxc/DUlv61Ze25otA2I6m4WP4wDYthPC13977XfhJbZqnEBtf0e+GoNw
-	 6Tjpcce+stT2IBHiwfu24s78mXpUREB2PyJTGYgfzzTRYtfiXhKf8oZb+F+QA/LYCm
-	 o9M8lz/SWOhoA==
-Date: Tue, 17 Feb 2026 13:01:32 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Daniel Durning <danieldurning.work@gmail.com>
-Cc: linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	selinux@vger.kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz, paul@paul-moore.com, 
-	stephen.smalley.work@gmail.com, omosnace@redhat.com, Oleg Nesterov <oleg@redhat.com>
-Subject: Re: [RFC PATCH] fs/pidfs: Add permission check to pidfd_info()
-Message-ID: <20260217-abgedankt-eilte-2386c98b3ef7@brauner>
-References: <20260206180248.12418-1-danieldurning.work@gmail.com>
- <20260209-spanplatten-zerrt-73851db30f18@brauner>
- <CAKrb_fEXR0uQnX5iK-ACH=amKMQ8qBSPGXmJb=1PgvEq8qsDEQ@mail.gmail.com>
+	s=arc-20240116; t=1771331584; c=relaxed/simple;
+	bh=KafqT0XV92ihkfDe5sYHgMTzfE9QPbQNJ8QV6fTpglw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=g193DaO/rXu9AJOqgzO3jsSN91c6Q8I3EDs3/iyGIOX03YC6Kor+iDZAUc6+LiBYboD/0Xr7jrwYXcVo/wQSgS+SUrMBkHcACASiZnRmIt49J0mQjg6tt9NrGIwrC7cqvWX5qupD/InpvoMxaa9T9RGXn0N9F9JuWF9oBsnQ1Fs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=WUEuRRDc; arc=none smtp.client-ip=185.125.25.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fFf2M3hM7zw1W;
+	Tue, 17 Feb 2026 13:23:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1771331035;
+	bh=lgS8MkCDYwES3NpPSa0v3GZZV6ShcSwPrQxabXdRdts=;
+	h=From:To:Cc:Subject:Date:From;
+	b=WUEuRRDczITgXXFYXu8ETZUYYZu2/LevMExngPA+jqsdwVBn0/OsYy7EmA+2prhCh
+	 f0bgY0ei0khw2kVBegbLpI4hv0x3zLDKEt/Pc3q/OiUew1ht+MxnFFflnf3ZPBbT5D
+	 0LfICfZEN/28ItzP1YcRIC6uke24lv/oLGEm3aLk=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4fFf2M0LkpzRPr;
+	Tue, 17 Feb 2026 13:23:55 +0100 (CET)
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	linux-security-module@vger.kernel.org,
+	Jann Horn <jannh@google.com>
+Subject: [PATCH v2 1/2] landlock: Fully release unused TSYNC work entries
+Date: Tue, 17 Feb 2026 13:23:39 +0100
+Message-ID: <20260217122341.2359582-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKrb_fEXR0uQnX5iK-ACH=amKMQ8qBSPGXmJb=1PgvEq8qsDEQ@mail.gmail.com>
+X-Infomaniak-Routing: alpha
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [3.84 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [0.05 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MIXED_CHARSET(0.71)[subject];
+	R_DKIM_ALLOW(-0.20)[digikod.net:s=20191114];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14710-lists,linux-security-module=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[vger.kernel.org,zeniv.linux.org.uk,suse.cz,paul-moore.com,gmail.com,redhat.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[brauner@kernel.org,linux-security-module@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-security-module];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14712-lists,linux-security-module=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[digikod.net];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[digikod.net:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 4F8F014BB8E
+	RCVD_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[mic@digikod.net,linux-security-module@vger.kernel.org];
+	RCPT_COUNT_THREE(0.00)[4];
+	PRECEDENCE_BULK(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-security-module];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,digikod.net:mid,digikod.net:dkim,digikod.net:email]
+X-Rspamd-Queue-Id: F1F2614BFE8
 X-Rspamd-Action: no action
 
-On Wed, Feb 11, 2026 at 02:43:21PM -0500, Daniel Durning wrote:
-> On Mon, Feb 9, 2026 at 9:01 AM Christian Brauner <brauner@kernel.org> wrote:
-> >
-> > On Fri, Feb 06, 2026 at 06:02:48PM +0000, danieldurning.work@gmail.com wrote:
-> > > From: Daniel Durning <danieldurning.work@gmail.com>
-> > >
-> > > Added a permission check to pidfd_info(). Originally, process info
-> > > could be retrieved with a pidfd even if proc was mounted with hidepid
-> > > enabled, allowing pidfds to be used to bypass those protections. We
-> > > now call ptrace_may_access() to perform some DAC checking as well
-> > > as call the appropriate LSM hook.
-> > >
-> > > The downside to this approach is that there are now more restrictions
-> > > on accessing this info from a pidfd than when just using proc (without
-> > > hidepid). I am open to suggestions if anyone can think of a better way
-> > > to handle this.
-> >
-> > This isn't really workable since this would regress userspace quite a
-> > bit. I think we need a different approach. I've given it some thought
-> > and everything's kinda ugly but this might work.
-> >
-> > In struct pid_namespace record whether anyone ever mounted a procfs
-> > with hidepid turned on for this pidns. In pidfd_info() we check whether
-> > hidepid was ever turned on. If it wasn't we're done and can just return
-> > the info. This will be the common case. If hidepid was ever turned on
-> > use kern_path("/proc") to lookup procfs. If not found check
-> > ptrace_may_access() to decide whether to return the info or not. If
-> > /proc is found check it's hidepid settings and make a decision based on
-> > that.
-> >
-> > You can probably reorder this to call ptrace_may_access() first and then
-> > do the procfs lookup dance. Thoughts?
-> 
-> Thanks for the feedback. I think your solution makes sense.
-> 
-> Unfortunately, it seems like systemd mounts procfs with hidepid enabled on
-> boot for services with the ProtectProc option enabled. This means that
-> procfs will always have been mounted with hidepid in the init pid namespace.
-> Do you think it would be viable to record whether or not procfs was mounted
-> with hidepid enabled in the mount namespace instead?
+If task_work_add() failed, ctx->task is put but the tsync_works struct
+is not reset to its previous state.  The first consequence is that the
+kernel allocates memory for dying threads, which could lead to
+user-accounted memory exhaustion (not very useful nor specific to this
+case).  The second consequence is that task_work_cancel(), called by
+cancel_tsync_works(), can dereference a NULL task pointer.
 
-I guess we can see what it looks like.
+Fix this issues by keeping a consistent works->size wrt the added task
+work.  This is done in a new tsync_works_trim() helper which also cleans
+up the shared_ctx and work fields.
+
+As a safeguard, add a pointer check to cancel_tsync_works() and update
+tsync_works_release() accordingly.
+
+Cc: Günther Noack <gnoack@google.com>
+Cc: Jann Horn <jannh@google.com>
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+---
+
+Changes since v1:
+https://lore.kernel.org/all/20260216142641.2100407-1-mic@digikod.net/
+- Move the return/release logic into a new tsync_works_trim() helper
+  (suggested by Günther).
+- Reset the whole ctx with memset().
+- Add an unlinkely(err).
+---
+ security/landlock/tsync.c | 47 ++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 41 insertions(+), 6 deletions(-)
+
+diff --git a/security/landlock/tsync.c b/security/landlock/tsync.c
+index 0d2b9c646030..42cc0ef0c704 100644
+--- a/security/landlock/tsync.c
++++ b/security/landlock/tsync.c
+@@ -203,6 +203,40 @@ static struct tsync_work *tsync_works_provide(struct tsync_works *s,
+ 	return ctx;
+ }
+ 
++/**
++ * tsync_works_trim - Put the last tsync_work element
++ *
++ * @s: TSYNC works to trim.
++ *
++ * Put the last task and decrement the size of @s.
++ *
++ * This helper does not cancel a running task, but just reset the last element
++ * to zero.
++ */
++static void tsync_works_trim(struct tsync_works *s)
++{
++	struct tsync_work *ctx;
++
++	if (WARN_ON_ONCE(s->size <= 0))
++		return;
++
++	ctx = s->works[s->size - 1];
++
++	/*
++	 * For consistency, remove the task from ctx so that it does not look like
++	 * we handed it a task_work.
++	 */
++	put_task_struct(ctx->task);
++	memset(ctx, 0, sizeof(*ctx));
++
++	/*
++	 * Cancel the tsync_works_provide() change to recycle the reserved memory
++	 * for the next thread, if any.  This also ensures that cancel_tsync_works()
++	 * and tsync_works_release() do not see any NULL task pointers.
++	 */
++	s->size--;
++}
++
+ /*
+  * tsync_works_grow_by - preallocates space for n more contexts in s
+  *
+@@ -276,7 +310,7 @@ static void tsync_works_release(struct tsync_works *s)
+ 	size_t i;
+ 
+ 	for (i = 0; i < s->size; i++) {
+-		if (!s->works[i]->task)
++		if (WARN_ON_ONCE(!s->works[i]->task))
+ 			continue;
+ 
+ 		put_task_struct(s->works[i]->task);
+@@ -379,16 +413,14 @@ static bool schedule_task_work(struct tsync_works *works,
+ 
+ 		init_task_work(&ctx->work, restrict_one_thread_callback);
+ 		err = task_work_add(thread, &ctx->work, TWA_SIGNAL);
+-		if (err) {
++		if (unlikely(err)) {
+ 			/*
+ 			 * task_work_add() only fails if the task is about to exit.  We
+ 			 * checked that earlier, but it can happen as a race.  Resume
+ 			 * without setting an error, as the task is probably gone in the
+-			 * next loop iteration.  For consistency, remove the task from ctx
+-			 * so that it does not look like we handed it a task_work.
++			 * next loop iteration.
+ 			 */
+-			put_task_struct(ctx->task);
+-			ctx->task = NULL;
++			tsync_works_trim(works);
+ 
+ 			atomic_dec(&shared_ctx->num_preparing);
+ 			atomic_dec(&shared_ctx->num_unfinished);
+@@ -412,6 +444,9 @@ static void cancel_tsync_works(struct tsync_works *works,
+ 	int i;
+ 
+ 	for (i = 0; i < works->size; i++) {
++		if (WARN_ON_ONCE(!works->works[i]->task))
++			continue;
++
+ 		if (!task_work_cancel(works->works[i]->task,
+ 				      &works->works[i]->work))
+ 			continue;
+-- 
+2.53.0
+
 
