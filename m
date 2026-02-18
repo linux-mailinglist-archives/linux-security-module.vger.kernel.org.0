@@ -1,66 +1,66 @@
-Return-Path: <linux-security-module+bounces-14718-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14721-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8DNdKViIlWnqSAIAu9opvQ
-	(envelope-from <linux-security-module+bounces-14718-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 10:37:28 +0100
+	id AIW3BASNlWl7SQIAu9opvQ
+	(envelope-from <linux-security-module+bounces-14721-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 10:57:24 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCFF5154C51
-	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 10:37:27 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83F8C155023
+	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 10:57:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 4CC13300443D
-	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 09:37:25 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 205683050EDA
+	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 09:57:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D98133D4E8;
-	Wed, 18 Feb 2026 09:37:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E11133D502;
+	Wed, 18 Feb 2026 09:57:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="FB629Jim"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="LMBurl8v"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-bc0e.mail.infomaniak.ch (smtp-bc0e.mail.infomaniak.ch [45.157.188.14])
+Received: from smtp-bc0d.mail.infomaniak.ch (smtp-bc0d.mail.infomaniak.ch [45.157.188.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BADA633C509
-	for <linux-security-module@vger.kernel.org>; Wed, 18 Feb 2026 09:37:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D829633E37C
+	for <linux-security-module@vger.kernel.org>; Wed, 18 Feb 2026 09:56:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771407444; cv=none; b=esf0EGYzpwVai8O4LUJkN/LkyA6DavV3R3pC+tF/pCB22JKoJgMMBwZlbjH1rIrxZGO6Za2tHE83ug5X2pgwv7fik22FrGdkapCWmpjc0PgrKdrfO+8NYVP0CsCXVVuEUfpSPzboQOzud6Ge/mtqm0BMhqAx9WHOdaSoftv6VQA=
+	t=1771408624; cv=none; b=KPfC1dLbg19QSvhMpjAH73oNvXlhMjAKpRpYdu+IqW7IwnndylN0bqpgd6N1MTXylPkAuCW1SANIr7Umrxf1uVGmScqz1gxv7i0DgpP/ltZJ0m6F7Cea95riU+edAvTT4DJhJUZZOmlTAXksOjn5+RXXiW5610jYM4kPM6yvldg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771407444; c=relaxed/simple;
-	bh=osdiW/HmDmYad/JtN7+x+I+Gtf5JEVZ44sUvlC0iDcM=;
+	s=arc-20240116; t=1771408624; c=relaxed/simple;
+	bh=50pHd/Lyq7OL4aRqEA1dp7XqbXwMb9YRIsuFE/XQ5Us=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gp4dc8PhEq37Co+3kfWF9RrTWllTWzzRdBVGg1G6CtiB6UaTo2v7mReAQ2kCjLfu3E7XdENXBDRdrGz1ZpL0S+piM7xp5E8nJfnPQQVonrnnWQgEsNcvd1UyTr22AHZXWucHTKZ7LzLwwCsDY5JhEknc5cl6euLS6RV4QqItklk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=FB629Jim; arc=none smtp.client-ip=45.157.188.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=d7QJeADwdL+OikHtvL5NakQigeXjEwKKNVuWV1MIztEc8DCB4b8AUqABwP7CuKQ0y3SqeuJ7WYsOLODgzN28XeAWCBhEuBNmdBDfcWJ6/dHAOPuBzn8CBIX4UByUa3m8WORuU2fz/bA+FSLQxZzP8khd94Tj2uxVKEGJET8Cz5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=LMBurl8v; arc=none smtp.client-ip=45.157.188.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fGBHc4WSSzc5d;
-	Wed, 18 Feb 2026 10:37:16 +0100 (CET)
+Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fGBHx24NkzDkd;
+	Wed, 18 Feb 2026 10:37:33 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1771407436;
-	bh=jlGpZueanRysvuX20CFkdtezd4x4i5qt9k3Fb0b9XtI=;
+	s=20191114; t=1771407453;
+	bh=CWV9OZrJ9t2I3kN8783d0Xc/+Vl63CdGgUSEr/mMOEQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FB629JimlKUrTNGmNqxSvBLSz1jUyN9ReIwju0KpJVdKKPKomj/yOQ/us0q0ML0nY
-	 XzTZqMDLKo/HrksAjRa1rLXGDtknPlZ5+EM9gQw5FcqFFRULqw8/PN0PQi2HO6hYmb
-	 6LXrb4CFOw7w7LjNyyenAsohsbXRUx2vO7J+gSOE=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4fGBHc000rz5nP;
-	Wed, 18 Feb 2026 10:37:15 +0100 (CET)
-Date: Wed, 18 Feb 2026 10:37:14 +0100
+	b=LMBurl8vQJRMYiw2XjhN7W+3/wZiBeHpi8dzFjk9+ozidnQ9mjJ4VJ8E/ivcWlund
+	 ew2jTIUOhDLS2O1ZvSPlxgWZFCyAqxN7KYw6OMb14bCxzfqJOtimXL490ngA4EscPl
+	 FJasSLunQoAB7+wSmkUTy1E46Rj2nAUTrVTY6GZc=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4fGBHw5Hr5zlqN;
+	Wed, 18 Feb 2026 10:37:32 +0100 (CET)
+Date: Wed, 18 Feb 2026 10:37:31 +0100
 From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
 To: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack3000@gmail.com>
 Cc: John Johansen <john.johansen@canonical.com>, 
-	Tingmao Wang <m@maowtm.org>, Justin Suess <utilityemal77@gmail.com>, 
-	Jann Horn <jannh@google.com>, linux-security-module@vger.kernel.org, 
-	Samasth Norway Ananda <samasth.norway.ananda@oracle.com>, Matthieu Buffet <matthieu@buffet.re>, 
-	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, konstantin.meskhidze@huawei.com, 
-	Demi Marie Obenour <demiobenour@gmail.com>, Alyssa Ross <hi@alyssa.is>, 
+	Justin Suess <utilityemal77@gmail.com>, linux-security-module@vger.kernel.org, 
+	Tingmao Wang <m@maowtm.org>, Samasth Norway Ananda <samasth.norway.ananda@oracle.com>, 
+	Matthieu Buffet <matthieu@buffet.re>, Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, 
+	konstantin.meskhidze@huawei.com, Demi Marie Obenour <demiobenour@gmail.com>, 
+	Alyssa Ross <hi@alyssa.is>, Jann Horn <jannh@google.com>, 
 	Tahera Fahimi <fahimitahera@gmail.com>
-Subject: Re: [PATCH v5 2/9] landlock: Control pathname UNIX domain socket
- resolution by path
-Message-ID: <20260217.lievaS8eeng8@digikod.net>
+Subject: Re: [PATCH v5 3/9] samples/landlock: Add support for named UNIX
+ domain socket restrictions
+Message-ID: <20260218.ufao5Vaefa2u@digikod.net>
 References: <20260215105158.28132-1-gnoack3000@gmail.com>
- <20260215105158.28132-3-gnoack3000@gmail.com>
+ <20260215105158.28132-4-gnoack3000@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -70,28 +70,28 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260215105158.28132-3-gnoack3000@gmail.com>
+In-Reply-To: <20260215105158.28132-4-gnoack3000@gmail.com>
 X-Infomaniak-Routing: alpha
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.07 / 15.00];
+X-Spamd-Result: default: False [-1.10 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MIXED_CHARSET(0.59)[subject];
+	R_MIXED_CHARSET(0.56)[subject];
 	R_DKIM_ALLOW(-0.20)[digikod.net:s=20191114];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14718-lists,linux-security-module=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14721-lists,linux-security-module=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FREEMAIL_TO(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[canonical.com,maowtm.org,gmail.com,google.com,vger.kernel.org,oracle.com,buffet.re,huawei-partners.com,huawei.com,alyssa.is];
+	FREEMAIL_CC(0.00)[canonical.com,gmail.com,vger.kernel.org,maowtm.org,oracle.com,buffet.re,huawei-partners.com,huawei.com,alyssa.is,google.com];
 	RCPT_COUNT_TWELVE(0.00)[13];
 	DMARC_NA(0.00)[digikod.net];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[digikod.net:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	MISSING_XM_UA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
@@ -101,332 +101,28 @@ X-Spamd-Result: default: False [-1.07 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-security-module];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,maowtm.org:email]
-X-Rspamd-Queue-Id: DCFF5154C51
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,digikod.net:mid,digikod.net:dkim,digikod.net:email]
+X-Rspamd-Queue-Id: 83F8C155023
 X-Rspamd-Action: no action
 
-On Sun, Feb 15, 2026 at 11:51:50AM +0100, Günther Noack wrote:
-> * Add a new access right LANDLOCK_ACCESS_FS_RESOLVE_UNIX, which
->   controls the look up operations for named UNIX domain sockets.  The
->   resolution happens during connect() and sendmsg() (depending on
->   socket type).
-> * Hook into the path lookup in unix_find_bsd() in af_unix.c, using a
->   LSM hook.  Make policy decisions based on the new access rights
-> * Increment the Landlock ABI version.
-> * Minor test adaptions to keep the tests working.
+On Sun, Feb 15, 2026 at 11:51:51AM +0100, Günther Noack wrote:
+> The access right for UNIX domain socket lookups is grouped with the
+> read-write rights in the sample tool.  Rationale: In the general case,
+> any operations are possible through a UNIX domain socket, including
+> data-mutating operations.
 > 
-> With this access right, access is granted if either of the following
-> conditions is met:
-> 
-> * The target socket's filesystem path was allow-listed using a
->   LANDLOCK_RULE_PATH_BENEATH rule, *or*:
-> * The target socket was created in the same Landlock domain in which
->   LANDLOCK_ACCESS_FS_RESOLVE_UNIX was restricted.
-> 
-> In case of a denial, connect() and sendmsg() return EACCES, which is
-> the same error as it is returned if the user does not have the write
-> bit in the traditional Unix file system permissions of that file.
-> 
-> This feature was created with substantial discussion and input from
-> Justin Suess, Tingmao Wang and Mickaël Salaün.
-> 
-> Cc: Tingmao Wang <m@maowtm.org>
 > Cc: Justin Suess <utilityemal77@gmail.com>
 > Cc: Mickaël Salaün <mic@digikod.net>
-> Suggested-by: Jann Horn <jannh@google.com>
-> Link: https://github.com/landlock-lsm/linux/issues/36
 > Signed-off-by: Günther Noack <gnoack3000@gmail.com>
 > ---
->  include/uapi/linux/landlock.h                |  10 ++
->  security/landlock/access.h                   |  11 +-
->  security/landlock/audit.c                    |   1 +
->  security/landlock/fs.c                       | 102 ++++++++++++++++++-
->  security/landlock/limits.h                   |   2 +-
->  security/landlock/syscalls.c                 |   2 +-
->  tools/testing/selftests/landlock/base_test.c |   2 +-
->  tools/testing/selftests/landlock/fs_test.c   |   5 +-
->  8 files changed, 128 insertions(+), 7 deletions(-)
+>  samples/landlock/sandboxer.c | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
 > 
-> diff --git a/include/uapi/linux/landlock.h b/include/uapi/linux/landlock.h
-> index f88fa1f68b77..3a8fc3af0d64 100644
-> --- a/include/uapi/linux/landlock.h
-> +++ b/include/uapi/linux/landlock.h
-> @@ -248,6 +248,15 @@ struct landlock_net_port_attr {
->   *
->   *   This access right is available since the fifth version of the Landlock
->   *   ABI.
-> + * - %LANDLOCK_ACCESS_FS_RESOLVE_UNIX: Look up pathname UNIX domain sockets
-> + *   (:manpage:`unix(7)`).  On UNIX domain sockets, this restricts both calls to
-> + *   :manpage:`connect(2)` as well as calls to :manpage:`sendmsg(2)` with an
-> + *   explicit recipient address.
-> + *
-> + *   This access right only applies to connections to UNIX server sockets which
-> + *   were created outside of the newly created Landlock domain (e.g. from within
-> + *   a parent domain or from an unrestricted process).  Newly created UNIX
-> + *   servers within the same Landlock domain continue to be accessible.
-
-It might help to add a reference to the explicit scope mechanism.
-
-Please squash patch 9/9 into this one and also add a reference here to
-the rationale described in security/landlock.rst
-
->   *
->   * Whether an opened file can be truncated with :manpage:`ftruncate(2)` or used
->   * with `ioctl(2)` is determined during :manpage:`open(2)`, in the same way as
-> @@ -333,6 +342,7 @@ struct landlock_net_port_attr {
->  #define LANDLOCK_ACCESS_FS_REFER			(1ULL << 13)
->  #define LANDLOCK_ACCESS_FS_TRUNCATE			(1ULL << 14)
->  #define LANDLOCK_ACCESS_FS_IOCTL_DEV			(1ULL << 15)
-> +#define LANDLOCK_ACCESS_FS_RESOLVE_UNIX			(1ULL << 16)
->  /* clang-format on */
->  
->  /**
-> diff --git a/security/landlock/access.h b/security/landlock/access.h
-> index 42c95747d7bd..9a2991688835 100644
-> --- a/security/landlock/access.h
-> +++ b/security/landlock/access.h
-> @@ -34,7 +34,7 @@
->  	LANDLOCK_ACCESS_FS_IOCTL_DEV)
->  /* clang-format on */
->  
-> -typedef u16 access_mask_t;
-> +typedef u32 access_mask_t;
->  
->  /* Makes sure all filesystem access rights can be stored. */
->  static_assert(BITS_PER_TYPE(access_mask_t) >= LANDLOCK_NUM_ACCESS_FS);
-> @@ -76,6 +76,15 @@ struct layer_access_masks {
->  	access_mask_t access[LANDLOCK_MAX_NUM_LAYERS];
->  };
->  
-> +static inline bool
-> +layer_access_masks_empty(const struct layer_access_masks *masks)
-> +{
-> +	for (size_t i = 0; i < ARRAY_SIZE(masks->access); i++)
-> +		if (masks->access[i])
-> +			return false;
-> +	return true;
-> +}
-> +
->  /*
->   * Tracks domains responsible of a denied access.  This avoids storing in each
->   * object the full matrix of per-layer unfulfilled access rights, which is
-> diff --git a/security/landlock/audit.c b/security/landlock/audit.c
-> index 60ff217ab95b..8d0edf94037d 100644
-> --- a/security/landlock/audit.c
-> +++ b/security/landlock/audit.c
-> @@ -37,6 +37,7 @@ static const char *const fs_access_strings[] = {
->  	[BIT_INDEX(LANDLOCK_ACCESS_FS_REFER)] = "fs.refer",
->  	[BIT_INDEX(LANDLOCK_ACCESS_FS_TRUNCATE)] = "fs.truncate",
->  	[BIT_INDEX(LANDLOCK_ACCESS_FS_IOCTL_DEV)] = "fs.ioctl_dev",
-> +	[BIT_INDEX(LANDLOCK_ACCESS_FS_RESOLVE_UNIX)] = "fs.resolve_unix",
->  };
->  
->  static_assert(ARRAY_SIZE(fs_access_strings) == LANDLOCK_NUM_ACCESS_FS);
-> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
-> index e764470f588c..76035c6f2bf1 100644
-> --- a/security/landlock/fs.c
-> +++ b/security/landlock/fs.c
-> @@ -27,6 +27,7 @@
->  #include <linux/lsm_hooks.h>
->  #include <linux/mount.h>
->  #include <linux/namei.h>
-> +#include <linux/net.h>
->  #include <linux/path.h>
->  #include <linux/pid.h>
->  #include <linux/rcupdate.h>
-> @@ -314,7 +315,8 @@ static struct landlock_object *get_inode_object(struct inode *const inode)
->  	LANDLOCK_ACCESS_FS_WRITE_FILE | \
->  	LANDLOCK_ACCESS_FS_READ_FILE | \
->  	LANDLOCK_ACCESS_FS_TRUNCATE | \
-> -	LANDLOCK_ACCESS_FS_IOCTL_DEV)
-> +	LANDLOCK_ACCESS_FS_IOCTL_DEV | \
-> +	LANDLOCK_ACCESS_FS_RESOLVE_UNIX)
->  /* clang-format on */
->  
->  /*
-> @@ -1561,6 +1563,103 @@ static int hook_path_truncate(const struct path *const path)
->  	return current_check_access_path(path, LANDLOCK_ACCESS_FS_TRUNCATE);
->  }
->  
-> +/**
-> + * unmask_scoped_access - Remove access right bits in @masks in all layers
-> + *                        where @client and @server have the same domain
-> + *
-> + * This does the same as domain_is_scoped(), but unmasks bits in @masks.
-> + * It can not return early as domain_is_scoped() does.
-> + *
-> + * @client: Client domain
-> + * @server: Server domain
-> + * @masks: Layer access masks to unmask
-> + * @access: Access bit that controls scoping
-> + */
-> +static void unmask_scoped_access(const struct landlock_ruleset *const client,
-> +				 const struct landlock_ruleset *const server,
-> +				 struct layer_access_masks *const masks,
-> +				 const access_mask_t access)
-
-This helper should be moved to task.c and factored out with
-domain_is_scoped().  This should be a dedicated patch.
-
-> +{
-> +	int client_layer, server_layer;
-> +	const struct landlock_hierarchy *client_walker, *server_walker;
-> +
-> +	if (WARN_ON_ONCE(!client))
-> +		return; /* should not happen */
-> +
-> +	if (!server)
-> +		return; /* server has no Landlock domain; nothing to clear */
-> +
-> +	client_layer = client->num_layers - 1;
-> +	client_walker = client->hierarchy;
-> +	server_layer = server->num_layers - 1;
-> +	server_walker = server->hierarchy;
-> +
-> +	/*
-> +	 * Clears the access bits at all layers where the client domain is the
-> +	 * same as the server domain.  We start the walk at min(client_layer,
-> +	 * server_layer).  The layer bits until there can not be cleared because
-> +	 * either the client or the server domain is missing.
-> +	 */
-> +	for (; client_layer > server_layer; client_layer--)
-> +		client_walker = client_walker->parent;
-> +
-> +	for (; server_layer > client_layer; server_layer--)
-> +		server_walker = server_walker->parent;
-> +
-> +	for (; client_layer >= 0; client_layer--) {
-> +		if (masks->access[client_layer] & access &&
-> +		    client_walker == server_walker)
-> +			masks->access[client_layer] &= ~access;
-> +
-> +		client_walker = client_walker->parent;
-> +		server_walker = server_walker->parent;
-> +	}
-> +}
-> +
-> +static int hook_unix_find(const struct path *const path, struct sock *other,
-> +			  int flags)
-> +{
-> +	const struct landlock_ruleset *dom_other;
-> +	const struct landlock_cred_security *subject;
-> +	struct layer_access_masks layer_masks;
-> +	struct landlock_request request = {};
-> +	static const struct access_masks fs_resolve_unix = {
-> +		.fs = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
-> +	};
-> +
-> +	/* Lookup for the purpose of saving coredumps is OK. */
-> +	if (unlikely(flags & SOCK_COREDUMP))
-> +		return 0;
-> +
-> +	/* Access to the same (or a lower) domain is always allowed. */
-> +	subject = landlock_get_applicable_subject(current_cred(),
-> +						  fs_resolve_unix, NULL);
-> +
-> +	if (!subject)
-> +		return 0;
-> +
-> +	if (!landlock_init_layer_masks(subject->domain, fs_resolve_unix.fs,
-> +				       &layer_masks, LANDLOCK_KEY_INODE))
-> +		return 0;
-> +
-> +	/* Checks the layers in which we are connecting within the same domain. */
-> +	dom_other = landlock_cred(other->sk_socket->file->f_cred)->domain;
-
-We need to call unix_state_lock(other) before reading it, and check for
-SOCK_DEAD, and check sk_socket before dereferencing it.  Indeed,
-the socket can be make orphan (see unix_dgram_sendmsg and
-unix_stream_connect).  I *think* a socket cannot be "resurrected" or
-recycled once dead, so we may assume there is no race condition wrt
-dom_other, but please double check.  This lockless call should be made
-clear in the LSM hook.  It's OK to not lock the socket before
-security_unix_find() (1) because no LSM might implement and (2) they
-might not need to lock the socket (e.g. if the caller is not sandboxed).
-
-The updated code should look something like this:
-
-unix_state_unlock(other);
-if (unlikely(sock_flag(other, SOCK_DEAD) || !other->sk_socket)) {
-	unix_state_unlock(other);
-	return 0;
-}
-
-dom_other = landlock_cred(other->sk_socket->file->f_cred)->domain;
-unix_state_unlock(other);
-
-
-> +	unmask_scoped_access(subject->domain, dom_other, &layer_masks,
-> +			     fs_resolve_unix.fs);
-> +
-> +	if (layer_access_masks_empty(&layer_masks))
-> +		return 0;
-> +
-> +	/* Checks the connections to allow-listed paths. */
-> +	if (is_access_to_paths_allowed(subject->domain, path,
-> +				       fs_resolve_unix.fs, &layer_masks,
-> +				       &request, NULL, 0, NULL, NULL, NULL))
-> +		return 0;
-> +
-> +	landlock_log_denial(subject, &request);
-> +	return -EACCES;
-> +}
-> +
->  /* File hooks */
->  
->  /**
-> @@ -1838,6 +1937,7 @@ static struct security_hook_list landlock_hooks[] __ro_after_init = {
->  	LSM_HOOK_INIT(path_unlink, hook_path_unlink),
->  	LSM_HOOK_INIT(path_rmdir, hook_path_rmdir),
->  	LSM_HOOK_INIT(path_truncate, hook_path_truncate),
-> +	LSM_HOOK_INIT(unix_find, hook_unix_find),
->  
->  	LSM_HOOK_INIT(file_alloc_security, hook_file_alloc_security),
->  	LSM_HOOK_INIT(file_open, hook_file_open),
-> diff --git a/security/landlock/limits.h b/security/landlock/limits.h
-> index eb584f47288d..b454ad73b15e 100644
-> --- a/security/landlock/limits.h
-> +++ b/security/landlock/limits.h
-> @@ -19,7 +19,7 @@
->  #define LANDLOCK_MAX_NUM_LAYERS		16
->  #define LANDLOCK_MAX_NUM_RULES		U32_MAX
->  
-> -#define LANDLOCK_LAST_ACCESS_FS		LANDLOCK_ACCESS_FS_IOCTL_DEV
-> +#define LANDLOCK_LAST_ACCESS_FS		LANDLOCK_ACCESS_FS_RESOLVE_UNIX
->  #define LANDLOCK_MASK_ACCESS_FS		((LANDLOCK_LAST_ACCESS_FS << 1) - 1)
->  #define LANDLOCK_NUM_ACCESS_FS		__const_hweight64(LANDLOCK_MASK_ACCESS_FS)
->  
-> diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
-> index 0d66a68677b7..933902d43241 100644
-> --- a/security/landlock/syscalls.c
-> +++ b/security/landlock/syscalls.c
-> @@ -164,7 +164,7 @@ static const struct file_operations ruleset_fops = {
->   * If the change involves a fix that requires userspace awareness, also update
->   * the errata documentation in Documentation/userspace-api/landlock.rst .
->   */
-> -const int landlock_abi_version = 8;
-> +const int landlock_abi_version = 9;
->  
->  /**
->   * sys_landlock_create_ruleset - Create a new ruleset
-> diff --git a/tools/testing/selftests/landlock/base_test.c b/tools/testing/selftests/landlock/base_test.c
-> index 0fea236ef4bd..30d37234086c 100644
-> --- a/tools/testing/selftests/landlock/base_test.c
-> +++ b/tools/testing/selftests/landlock/base_test.c
-> @@ -76,7 +76,7 @@ TEST(abi_version)
->  	const struct landlock_ruleset_attr ruleset_attr = {
->  		.handled_access_fs = LANDLOCK_ACCESS_FS_READ_FILE,
->  	};
-> -	ASSERT_EQ(8, landlock_create_ruleset(NULL, 0,
-> +	ASSERT_EQ(9, landlock_create_ruleset(NULL, 0,
->  					     LANDLOCK_CREATE_RULESET_VERSION));
->  
->  	ASSERT_EQ(-1, landlock_create_ruleset(&ruleset_attr, 0,
-> diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-> index 968a91c927a4..b318627e7561 100644
-> --- a/tools/testing/selftests/landlock/fs_test.c
-> +++ b/tools/testing/selftests/landlock/fs_test.c
-> @@ -575,9 +575,10 @@ TEST_F_FORK(layout1, inval)
+> diff --git a/samples/landlock/sandboxer.c b/samples/landlock/sandboxer.c
+> index e7af02f98208..0bbbc5c9ead6 100644
+> --- a/samples/landlock/sandboxer.c
+> +++ b/samples/landlock/sandboxer.c
+> @@ -111,7 +111,8 @@ static int parse_path(char *env_path, const char ***const path_list)
 >  	LANDLOCK_ACCESS_FS_WRITE_FILE | \
 >  	LANDLOCK_ACCESS_FS_READ_FILE | \
 >  	LANDLOCK_ACCESS_FS_TRUNCATE | \
@@ -434,11 +130,41 @@ unix_state_unlock(other);
 > +	LANDLOCK_ACCESS_FS_IOCTL_DEV | \
 > +	LANDLOCK_ACCESS_FS_RESOLVE_UNIX)
 >  
-> -#define ACCESS_LAST LANDLOCK_ACCESS_FS_IOCTL_DEV
-> +#define ACCESS_LAST LANDLOCK_ACCESS_FS_RESOLVE_UNIX
+>  /* clang-format on */
 >  
->  #define ACCESS_ALL ( \
->  	ACCESS_FILE | \
+> @@ -295,11 +296,12 @@ static bool check_ruleset_scope(const char *const env_var,
+>  	LANDLOCK_ACCESS_FS_MAKE_SYM | \
+>  	LANDLOCK_ACCESS_FS_REFER | \
+>  	LANDLOCK_ACCESS_FS_TRUNCATE | \
+> -	LANDLOCK_ACCESS_FS_IOCTL_DEV)
+> +	LANDLOCK_ACCESS_FS_IOCTL_DEV | \
+> +	LANDLOCK_ACCESS_FS_RESOLVE_UNIX)
+>  
+>  /* clang-format on */
+>  
+> -#define LANDLOCK_ABI_LAST 7
+> +#define LANDLOCK_ABI_LAST 9
+>  
+>  #define XSTR(s) #s
+>  #define STR(s) XSTR(s)
+> @@ -444,6 +446,13 @@ int main(const int argc, char *const argv[], char *const *const envp)
+>  			"provided by ABI version %d (instead of %d).\n",
+>  			LANDLOCK_ABI_LAST, abi);
+>  		__attribute__((fallthrough));
+> +	case 7:
+> +		__attribute__((fallthrough));
+
+The current code should print the hint when ABI <= 7.  Please send a
+dedicated patch to fix the TSYNC-related changes.
+
+> +	case 8:
+> +		/* Removes LANDLOCK_ACCESS_FS_RESOLVE_UNIX for ABI < 9 */
+> +		ruleset_attr.handled_access_fs &=
+> +			~LANDLOCK_ACCESS_FS_RESOLVE_UNIX;
+> +		__attribute__((fallthrough));
+>  	case LANDLOCK_ABI_LAST:
+>  		break;
+>  	default:
 > -- 
 > 2.52.0
 > 
