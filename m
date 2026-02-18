@@ -1,52 +1,52 @@
-Return-Path: <linux-security-module+bounces-14721-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14719-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AIW3BASNlWl7SQIAu9opvQ
-	(envelope-from <linux-security-module+bounces-14721-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 10:57:24 +0100
+	id qBhuCOWIlWnqSAIAu9opvQ
+	(envelope-from <linux-security-module+bounces-14719-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 10:39:49 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83F8C155023
-	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 10:57:23 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 757BE154C7E
+	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 10:39:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 205683050EDA
-	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 09:57:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DE04B300B100
+	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 09:39:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E11133D502;
-	Wed, 18 Feb 2026 09:57:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D00B33CEB7;
+	Wed, 18 Feb 2026 09:39:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="LMBurl8v"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="oCVgaW7t"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-bc0d.mail.infomaniak.ch (smtp-bc0d.mail.infomaniak.ch [45.157.188.13])
+Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [84.16.66.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D829633E37C
-	for <linux-security-module@vger.kernel.org>; Wed, 18 Feb 2026 09:56:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B637314B8C
+	for <linux-security-module@vger.kernel.org>; Wed, 18 Feb 2026 09:39:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771408624; cv=none; b=KPfC1dLbg19QSvhMpjAH73oNvXlhMjAKpRpYdu+IqW7IwnndylN0bqpgd6N1MTXylPkAuCW1SANIr7Umrxf1uVGmScqz1gxv7i0DgpP/ltZJ0m6F7Cea95riU+edAvTT4DJhJUZZOmlTAXksOjn5+RXXiW5610jYM4kPM6yvldg=
+	t=1771407575; cv=none; b=Y/6tGbxHsrgEbugoXk27ch4ETBjbEcG0/hnJvaWhpOcDcbraTlfzDD2TrkA9T/vUq27+8dd6ENNbz+KwBCemMKfs0iN3qzsoC46OkYeNYFCwHFfzvGWQJv66wzZz8Om9G+x5PFqlSVraZQ8itaKupK+UJtJhZOhrNySCBHiAkGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771408624; c=relaxed/simple;
-	bh=50pHd/Lyq7OL4aRqEA1dp7XqbXwMb9YRIsuFE/XQ5Us=;
+	s=arc-20240116; t=1771407575; c=relaxed/simple;
+	bh=D1ur1fV0iVQk5k2KOpSLszfZor7lFIJrz6vU6DGqPKY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d7QJeADwdL+OikHtvL5NakQigeXjEwKKNVuWV1MIztEc8DCB4b8AUqABwP7CuKQ0y3SqeuJ7WYsOLODgzN28XeAWCBhEuBNmdBDfcWJ6/dHAOPuBzn8CBIX4UByUa3m8WORuU2fz/bA+FSLQxZzP8khd94Tj2uxVKEGJET8Cz5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=LMBurl8v; arc=none smtp.client-ip=45.157.188.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=nrRwHcGl6WQWtajX9cn4PHWMDudclNzw/mJc5VVKjgxJOr5S6HOtlzYR4WiurA2NvA9g7bPaWrlUER236RPYmhI2kCNfvMxggI5x2dJB8hDJulQ7PJOeRUSqF6I5tmTeu/vbsydDxzJaYGukoQz/wCekzqjC/nrMebiUsaiqJ+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=oCVgaW7t; arc=none smtp.client-ip=84.16.66.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fGBHx24NkzDkd;
-	Wed, 18 Feb 2026 10:37:33 +0100 (CET)
+Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fGBL52GlNzvPs;
+	Wed, 18 Feb 2026 10:39:25 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1771407453;
-	bh=CWV9OZrJ9t2I3kN8783d0Xc/+Vl63CdGgUSEr/mMOEQ=;
+	s=20191114; t=1771407565;
+	bh=xHqrmQWiY0MlW87rO/PgVKhs4XIXziZ44UfytakahCU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LMBurl8vQJRMYiw2XjhN7W+3/wZiBeHpi8dzFjk9+ozidnQ9mjJ4VJ8E/ivcWlund
-	 ew2jTIUOhDLS2O1ZvSPlxgWZFCyAqxN7KYw6OMb14bCxzfqJOtimXL490ngA4EscPl
-	 FJasSLunQoAB7+wSmkUTy1E46Rj2nAUTrVTY6GZc=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4fGBHw5Hr5zlqN;
-	Wed, 18 Feb 2026 10:37:32 +0100 (CET)
-Date: Wed, 18 Feb 2026 10:37:31 +0100
+	b=oCVgaW7tX1/Oxv5DUv7iAVbJv5ZA/732sAb1SFm1KwvsZhdJELEbAA3C3LVcKPAJo
+	 5bp2dgHZamxF6IJ679uRyKH9ShPiNmFEaUm7fWYfpXODW/FmbkYYwRVS6Yu0T6A2xZ
+	 cfFxs44EBbB6x283bf8HsuXTFuR0/j27NsPTdgs8=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4fGBL45BzPz4tC;
+	Wed, 18 Feb 2026 10:39:24 +0100 (CET)
+Date: Wed, 18 Feb 2026 10:39:23 +0100
 From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
 To: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack3000@gmail.com>
 Cc: John Johansen <john.johansen@canonical.com>, 
@@ -56,11 +56,11 @@ Cc: John Johansen <john.johansen@canonical.com>,
 	konstantin.meskhidze@huawei.com, Demi Marie Obenour <demiobenour@gmail.com>, 
 	Alyssa Ross <hi@alyssa.is>, Jann Horn <jannh@google.com>, 
 	Tahera Fahimi <fahimitahera@gmail.com>
-Subject: Re: [PATCH v5 3/9] samples/landlock: Add support for named UNIX
- domain socket restrictions
-Message-ID: <20260218.ufao5Vaefa2u@digikod.net>
+Subject: Re: [PATCH v5 8/9] landlock: Document FS access right for pathname
+ UNIX sockets
+Message-ID: <20260218.AXoosuwo8aen@digikod.net>
 References: <20260215105158.28132-1-gnoack3000@gmail.com>
- <20260215105158.28132-4-gnoack3000@gmail.com>
+ <20260215105158.28132-9-gnoack3000@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -70,18 +70,18 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260215105158.28132-4-gnoack3000@gmail.com>
+In-Reply-To: <20260215105158.28132-9-gnoack3000@gmail.com>
 X-Infomaniak-Routing: alpha
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.10 / 15.00];
+X-Spamd-Result: default: False [-1.07 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MIXED_CHARSET(0.56)[subject];
+	R_MIXED_CHARSET(0.59)[subject];
 	R_DKIM_ALLOW(-0.20)[digikod.net:s=20191114];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14721-lists,linux-security-module=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14719-lists,linux-security-module=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FREEMAIL_TO(0.00)[gmail.com];
@@ -91,7 +91,7 @@ X-Spamd-Result: default: False [-1.10 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[digikod.net:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	MISSING_XM_UA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
@@ -101,70 +101,66 @@ X-Spamd-Result: default: False [-1.10 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-security-module];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,digikod.net:mid,digikod.net:dkim,digikod.net:email]
-X-Rspamd-Queue-Id: 83F8C155023
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,digikod.net:mid,digikod.net:dkim,digikod.net:email]
+X-Rspamd-Queue-Id: 757BE154C7E
 X-Rspamd-Action: no action
 
-On Sun, Feb 15, 2026 at 11:51:51AM +0100, Günther Noack wrote:
-> The access right for UNIX domain socket lookups is grouped with the
-> read-write rights in the sample tool.  Rationale: In the general case,
-> any operations are possible through a UNIX domain socket, including
-> data-mutating operations.
-> 
+On Sun, Feb 15, 2026 at 11:51:56AM +0100, Günther Noack wrote:
 > Cc: Justin Suess <utilityemal77@gmail.com>
 > Cc: Mickaël Salaün <mic@digikod.net>
 > Signed-off-by: Günther Noack <gnoack3000@gmail.com>
 > ---
->  samples/landlock/sandboxer.c | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
+>  Documentation/userspace-api/landlock.rst | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
 > 
-> diff --git a/samples/landlock/sandboxer.c b/samples/landlock/sandboxer.c
-> index e7af02f98208..0bbbc5c9ead6 100644
-> --- a/samples/landlock/sandboxer.c
-> +++ b/samples/landlock/sandboxer.c
-> @@ -111,7 +111,8 @@ static int parse_path(char *env_path, const char ***const path_list)
->  	LANDLOCK_ACCESS_FS_WRITE_FILE | \
->  	LANDLOCK_ACCESS_FS_READ_FILE | \
->  	LANDLOCK_ACCESS_FS_TRUNCATE | \
-> -	LANDLOCK_ACCESS_FS_IOCTL_DEV)
-> +	LANDLOCK_ACCESS_FS_IOCTL_DEV | \
-> +	LANDLOCK_ACCESS_FS_RESOLVE_UNIX)
->  
->  /* clang-format on */
->  
-> @@ -295,11 +296,12 @@ static bool check_ruleset_scope(const char *const env_var,
->  	LANDLOCK_ACCESS_FS_MAKE_SYM | \
->  	LANDLOCK_ACCESS_FS_REFER | \
->  	LANDLOCK_ACCESS_FS_TRUNCATE | \
-> -	LANDLOCK_ACCESS_FS_IOCTL_DEV)
-> +	LANDLOCK_ACCESS_FS_IOCTL_DEV | \
-> +	LANDLOCK_ACCESS_FS_RESOLVE_UNIX)
->  
->  /* clang-format on */
->  
-> -#define LANDLOCK_ABI_LAST 7
-> +#define LANDLOCK_ABI_LAST 9
->  
->  #define XSTR(s) #s
->  #define STR(s) XSTR(s)
-> @@ -444,6 +446,13 @@ int main(const int argc, char *const argv[], char *const *const envp)
->  			"provided by ABI version %d (instead of %d).\n",
->  			LANDLOCK_ABI_LAST, abi);
->  		__attribute__((fallthrough));
-> +	case 7:
-> +		__attribute__((fallthrough));
+> diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/userspace-api/landlock.rst
+> index 13134bccdd39..3ba73afcbc4b 100644
+> --- a/Documentation/userspace-api/landlock.rst
+> +++ b/Documentation/userspace-api/landlock.rst
+> @@ -77,7 +77,8 @@ to be explicit about the denied-by-default access rights.
+>              LANDLOCK_ACCESS_FS_MAKE_SYM |
+>              LANDLOCK_ACCESS_FS_REFER |
+>              LANDLOCK_ACCESS_FS_TRUNCATE |
+> -            LANDLOCK_ACCESS_FS_IOCTL_DEV,
+> +            LANDLOCK_ACCESS_FS_IOCTL_DEV |
+> +            LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
+>          .handled_access_net =
+>              LANDLOCK_ACCESS_NET_BIND_TCP |
+>              LANDLOCK_ACCESS_NET_CONNECT_TCP,
+> @@ -127,6 +128,12 @@ version, and only use the available subset of access rights:
+>          /* Removes LANDLOCK_SCOPE_* for ABI < 6 */
+>          ruleset_attr.scoped &= ~(LANDLOCK_SCOPE_ABSTRACT_UNIX_SOCKET |
+>                                   LANDLOCK_SCOPE_SIGNAL);
+> +        __attribute__((fallthrough));
+> +    case 7:
+> +        __attribute__((fallthrough));
 
-The current code should print the hint when ABI <= 7.  Please send a
-dedicated patch to fix the TSYNC-related changes.
+I don't think the fallthrough attribute is needed here.  Same for the
+sample.
 
-> +	case 8:
-> +		/* Removes LANDLOCK_ACCESS_FS_RESOLVE_UNIX for ABI < 9 */
-> +		ruleset_attr.handled_access_fs &=
-> +			~LANDLOCK_ACCESS_FS_RESOLVE_UNIX;
-> +		__attribute__((fallthrough));
->  	case LANDLOCK_ABI_LAST:
->  		break;
->  	default:
+> +    case 8:
+> +        /* Removes LANDLOCK_ACCESS_FS_RESOLVE_UNIX for ABI < 8 */
+
+ABI < 9
+
+> +        ruleset_attr.handled_access_fs &= ~LANDLOCK_ACCESS_FS_RESOLVE_UNIX;
+>      }
+>  
+>  This enables the creation of an inclusive ruleset that will contain our rules.
+> @@ -685,6 +692,13 @@ enforce Landlock rulesets across all threads of the calling process
+>  using the ``LANDLOCK_RESTRICT_SELF_TSYNC`` flag passed to
+>  sys_landlock_restrict_self().
+>  
+> +Pathname UNIX sockets (ABI < 9)
+> +-------------------------------
+> +
+> +Starting with the Landlock ABI version 9, it is possible to restrict
+> +connections to pathname UNIX domain sockets (:manpage:`unix(7)`) using
+> +the new ``LANDLOCK_ACCESS_FS_RESOLVE_UNIX`` right.
+> +
+>  .. _kernel_support:
+>  
+>  Kernel support
 > -- 
 > 2.52.0
 > 
