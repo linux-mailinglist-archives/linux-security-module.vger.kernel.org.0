@@ -1,66 +1,66 @@
-Return-Path: <linux-security-module+bounces-14724-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14725-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2N0qH3cQlmkXZgIAu9opvQ
-	(envelope-from <linux-security-module+bounces-14724-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 20:18:15 +0100
+	id MHj0NbAblmkuaQIAu9opvQ
+	(envelope-from <linux-security-module+bounces-14725-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 21:06:08 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4410158FAD
-	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 20:18:14 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45CF2159546
+	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 21:06:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id BFAF73011A7C
-	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 19:18:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9975F3013D7D
+	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 20:06:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87D08346AE5;
-	Wed, 18 Feb 2026 19:18:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04BD02F6907;
+	Wed, 18 Feb 2026 20:06:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="Eo/inXc5"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="xEVN1TfR"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-bc08.mail.infomaniak.ch (smtp-bc08.mail.infomaniak.ch [45.157.188.8])
+Received: from smtp-190c.mail.infomaniak.ch (smtp-190c.mail.infomaniak.ch [185.125.25.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99245346FDA
-	for <linux-security-module@vger.kernel.org>; Wed, 18 Feb 2026 19:18:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E5B12F39A1
+	for <linux-security-module@vger.kernel.org>; Wed, 18 Feb 2026 20:05:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771442291; cv=none; b=RNfbXD/AaEEaJ8WwgMrCrzSBfjJHoUNraME0hTqLamsqgSxVLJiONBI0hVvfbhfBpkfl/KBJ3lr2m9pAw9+ijkvICFFFqOoBMsmTw2VG8azBkI78F2CQfQl1V/rvV4R+Kt6+hnqCLw/rJlSyQONDjUzzzH1/KlvSKEArCQ4QMyA=
+	t=1771445164; cv=none; b=C5RZSFzWth22ncuK4hoTyk/Q03ZwlyjPpao4pA0XBg1ZrukUGFoMyv+xc2Hah8zFSQHu7d2N1W4niNP3Syi8efyD+Zx/x2BMbL+k9ZUrIYQzPxkBb8pqi8aRHvfUEtv94XFtw7ZmgIW31MvHozup2iQxyB6bFt7yjjajFG+qtBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771442291; c=relaxed/simple;
-	bh=AeQ7xjqyJGeQQZlLVQNj29NYcXNrH+CBHOEHyvHRNi4=;
+	s=arc-20240116; t=1771445164; c=relaxed/simple;
+	bh=H6fsDxRe2dAxvUTpHuKtMK28p97hK9sXFXCbSRnb2gE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZDYwQAbEHKny52mcLErgcTO6E5QMgEYbypFhhsekJE/B84JE8vKiSDjC24LmYioHucq8c0kkYoP41dTFy5XV7atZ2+U635PtnN/fokRNRzXg4PnGYS8hPd+Lvo1jxAk9fG4VC77viXwlG9KPeOC40792++AXHa7DzZ2MMOqPf4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=Eo/inXc5; arc=none smtp.client-ip=45.157.188.8
+	 Content-Type:Content-Disposition:In-Reply-To; b=bDZNgfLP6NLiaivcSYn2xWbEsxz8JbU2Lk7stF0zt832oRpql0x3cBIDbz/W8Jc5rcvi1llwfpaSnEHtlo8EvcXqdRW7UwfjIFGLJoB+vE/cqt5Dptvl6blOuNq8/1mFE+oQZph4DelubdcShAtA41X/S3UwHl0wVVAzfbc7sjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=xEVN1TfR; arc=none smtp.client-ip=185.125.25.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fGR2C2PnrzQ4n;
-	Wed, 18 Feb 2026 20:11:31 +0100 (CET)
+Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fGSDv5jTCzjV0;
+	Wed, 18 Feb 2026 21:05:51 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1771441891;
-	bh=79+aj51njAfDV0RlYlLFoDxORntODlEA62DIupvkb/8=;
+	s=20191114; t=1771445151;
+	bh=/hJ7CZ9L29pzTlm8j5C5ZKut4Tr3GLdiwSl1kSPNMb0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Eo/inXc558PRMqODzq+uGdo6F6ucd815BkW5ClvwczTXtryj+e/CQkI3BO9oupuzB
-	 pNwU7a+zG1bg+6BeHZM7NOoS5S+w4ucXh2l7XAvahcvd+/v/XCs907o87GDp68TU+R
-	 Qy+fBFWgkyUdnhjkxX4GlJSFJiqSkdNJwe3cYVaA=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4fGR2B1FF6zNQg;
-	Wed, 18 Feb 2026 20:11:30 +0100 (CET)
-Date: Wed, 18 Feb 2026 20:11:26 +0100
+	b=xEVN1TfRwBGyi3erL994zElGfFjQCmgJRPjkWkwGH1YyIS42E2MCj+sQqiYpEHCOJ
+	 h7yMbkozOuVAp+s6jUgaIwEdujZbE7n7PSoxPx5PQepRH85ehsJVurObM8/vT1q21o
+	 vCmmkcBDhR4vGHSNZo7p+6TZkyasaPPqY0p+BM70=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4fGSDt5pzQzbj0;
+	Wed, 18 Feb 2026 21:05:50 +0100 (CET)
+Date: Wed, 18 Feb 2026 21:05:46 +0100
 From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
 To: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack3000@gmail.com>
 Cc: John Johansen <john.johansen@canonical.com>, 
-	Justin Suess <utilityemal77@gmail.com>, Tingmao Wang <m@maowtm.org>, 
-	linux-security-module@vger.kernel.org, Samasth Norway Ananda <samasth.norway.ananda@oracle.com>, 
+	linux-security-module@vger.kernel.org, Tingmao Wang <m@maowtm.org>, 
+	Justin Suess <utilityemal77@gmail.com>, Samasth Norway Ananda <samasth.norway.ananda@oracle.com>, 
 	Matthieu Buffet <matthieu@buffet.re>, Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, 
 	konstantin.meskhidze@huawei.com, Demi Marie Obenour <demiobenour@gmail.com>, 
 	Alyssa Ross <hi@alyssa.is>, Jann Horn <jannh@google.com>, 
 	Tahera Fahimi <fahimitahera@gmail.com>
-Subject: Re: [PATCH v5 4/9] landlock/selftests: Test
- LANDLOCK_ACCESS_FS_RESOLVE_UNIX
-Message-ID: <20260218.aser1cu7Aewi@digikod.net>
+Subject: Re: [PATCH v5 6/9] landlock/selftests: Check that coredump sockets
+ stay unrestricted
+Message-ID: <20260218.ohth8theu8Yi@digikod.net>
 References: <20260215105158.28132-1-gnoack3000@gmail.com>
- <20260215105158.28132-5-gnoack3000@gmail.com>
+ <20260215105158.28132-7-gnoack3000@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -70,28 +70,28 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260215105158.28132-5-gnoack3000@gmail.com>
+In-Reply-To: <20260215105158.28132-7-gnoack3000@gmail.com>
 X-Infomaniak-Routing: alpha
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.83 / 15.00];
+X-Spamd-Result: default: False [-1.03 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MIXED_CHARSET(0.83)[subject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_MIXED_CHARSET(0.63)[subject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[digikod.net:s=20191114];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14724-lists,linux-security-module=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14725-lists,linux-security-module=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FREEMAIL_TO(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[canonical.com,gmail.com,maowtm.org,vger.kernel.org,oracle.com,buffet.re,huawei-partners.com,huawei.com,alyssa.is,google.com];
+	FREEMAIL_CC(0.00)[canonical.com,vger.kernel.org,maowtm.org,gmail.com,oracle.com,buffet.re,huawei-partners.com,huawei.com,alyssa.is,google.com];
 	RCPT_COUNT_TWELVE(0.00)[13];
 	DMARC_NA(0.00)[digikod.net];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[digikod.net:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	MISSING_XM_UA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
@@ -102,78 +102,235 @@ X-Spamd-Result: default: False [-0.83 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,maowtm.org:email]
-X-Rspamd-Queue-Id: D4410158FAD
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 45CF2159546
 X-Rspamd-Action: no action
 
-On Sun, Feb 15, 2026 at 11:51:52AM +0100, Günther Noack wrote:
-> * Extract common helpers from an existing IOCTL test that
->   also uses pathname unix(7) sockets.
-> * These tests use the common scoped domains fixture which is also used
->   in other Landlock scoping tests and which was used in Tingmao Wang's
->   earlier patch set in [1].
+On Sun, Feb 15, 2026 at 11:51:54AM +0100, Günther Noack wrote:
+> Even when a process is restricted with the new
+> LANDLOCK_ACCESS_FS_RESOLVE_SOCKET right, the kernel can continue
+> writing its coredump to the configured coredump socket.
 > 
-> These tests exercise the cross product of the following scenarios:
+> In the test, we create a local server and rewire the system to write
+> coredumps into it.  We then create a child process within a Landlock
+> domain where LANDLOCK_ACCESS_FS_RESOLVE_SOCKET is restricted and make
+> the process crash.  The test uses SO_PEERCRED to check that the
+> connecting client process is the expected one.
 > 
-> * Stream connect(), Datagram connect(), Datagram sendmsg() and
->   Seqpacket connect().
-> * Child-to-parent and parent-to-child communication
-> * The Landlock policy configuration as listed in the scoped_domains
->   fixture.
->   * In the default variant, Landlock domains are only placed where
->     prescribed in the fixture.
->   * In the "ALL_DOMAINS" variant, Landlock domains are also placed in
->     the places where the fixture says to omit them, but with a
->     LANDLOCK_RULE_PATH_BENEATH that allows connection.
-> 
-> Cc: Justin Suess <utilityemal77@gmail.com>
-> Cc: Tingmao Wang <m@maowtm.org>
-> Cc: Mickaël Salaün <mic@digikod.net>
-> Link[1]: https://lore.kernel.org/all/53b9883648225d5a08e82d2636ab0b4fda003bc9.1767115163.git.m@maowtm.org/
 > Signed-off-by: Günther Noack <gnoack3000@gmail.com>
 > ---
->  tools/testing/selftests/landlock/fs_test.c | 384 ++++++++++++++++++++-
->  1 file changed, 368 insertions(+), 16 deletions(-)
+>  tools/testing/selftests/landlock/fs_test.c | 122 +++++++++++++++++++++
+>  1 file changed, 122 insertions(+)
 > 
 > diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-> index b318627e7561..bdeff2e0e029 100644
+> index 8fa9d7c49ac3..705d8a13d2e0 100644
 > --- a/tools/testing/selftests/landlock/fs_test.c
 > +++ b/tools/testing/selftests/landlock/fs_test.c
-> @@ -4358,30 +4358,61 @@ TEST_F_FORK(layout1, named_pipe_ioctl)
->  	ASSERT_EQ(child_pid, waitpid(child_pid, NULL, 0));
->  }
+> @@ -22,6 +22,7 @@
+>  #include <sys/ioctl.h>
+>  #include <sys/mount.h>
+>  #include <sys/prctl.h>
+> +#include <sys/resource.h>
+>  #include <sys/sendfile.h>
+>  #include <sys/socket.h>
+>  #include <sys/stat.h>
+> @@ -4922,6 +4923,127 @@ TEST_F(scoped_domains, unix_seqpacket_connect_to_child_full)
+>  #undef USE_SENDTO
+>  #undef ENFORCE_ALL
 >  
-> +/*
-> + * set_up_named_unix_server - Create a pathname unix socket
-> + *
-> + * If the socket type is not SOCK_DGRAM, also invoke listen(2).
-> + *
-> + * Return: The listening FD - it is the caller responsibility to close it.
-> + */
-> +static int set_up_named_unix_server(struct __test_metadata *const _metadata,
-> +				    int type, const char *const path)
+> +static void read_core_pattern(struct __test_metadata *const _metadata,
+> +			      char *buf, size_t buf_size)
 > +{
 > +	int fd;
-> +	struct sockaddr_un addr = {
-> +		.sun_family = AF_UNIX,
-> +	};
+> +	ssize_t ret;
 > +
-> +	fd = socket(AF_UNIX, type, 0);
+> +	fd = open("/proc/sys/kernel/core_pattern", O_RDONLY | O_CLOEXEC);
 > +	ASSERT_LE(0, fd);
 > +
-> +	strncpy(addr.sun_path, path, sizeof(addr.sun_path));
-
-fs_test.c: In function ‘set_up_named_unix_server’:
-fs_test.c:4125:9: error: ‘strncpy’ specified bound 108 equals destination size [-Werror=stringop-truncation]
- 4125 |         strncpy(addr.sun_path, path, sizeof(addr.sun_path));
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-We should also ASSERT the result to make sure path's length is not too big.
-
-> +	ASSERT_EQ(0, bind(fd, (struct sockaddr *)&addr, sizeof(addr)));
+> +	ret = read(fd, buf, buf_size - 1);
+> +	ASSERT_LE(0, ret);
+> +	EXPECT_EQ(0, close(fd));
 > +
-> +	if (type != SOCK_DGRAM)
-> +		ASSERT_EQ(0, listen(fd, 10 /* qlen */));
-> +	return fd;
+> +	buf[ret] = '\0';
 > +}
+> +
+> +static void set_core_pattern(struct __test_metadata *const _metadata,
+> +			     const char *pattern)
+> +{
+> +	int fd;
+> +	size_t len = strlen(pattern);
+> +
+> +	fd = open("/proc/sys/kernel/core_pattern", O_WRONLY | O_CLOEXEC);
+> +	ASSERT_LE(0, fd);
+> +
+> +	ASSERT_EQ(len, write(fd, pattern, len));
+> +	EXPECT_EQ(0, close(fd));
+> +}
+
+I had to fix this helper to make it work with check-linux.sh:
+
+diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
+index ae32513fb54b..64887d34079a 100644
+--- a/tools/testing/selftests/landlock/fs_test.c
++++ b/tools/testing/selftests/landlock/fs_test.c
+@@ -4659,11 +4659,34 @@ static void set_core_pattern(struct __test_metadata *const _metadata,
+ 	int fd;
+ 	size_t len = strlen(pattern);
+ 
++	/*
++	 * Writing to /proc/sys/kernel/core_pattern requires EUID 0 because
++	 * sysctl_perm() checks that, ignoring capabilities like
++	 * CAP_SYS_ADMIN or CAP_DAC_OVERRIDE.
++	 *
++	 * Switching EUID clears the dumpable flag, which must be restored
++	 * afterwards to allow coredumps.
++	 */
++	set_cap(_metadata, CAP_SETUID);
++	ASSERT_EQ(0, seteuid(0));
++	clear_cap(_metadata, CAP_SETUID);
++
+ 	fd = open("/proc/sys/kernel/core_pattern", O_WRONLY | O_CLOEXEC);
+-	ASSERT_LE(0, fd);
++	ASSERT_LE(0, fd)
++	{
++		TH_LOG("Failed to open core_pattern for writing: %s",
++		       strerror(errno));
++	}
+ 
+ 	ASSERT_EQ(len, write(fd, pattern, len));
+ 	EXPECT_EQ(0, close(fd));
++
++	set_cap(_metadata, CAP_SETUID);
++	ASSERT_EQ(0, seteuid(getuid()));
++	clear_cap(_metadata, CAP_SETUID);
++
++	/* Restore dumpable flag cleared by seteuid(). */
++	ASSERT_EQ(0, prctl(PR_SET_DUMPABLE, 1 , 0, 0, 0));
+ }
+ 
+ FIXTURE(coredump)
+@@ -4680,9 +4703,7 @@ FIXTURE_SETUP(coredump)
+ 
+ FIXTURE_TEARDOWN_PARENT(coredump)
+ {
+-	set_cap(_metadata, CAP_SYS_ADMIN);
+ 	set_core_pattern(_metadata, self->original_core_pattern);
+-	clear_cap(_metadata, CAP_SYS_ADMIN);
+ }
+ 
+ /*
+@@ -4705,9 +4726,7 @@ TEST_F_FORK(coredump, socket_not_restricted)
+ 	srv_fd = set_up_named_unix_server(_metadata, SOCK_STREAM, sock_path);
+ 
+ 	/* Point coredumps at our socket. */
+-	set_cap(_metadata, CAP_SYS_ADMIN);
+ 	set_core_pattern(_metadata, core_pattern);
+-	clear_cap(_metadata, CAP_SYS_ADMIN);
+ 
+ 	/* Restrict LANDLOCK_ACCESS_FS_RESOLVE_UNIX. */
+ 	enforce_fs(_metadata, LANDLOCK_ACCESS_FS_RESOLVE_UNIX, NULL);
+
+
+Please run tests in this (minimal) environment.
+
+> +
+> +FIXTURE(coredump)
+> +{
+> +	char original_core_pattern[256];
+> +};
+> +
+> +FIXTURE_SETUP(coredump)
+> +{
+> +	disable_caps(_metadata);
+> +	read_core_pattern(_metadata, self->original_core_pattern,
+> +			  sizeof(self->original_core_pattern));
+> +}
+> +
+> +FIXTURE_TEARDOWN_PARENT(coredump)
+> +{
+> +	set_cap(_metadata, CAP_SYS_ADMIN);
+> +	set_core_pattern(_metadata, self->original_core_pattern);
+> +	clear_cap(_metadata, CAP_SYS_ADMIN);
+> +}
+> +
+> +/*
+> + * Test that even when a process is restricted with
+> + * LANDLOCK_ACCESS_FS_RESOLVE_UNIX, the kernel can still initiate a connection
+> + * to the coredump socket on the processes' behalf.
+> + */
+> +TEST_F_FORK(coredump, socket_not_restricted)
+> +{
+> +	static const char core_pattern[] = "@/tmp/landlock_coredump_test.sock";
+> +	const char *const sock_path = core_pattern + 1;
+> +	int srv_fd, conn_fd, status;
+> +	pid_t child_pid;
+> +	struct ucred cred;
+> +	socklen_t cred_len = sizeof(cred);
+> +	char buf[4096];
+> +
+> +	/* Set up the coredump server socket. */
+> +	unlink(sock_path);
+> +	srv_fd = set_up_named_unix_server(_metadata, SOCK_STREAM, sock_path);
+> +
+> +	/* Point coredumps at our socket. */
+> +	set_cap(_metadata, CAP_SYS_ADMIN);
+> +	set_core_pattern(_metadata, core_pattern);
+> +	clear_cap(_metadata, CAP_SYS_ADMIN);
+> +
+> +	/* Restrict LANDLOCK_ACCESS_FS_RESOLVE_UNIX. */
+> +	drop_access_rights(_metadata, &(struct landlock_ruleset_attr){
+> +		.handled_access_fs = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
+> +	});
+> +
+> +	/* Fork a child that crashes. */
+> +	child_pid = fork();
+> +	ASSERT_LE(0, child_pid);
+> +	if (child_pid == 0) {
+> +		struct rlimit rl = {
+> +			.rlim_cur = RLIM_INFINITY,
+> +			.rlim_max = RLIM_INFINITY,
+> +		};
+> +
+> +		ASSERT_EQ(0, setrlimit(RLIMIT_CORE, &rl));
+> +
+> +		/* Crash on purpose. */
+> +		kill(getpid(), SIGSEGV);
+> +		_exit(1);
+> +	}
+> +
+> +	/*
+> +	 * Accept the coredump connection.  If Landlock incorrectly denies the
+> +	 * kernel's coredump connect, accept() will block forever, so the test
+> +	 * would time out.
+> +	 */
+> +	conn_fd = accept(srv_fd, NULL, NULL);
+> +	ASSERT_LE(0, conn_fd);
+> +
+> +	/* Check that the connection came from the crashing child. */
+> +	ASSERT_EQ(0, getsockopt(conn_fd, SOL_SOCKET, SO_PEERCRED, &cred,
+> +				&cred_len));
+> +	EXPECT_EQ(child_pid, cred.pid);
+> +
+> +	/* Drain the coredump data so the kernel can finish. */
+> +	while (read(conn_fd, buf, sizeof(buf)) > 0)
+> +		;
+> +
+> +	EXPECT_EQ(0, close(conn_fd));
+> +
+> +	/* Wait for the child and verify it coredumped. */
+> +	ASSERT_EQ(child_pid, waitpid(child_pid, &status, 0));
+> +	ASSERT_TRUE(WIFSIGNALED(status));
+> +	ASSERT_TRUE(WCOREDUMP(status));
+> +
+> +	EXPECT_EQ(0, close(srv_fd));
+> +	EXPECT_EQ(0, unlink(sock_path));
+> +}
+> +
+>  /* clang-format off */
+>  FIXTURE(layout1_bind) {};
+>  /* clang-format on */
+> -- 
+> 2.52.0
+> 
+> 
 
