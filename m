@@ -1,157 +1,238 @@
-Return-Path: <linux-security-module+bounces-14717-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14720-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4LPIFgyFlWmwSAIAu9opvQ
-	(envelope-from <linux-security-module+bounces-14717-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 10:23:24 +0100
+	id eOfLLrGJlWnqSAIAu9opvQ
+	(envelope-from <linux-security-module+bounces-14720-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 10:43:13 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B799C154B02
-	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 10:23:23 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33836154CF0
+	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 10:43:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 839F830078F4
-	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 09:22:44 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EC93C301947D
+	for <lists+linux-security-module@lfdr.de>; Wed, 18 Feb 2026 09:43:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4FE12D94BB;
-	Wed, 18 Feb 2026 09:22:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B33EA2367D9;
+	Wed, 18 Feb 2026 09:43:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b="Ws+9EyYY"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="2Encfo+X"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mx1.secunet.com (mx1.secunet.com [62.96.220.36])
+Received: from smtp-42a8.mail.infomaniak.ch (smtp-42a8.mail.infomaniak.ch [84.16.66.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 409FA2F12DA;
-	Wed, 18 Feb 2026 09:22:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.96.220.36
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39FED2DC33B
+	for <linux-security-module@vger.kernel.org>; Wed, 18 Feb 2026 09:43:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771406563; cv=none; b=GA+YZ2AQ6kecBXnmgCiVsmlbnT/W7Ec3RdCN3hZGBZ6qF0nxpTDapIABcg/6LriUqAgNkdQr7J9bn7Qcy3XlvVa8f/B62V335fZisn2mV1BFh3DwktrJjFuA910tsfy7obKWrqqmkLBgRyZ9JrNtK4Xy879Xd2xoYYb2hIqcO6Y=
+	t=1771407789; cv=none; b=oxv6B3Y50++kuodesZj22JrC/VUDC9qSre7yN/m/HfoNZyOelDUhIz0wwiAaL5HDt4wA9lAIwdqXqXwxba+UlM/RuRru5agRhxXKL9/7IDkYI3M+R3HgpWA/OGRYXd4VZzeKsIw27+gUNRsEfHxMwov0FDVx10r186a+hMNZGUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771406563; c=relaxed/simple;
-	bh=QRP7P7HRDTjKaJCK7nZalWkI+8t9AnotE0IPAlsvm+Y=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Iwi0Z/NRxbvtswHBCZb0xDwTmVX2iOWkTMMwPrgFwtsnVZPnHFivrs+aQ2jB0wySp9YzOkexbVakpf0rNBrKDAilmlgROlHe0zM7utw9+dOkRObRjQpYS7wt7SjfOevlxU8q5gAvLzF+d1SSf46dEdBpNwsXVJyUGelYDtoHvOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=secunet.com; spf=pass smtp.mailfrom=secunet.com; dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b=Ws+9EyYY; arc=none smtp.client-ip=62.96.220.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=secunet.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=secunet.com
-Received: from localhost (localhost [127.0.0.1])
-	by mx1.secunet.com (Postfix) with ESMTP id 1F5F2206DF;
-	Wed, 18 Feb 2026 10:22:39 +0100 (CET)
-X-Virus-Scanned: by secunet
-Received: from mx1.secunet.com ([127.0.0.1])
- by localhost (mx1.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5g7Yrxvle39P; Wed, 18 Feb 2026 10:22:38 +0100 (CET)
-Received: from EXCH-01.secunet.de (rl1.secunet.de [10.32.0.231])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mx1.secunet.com (Postfix) with ESMTPS id 43460201D3;
-	Wed, 18 Feb 2026 10:22:38 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.secunet.com 43460201D3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=secunet.com;
-	s=202301; t=1771406558;
-	bh=DX/NNPfsIZ+Oe102Ohr9kgE/Q+rSKqtQyPHB3ln9zdE=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To:From;
-	b=Ws+9EyYYlL1LR4zicdaAQl1zDc6n39Nh0luR0bmbQ1fg+G7BQLIYcsqW/K/Am9i9X
-	 5XTvw+F5X6NDI+OYGxtUjFNhWqdDXi+8+AejjAkAMAOBQ93Zv6eUw+N3cU52mQe+SP
-	 Kk4P15i+iv1TfNUY4JjsrXtUseAuAJTWSMDkudXWJI4gmVlz3LNd2tA9Hu7g85Cade
-	 7OGfW1IGS2z/69PUZ5PJrFR+1ZIy/6BD+RGs5YQxSY4hp9kb9R3DoNFhwiQi2wyuKr
-	 EyNwg6+v7z0iG+zPjDgrzmO6JVA2BgId917gSBsGxERDGBgdh7n2QN7Xby/DlP4YF7
-	 2dVMOlxYskL1A==
-Received: from secunet.com (10.182.7.193) by EXCH-01.secunet.de (10.32.0.171)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Wed, 18 Feb
- 2026 10:22:37 +0100
-Received: (nullmailer pid 3178201 invoked by uid 1000);
-	Wed, 18 Feb 2026 09:22:36 -0000
-Date: Wed, 18 Feb 2026 10:22:36 +0100
-From: Steffen Klassert <steffen.klassert@secunet.com>
-To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-CC: Paul Moore <paul@paul-moore.com>, SELinux <selinux@vger.kernel.org>,
-	linux-security-module <linux-security-module@vger.kernel.org>, Herbert Xu
-	<herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Network Development
-	<netdev@vger.kernel.org>
-Subject: Re: [PATCH] xfrm: kill xfrm_dev_{state,policy}_flush_secctx_check()
-Message-ID: <aZWE3F8ppQgN3Gwe@secunet.com>
-References: <f9b88268-03dc-4356-8b31-0bab73cc9b1e@I-love.SAKURA.ne.jp>
- <CAHC9VhRzRAR+hhn4TFADnHWpzjOxjmh0S_Hg_HktkPkKQ35ycg@mail.gmail.com>
- <74a70504-8ff8-4d97-b35f-774364779889@I-love.SAKURA.ne.jp>
- <7ef21dab-3805-4eae-80d7-9779aeff3f58@I-love.SAKURA.ne.jp>
- <aYmoDwO-YXrc4W1c@secunet.com>
- <85546d35-c7bd-49bf-b0c3-9677bde25859@I-love.SAKURA.ne.jp>
- <aYnDWbxo-jAzR4ca@secunet.com>
- <7c17884d-dbf1-4c2c-9813-0c5369cfdcc9@I-love.SAKURA.ne.jp>
- <aY76t_xYCHmLq6Ur@secunet.com>
- <d20f1b63-714f-48ba-9bee-cd074205404f@I-love.SAKURA.ne.jp>
+	s=arc-20240116; t=1771407789; c=relaxed/simple;
+	bh=J9Uxe4ZEAWj20zBZzQJyfXD6ju3mDOe3vYTEKgmZwTU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K6Uc0584QEB58woCuopA8L20YXZaKDzl/b2tiX2jcpPnmdCZFRZfzDJUEQ2Y2MDF40LudBeSd7nSMZblf+nJxDCoYSOo+khloEfAsY+1RAGqlnBgHKRxV1+WtcDiQAMtJLwFmjbEOK/hAN0EWBZhIhcsdX6ELUvQnBgxDlKhZeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=2Encfo+X; arc=none smtp.client-ip=84.16.66.168
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fGBH31RQnzqpc;
+	Wed, 18 Feb 2026 10:36:47 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1771407407;
+	bh=ffntIhV2m6xC97D+pEZgKwQ6ddwWIQFpxfoE0JG7tfw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=2Encfo+X/baZ2m1VBAgiRsUSMTGNzMcMAaicEiW0RYddGxHGEbherxuDtrOGldquH
+	 bEYIF1ZKpQ0UAeLfNT0YF0P5a8dU2rubVY2u/xGObzeIPdqJFeU+2auMZAYA/pdp3j
+	 oL/HEqhd7nEV0zHDsX9J4ea0IeUp2CYomld4z02g=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4fGBH06q50z5rJ;
+	Wed, 18 Feb 2026 10:36:44 +0100 (CET)
+Date: Wed, 18 Feb 2026 10:36:37 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack3000@gmail.com>
+Cc: John Johansen <john.johansen@canonical.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E . Hallyn" <serge@hallyn.com>, Tingmao Wang <m@maowtm.org>, 
+	Justin Suess <utilityemal77@gmail.com>, linux-security-module@vger.kernel.org, 
+	Samasth Norway Ananda <samasth.norway.ananda@oracle.com>, Matthieu Buffet <matthieu@buffet.re>, 
+	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, konstantin.meskhidze@huawei.com, 
+	Demi Marie Obenour <demiobenour@gmail.com>, Alyssa Ross <hi@alyssa.is>, Jann Horn <jannh@google.com>, 
+	Tahera Fahimi <fahimitahera@gmail.com>, Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v5 1/9] lsm: Add LSM hook security_unix_find
+Message-ID: <20260217.Nei3Aeg8bo6h@digikod.net>
+References: <20260215105158.28132-1-gnoack3000@gmail.com>
+ <20260215105158.28132-2-gnoack3000@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <d20f1b63-714f-48ba-9bee-cd074205404f@I-love.SAKURA.ne.jp>
-X-ClientProxiedBy: EXCH-04.secunet.de (10.32.0.184) To EXCH-01.secunet.de
- (10.32.0.171)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260215105158.28132-2-gnoack3000@gmail.com>
+X-Infomaniak-Routing: alpha
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.89 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[secunet.com,none];
-	R_DKIM_ALLOW(-0.20)[secunet.com:s=202301];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_MIXED_CHARSET(0.77)[subject];
+	R_DKIM_ALLOW(-0.20)[digikod.net:s=20191114];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,secunet.com:mid,secunet.com:dkim];
-	TAGGED_FROM(0.00)[bounces-14717-lists,linux-security-module=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14720-lists,linux-security-module=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[secunet.com:+];
-	TO_DN_ALL(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MIME_TRACE(0.00)[0:+];
-	FROM_NEQ_ENVFROM(0.00)[steffen.klassert@secunet.com,linux-security-module@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[canonical.com,paul-moore.com,namei.org,hallyn.com,maowtm.org,gmail.com,vger.kernel.org,oracle.com,buffet.re,huawei-partners.com,huawei.com,alyssa.is,google.com,kernel.org,zeniv.linux.org.uk];
+	RCPT_COUNT_TWELVE(0.00)[20];
+	DMARC_NA(0.00)[digikod.net];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[digikod.net:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
+	RCVD_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[mic@digikod.net,linux-security-module@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-security-module];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: B799C154B02
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[maowtm.org:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,digikod.net:mid,digikod.net:dkim]
+X-Rspamd-Queue-Id: 33836154CF0
 X-Rspamd-Action: no action
 
-On Fri, Feb 13, 2026 at 10:59:15PM +0900, Tetsuo Handa wrote:
-> On 2026/02/13 19:19, Steffen Klassert wrote:
-> On 2026/02/13 19:19, Steffen Klassert wrote:
-> >> The NETDEV_UNREGISTER path can be triggered by just doing "unshare -n ip addr show"
-> >> (i.e. implicit cleanup of a network namespace due to termination of init process in
-> >> that namespace). We are not allowed to reject the cleanup_net() route.
-> > 
-> > And here we come to the other problem I mentioned. When a LSM policy
-> > rejects to flush the xfrm states and policies on network namespace
-> > exit, we leak all the xfrm states and policies in that namespace.
-> > Here we have no other option, we must flush the xfrm states and
-> > policies regardless of any LSM policy. This can be fixed with
-> > something like that:
+On Sun, Feb 15, 2026 at 11:51:49AM +0100, Günther Noack wrote:
+> From: Justin Suess <utilityemal77@gmail.com>
 > 
-> This something is what I explained at
-> https://lkml.kernel.org/r/1bb453af-3ef2-4ab6-a909-0705bd07c136@I-love.SAKURA.ne.jp .
-> The "task_valid" argument does not always reflect whether LSM policy can reject or not.
-
-That was to fix the memleak on network namespace exit.
-The task_valid check should be ok for xfrm_policy_flush()
-and xfrm_state_flush().
-
+> Add a LSM hook security_unix_find.
 > 
-> Anyway, the patch to add xfrm_dev_unregister(dev) seems OK if we do like
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit?h=next-20260123&id=fc0f090e41e652d158f946c616cdd82baed3c8f4 ?
+> This hook is called to check the path of a named unix socket before a
+> connection is initiated. The peer socket may be inspected as well.
+> 
+> Why existing hooks are unsuitable:
+> 
+> Existing socket hooks, security_unix_stream_connect(),
+> security_unix_may_send(), and security_socket_connect() don't provide
+> TOCTOU-free / namespace independent access to the paths of sockets.
+> 
+> (1) We cannot resolve the path from the struct sockaddr in existing hooks.
+> This requires another path lookup. A change in the path between the
+> two lookups will cause a TOCTOU bug.
+> 
+> (2) We cannot use the struct path from the listening socket, because it
+> may be bound to a path in a different namespace than the caller,
+> resulting in a path that cannot be referenced at policy creation time.
+> 
+> Cc: Günther Noack <gnoack3000@gmail.com>
+> Cc: Tingmao Wang <m@maowtm.org>
+> Signed-off-by: Justin Suess <utilityemal77@gmail.com>
+> ---
+>  include/linux/lsm_hook_defs.h |  5 +++++
+>  include/linux/security.h      | 11 +++++++++++
+>  net/unix/af_unix.c            |  8 ++++++++
+>  security/security.c           | 20 ++++++++++++++++++++
+>  4 files changed, 44 insertions(+)
+> 
+> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+> index 8c42b4bde09c..7a0fd3dbfa29 100644
+> --- a/include/linux/lsm_hook_defs.h
+> +++ b/include/linux/lsm_hook_defs.h
+> @@ -317,6 +317,11 @@ LSM_HOOK(int, 0, post_notification, const struct cred *w_cred,
+>  LSM_HOOK(int, 0, watch_key, struct key *key)
+>  #endif /* CONFIG_SECURITY && CONFIG_KEY_NOTIFICATIONS */
+>  
+> +#if defined(CONFIG_SECURITY_NETWORK) && defined(CONFIG_SECURITY_PATH)
+> +LSM_HOOK(int, 0, unix_find, const struct path *path, struct sock *other,
+> +	 int flags)
+> +#endif /* CONFIG_SECURITY_NETWORK && CONFIG_SECURITY_PATH */
+> +
+>  #ifdef CONFIG_SECURITY_NETWORK
+>  LSM_HOOK(int, 0, unix_stream_connect, struct sock *sock, struct sock *other,
+>  	 struct sock *newsk)
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index 83a646d72f6f..99a33d8eb28d 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -1931,6 +1931,17 @@ static inline int security_mptcp_add_subflow(struct sock *sk, struct sock *ssk)
+>  }
+>  #endif	/* CONFIG_SECURITY_NETWORK */
+>  
+> +#if defined(CONFIG_SECURITY_NETWORK) && defined(CONFIG_SECURITY_PATH)
+> +
+> +int security_unix_find(const struct path *path, struct sock *other, int flags);
+> +
+> +#else /* CONFIG_SECURITY_NETWORK && CONFIG_SECURITY_PATH */
+> +static inline int security_unix_find(const struct path *path, struct sock *other, int flags)
+> +{
+> +	return 0;
+> +}
+> +#endif /* CONFIG_SECURITY_NETWORK && CONFIG_SECURITY_PATH */
+> +
+>  #ifdef CONFIG_SECURITY_INFINIBAND
+>  int security_ib_pkey_access(void *sec, u64 subnet_prefix, u16 pkey);
+>  int security_ib_endport_manage_subnet(void *sec, const char *name, u8 port_num);
+> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+> index d0511225799b..369812b79dd8 100644
+> --- a/net/unix/af_unix.c
+> +++ b/net/unix/af_unix.c
+> @@ -1230,6 +1230,14 @@ static struct sock *unix_find_bsd(struct sockaddr_un *sunaddr, int addr_len,
+>  	if (!sk)
+>  		goto path_put;
+>  
+> +	/*
+> +	 * We call the hook because we know that the inode is a socket and we
+> +	 * hold a valid reference to it via the path.
+> +	 */
+> +	err = security_unix_find(&path, sk, flags);
+> +	if (err)
+> +		goto sock_put;
+> +
+>  	err = -EPROTOTYPE;
+>  	if (sk->sk_type == type)
 
-That would be OK as a first fix. Later we should
-just unlink policies and states from the device,
-as explained in my last mail.
+I think this hook call should be moved here, just before the
+touch_atime() call for consistency with the socket type check, and to
+avoid doing useless check in the hook.
+
+>  		touch_atime(&path);
+> diff --git a/security/security.c b/security/security.c
+> index 67af9228c4e9..c73196b8db4b 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -4731,6 +4731,26 @@ int security_mptcp_add_subflow(struct sock *sk, struct sock *ssk)
+>  
+>  #endif	/* CONFIG_SECURITY_NETWORK */
+>  
+> +#if defined(CONFIG_SECURITY_NETWORK) && defined(CONFIG_SECURITY_PATH)
+> +/**
+> + * security_unix_find() - Check if a named AF_UNIX socket can connect
+> + * @path: path of the socket being connected to
+> + * @other: peer sock
+> + * @flags: flags associated with the socket
+> + *
+> + * This hook is called to check permissions before connecting to a named
+> + * AF_UNIX socket.
+> + *
+> + * Return: Returns 0 if permission is granted.
+> + */
+> +int security_unix_find(const struct path *path, struct sock *other, int flags)
+> +{
+> +	return call_int_hook(unix_find, path, other, flags);
+> +}
+> +EXPORT_SYMBOL(security_unix_find);
+> +
+> +#endif	/* CONFIG_SECURITY_NETWORK && CONFIG_SECURITY_PATH */
+> +
+>  #ifdef CONFIG_SECURITY_INFINIBAND
+>  /**
+>   * security_ib_pkey_access() - Check if access to an IB pkey is allowed
+> -- 
+> 2.52.0
+> 
+> 
 
