@@ -1,206 +1,166 @@
-Return-Path: <linux-security-module+bounces-14742-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14739-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WIw/MQwul2k1vgIAu9opvQ
-	(envelope-from <linux-security-module+bounces-14742-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Thu, 19 Feb 2026 16:36:44 +0100
+	id aFxTKaQfl2m9uwIAu9opvQ
+	(envelope-from <linux-security-module+bounces-14739-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Thu, 19 Feb 2026 15:35:16 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9944616039D
-	for <lists+linux-security-module@lfdr.de>; Thu, 19 Feb 2026 16:36:44 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D27215F907
+	for <lists+linux-security-module@lfdr.de>; Thu, 19 Feb 2026 15:35:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 447943013961
-	for <lists+linux-security-module@lfdr.de>; Thu, 19 Feb 2026 15:36:39 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 8A9873001469
+	for <lists+linux-security-module@lfdr.de>; Thu, 19 Feb 2026 14:35:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AA21348469;
-	Thu, 19 Feb 2026 15:36:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36E9633F8DC;
+	Thu, 19 Feb 2026 14:35:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X9Y8eQbd"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Z9bX1CMS"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F10C4199920;
-	Thu, 19 Feb 2026 15:36:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE60D2F83B7
+	for <linux-security-module@vger.kernel.org>; Thu, 19 Feb 2026 14:35:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771515393; cv=none; b=R8VgNODAZE0cUyAK5+fppQdmUvKtGDmMWbt+K+sYmCn/SKEAl6C63O3p5rajmvvHf4VTsvEaMT8AHKg7/XJn4YZ+rJzhM6Xfkwixk5lZitcnifATnoZEe5xAKvIz5Ki7qi3wdW9BtYKYRxvb2Xxp6KYFHIaxTZS7nzkRANO4X9I=
+	t=1771511714; cv=none; b=EpgLgpxJPFX4NXGTmX9lOO3uR6VU+GN3IYCCcHGyB9mR9lqhgOWBqh60K/FlMtV1KIiLMxAyJ+bv1btO3r74VFln5txn37KO1+lFE4GMc2hqPKgMjLBGng7Bu96R/0snE343PakyGVgY8sDZIEAFZZtGn65XUJAu8Y2o081gq88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771515393; c=relaxed/simple;
-	bh=xvGScHjuinZ0ATzJQB4XWDn+7FfGiPuiuds790maVJM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i7sWn0jm99MR6P+3O/mWsftjTZwxoTw0GUmasEgn2q0BAfoR1us1GepskVekNBO4fI+I6gm8+7g6ZKRhrwtndNTcYaEhw5aIbNQC0qIkucgSwuqKBi5jEMAkbIgTlCxLqKeMwuoP0snYrQ+eK7DtluI3Da4z15eL7e4+At+mWWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X9Y8eQbd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1105BC4CEF7;
-	Thu, 19 Feb 2026 15:36:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771515392;
-	bh=xvGScHjuinZ0ATzJQB4XWDn+7FfGiPuiuds790maVJM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=X9Y8eQbdJ27k5PgYNvucYbCou7PyhGWqSaSw5zQ9BMp5TfRnUEdlq6LpQNPShYF5f
-	 5+FQ33fjy0j5phsKwCSp4c7vnv/kHZcBDSSjYmZlxE1Rtj1KPTdsrqJGBOt45xASBq
-	 44TBES2c3aRoJck462y43Jn27YvOo7ETxGA06SfCErH9+rqHx3PFjCIsihwiliYBCg
-	 veM9FYkRpCNI2Sz3gH5imjY0d+gVJfxUt6b95uJIf9Q9ucaEOWthJTA5KvIjlhbXNZ
-	 UhYdrRsiVZ56wQU95sEc+CesXOgk3pKmiLRxYkB6wDl85KBhED/TFJPanXaK4uOKHr
-	 DM1nWzuo7fGxA==
-Date: Thu, 19 Feb 2026 15:27:56 +0100
-From: Nicolas Schier <nsc@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Petr Pavlu <petr.pavlu@suse.com>, Nathan Chancellor <nathan@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
-	Xiu Jianfeng <xiujianfeng@huawei.com>,
-	Fabian =?iso-8859-1?Q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>,
-	Arnout Engelen <arnout@bzzt.net>,
-	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
-	Christian Heusel <christian@heusel.eu>,
-	=?iso-8859-1?Q?C=E2ju?= Mihai-Drosi <mcaju95@gmail.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 15/17] module: Introduce hash-based integrity checking
-Message-ID: <aZcd7PpetL8J6CM4@derry.ads.avm.de>
-References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
- <20260113-module-hashes-v4-15-0b932db9b56b@weissschuh.net>
- <db1ed045-d7b6-49dc-b111-9fea7c30f8ab@suse.com>
- <28cf8d51-7530-41d5-a47b-cad5ecabd269@t-8ch.de>
+	s=arc-20240116; t=1771511714; c=relaxed/simple;
+	bh=tEwvuFOHCr7SN8AzC30UrDoTcfRjUrmnfC1usjvWQzo=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=r1jGm/yCz5/XrSqLPvrlzM4dMwfL/MwI2kgGj9kKTbu9scMiR0xIzN9amJWBMfhzS30gq7ZmtZcWGt7oChK/le4uqavyARdBN89gpBQs8K2fUh9cF9lABy1whatea4hXTDqLY3ZvYmkPemAEq4fELTD1Oy0YkYaZthFvZhAm8jo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Z9bX1CMS; arc=none smtp.client-ip=209.85.208.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-659cbdd7cf4so891065a12.0
+        for <linux-security-module@vger.kernel.org>; Thu, 19 Feb 2026 06:35:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1771511711; x=1772116511; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tEwvuFOHCr7SN8AzC30UrDoTcfRjUrmnfC1usjvWQzo=;
+        b=Z9bX1CMS5eIg2CdlsGpQ75WmV6xIpiKkq5qeITrCrUiYVliCSi9EJgpJ5zsEMa1Psk
+         BW/EGJVs2mreqU4b8d/TqgiMHwj/DOhQH0uKngXCr6sLvsZpW6c3Yg9jwLU7MiKZKZwN
+         pvy2ld4lU78Z41ODcP3cC0BHytKB/YfWmVPvfHLK+lJ+xWkfXpT0Lno7atuE89nLZHL5
+         i1t1SdvEIkEtgUjn+KymoonpMC+MGmEw6Y84yUL8tuAF5Ux1SOR/Bgqlk1X5V1t8oUXN
+         GynmlauKLDxC6e9u6ChJnXnT3FonkJlb6RM1Uuc6dbkLpfQa+IAXHkBlbC31I6tANOlD
+         njPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771511711; x=1772116511;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tEwvuFOHCr7SN8AzC30UrDoTcfRjUrmnfC1usjvWQzo=;
+        b=LFxCn6RmXyZUZ3tH5L3GfLclIsLIfJS4A0mhLM1OgCYtE0YGdrJ/Pm/x2vvRn7/z+n
+         GM73VQy6wBwsN3j+35ZcW1m37Yvh7Wr8FLaYvO9Elz5CjpzSQs3sNegR3htzW16q2L1Q
+         eR+ivwNsVFhoGXVbmWl66G394vmQ187iADp++wz0K6kGWDIKY/qEHaD66jYGiZ1Sw0c0
+         l8IYEAt7gGpHj4nue0MbD3ecAYP+UsFqXSy9wpAAaAZ6by4LQGrKi3YAqGi9UO7w1Uf9
+         Vo3BvgJZpx0IQl2KPUtuTl7bknHHqa8ni2yfapLbrEOiEaXVCC5Kwwo4geezk6CykARA
+         PsJw==
+X-Forwarded-Encrypted: i=1; AJvYcCVFkI+GfLJtHRuz0XA35q1J8cTRPFan+8R2MWVph6cg7SbhQGF+XKLdjpyFAZ4TI7RegUkz9emXjJnS5no0V+WobuNEv/g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZjW/ecudNqwrk9I/knboe1ZVB0eOculZegdkiQ82txA2Gt/ix
+	09mJadt8HpV0Cm0JUnfm/PzGntsu1/hDLIYwTpen7jjG7xAf4vdwfavDuwvMys6VxsSJgspyAwV
+	EQeHX4QmOb8l6MnHMlg==
+X-Received: from edrv4.prod.google.com ([2002:aa7:d644:0:b0:65a:409d:beb7])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6402:2787:b0:65c:1488:182 with SMTP id 4fb4d7f45d1cf-65c769793d2mr3008040a12.14.1771511711043;
+ Thu, 19 Feb 2026 06:35:11 -0800 (PST)
+Date: Thu, 19 Feb 2026 14:35:10 +0000
+In-Reply-To: <c2b65a8f-b0cc-4bba-8ef9-7a079314d52d@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <28cf8d51-7530-41d5-a47b-cad5ecabd269@t-8ch.de>
+Mime-Version: 1.0
+References: <20260219-remove-task-euid-v1-1-904060826e07@google.com> <c2b65a8f-b0cc-4bba-8ef9-7a079314d52d@gmail.com>
+Message-ID: <aZcfnqkGcFb2k_hT@google.com>
+Subject: Re: [PATCH] task: delete task_euid()
+From: Alice Ryhl <aliceryhl@google.com>
+To: Alex Shi <seakeel@gmail.com>
+Cc: Paul Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Alex Shi <alexs@kernel.org>, 
+	Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>, 
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, linux-security-module@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, Jann Horn <jannh@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.56 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MV_CASE(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	MIME_BASE64_TEXT(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14742-lists,linux-security-module=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[suse.com,kernel.org,arndb.de,google.com,samsung.com,paul-moore.com,namei.org,hallyn.com,lwn.net,linux.ibm.com,ellerman.id.au,gmail.com,huawei.com,oracle.com,atomlin.com,oss.cyber.gouv.fr,proxmox.com,bzzt.net,mapreri.org,archlinux.org,heusel.eu,linutronix.de,vger.kernel.org,lists.ozlabs.org];
-	RCPT_COUNT_TWELVE(0.00)[39];
-	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14739-lists,linux-security-module=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[22];
+	FREEMAIL_CC(0.00)[paul-moore.com,kernel.org,lwn.net,linuxfoundation.org,linux.dev,hust.edu.cn,garyguo.net,protonmail.com,umich.edu,vger.kernel.org,google.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	MID_RHS_MATCH_FROM(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[nsc@kernel.org,linux-security-module@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NEQ_ENVFROM(0.00)[aliceryhl@google.com,linux-security-module@vger.kernel.org];
+	DKIM_TRACE(0.00)[google.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-security-module];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[gnu.org:url,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 9944616039D
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 4D27215F907
 X-Rspamd-Action: no action
 
-On Tue, Feb 03, 2026 at 01:55:05PM +0100, Thomas Weißschuh wrote:
-> On 2026-01-30 18:06:20+0100, Petr Pavlu wrote:
-> > On 1/13/26 1:28 PM, Thomas Weißschuh wrote:
-> > > Normally the .ko module files depend on a fully built vmlinux to be
-> > > available for modpost validation and BTF generation. With
-> > > CONFIG_MODULE_HASHES, vmlinux now depends on the modules
-> > > to build a merkle tree. This introduces a dependency cycle which is
-> > > impossible to satisfy. Work around this by building the modules during
-> > > link-vmlinux.sh, after vmlinux is complete enough for modpost and BTF
-> > > but before the final module hashes are
-> > 
-> > I wonder if this dependency cycle could be resolved by utilizing the
-> > split into vmlinux.unstripped and vmlinux that occurred last year.
-> > 
-> > The idea is to create the following ordering: vmlinux.unstripped ->
-> > modules -> vmlinux, and to patch in .module_hashes only when building
-> > the final vmlinux.
-> > 
-> > This would require the following:
-> > * Split scripts/Makefile.vmlinux into two Makefiles, one that builds the
-> >   current vmlinux.unstripped and the second one that builds the final
-> >   vmlinux from it.
-> > * Modify the top Makefile to recognize vmlinux.unstripped and update the
-> >   BTF generation rule 'modules: vmlinux' to
-> >   'modules: vmlinux.unstripped'.
-> > * Add the 'vmlinux: modules' ordering in the top Makefile for
-> >   CONFIG_MODULE_HASHES=y.
-> > * Remove the patching of vmlinux.unstripped in scripts/link-vmlinux.sh
-> >   and instead move it into scripts/Makefile.vmlinux when running objcopy
-> >   to produce the final vmlinux.
-> > 
-> > I think this approach has two main advantages:
-> > * CONFIG_MODULE_HASHES can be made orthogonal to
-> >   CONFIG_DEBUG_INFO_BTF_MODULES.
-> > * All dependencies are expressed at the Makefile level instead of having
-> >   scripts/link-vmlinux.sh invoke 'make -f Makefile modules'.
-> > 
-> > Below is a rough prototype that applies on top of this series. It is a
-> > bit verbose due to the splitting of part of scripts/Makefile.vmlinux
-> > into scripts/Makefile.vmlinux_unstripped.
-> 
-> That looks like a feasible alternative. Before adopting it, I'd like to
-> hear the preference of the kbuild folks.
-> 
-> > diff --git a/Makefile b/Makefile
-> > index 841772a5a260..19a3beb82fa7 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -1259,7 +1259,7 @@ vmlinux_o: vmlinux.a $(KBUILD_VMLINUX_LIBS)
-> >  vmlinux.o modules.builtin.modinfo modules.builtin: vmlinux_o
-> >  	@:
-> >  
-> > -PHONY += vmlinux
-> > +PHONY += vmlinux.unstripped vmlinux
-> >  # LDFLAGS_vmlinux in the top Makefile defines linker flags for the top vmlinux,
-> >  # not for decompressors. LDFLAGS_vmlinux in arch/*/boot/compressed/Makefile is
-> >  # unrelated; the decompressors just happen to have the same base name,
-> > @@ -1270,9 +1270,11 @@ PHONY += vmlinux
-> >  #   https://savannah.gnu.org/bugs/?61463
-> >  # For Make > 4.4, the following simple code will work:
-> >  #  vmlinux: private export LDFLAGS_vmlinux := $(LDFLAGS_vmlinux)
-> > -vmlinux: private _LDFLAGS_vmlinux := $(LDFLAGS_vmlinux)
-> > -vmlinux: export LDFLAGS_vmlinux = $(_LDFLAGS_vmlinux)
-> > -vmlinux: vmlinux.o $(KBUILD_LDS) modpost
-> > +vmlinux.unstripped: private _LDFLAGS_vmlinux := $(LDFLAGS_vmlinux)
-> > +vmlinux.unstripped: export LDFLAGS_vmlinux = $(_LDFLAGS_vmlinux)
-> > +vmlinux.unstripped: vmlinux.o $(KBUILD_LDS) modpost
-> > +	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.vmlinux_unstripped
-> > +vmlinux: vmlinux.unstripped
-> >  	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.vmlinux
-> 
-> Maybe we could keep them together in a single Makefile,
-> and instead have different targets in it.
-> 
-
-yes, I think so, too.  I like the Petr's alternative.
-
-Kind regards,
-Nicolas
+T24gVGh1LCBGZWIgMTksIDIwMjYgYXQgMTA6Mjc6MDFQTSArMDgwMCwgQWxleCBTaGkgd3JvdGU6
+Cj4gCj4gCj4gT24gMjAyNi8yLzE5IDIwOjE0LCBBbGljZSBSeWhsIHdyb3RlOgo+ID4gdGFza19l
+dWlkKCkgaXMgYSB2ZXJ5IHdlaXJkIG9wZXJhdGlvbi4gWW91IGNhbiBzZWUgaG93IHdlaXJkIGl0
+IGlzIGJ5Cj4gPiBncmVwcGluZyBmb3IgdGFza19ldWlkKCkgLSBiaW5kZXIgaXMgaXRzIG9ubHkg
+dXNlci4gdGFza19ldWlkKCkgb2J0YWlucwo+ID4gdGhlIG9iamVjdGl2ZSBlZmZlY3RpdmUgVUlE
+IC0gaXQgbG9va3MgYXQgdGhlIGNyZWRlbnRpYWxzIG9mIHRoZSB0YXNrCj4gPiBmb3IgcHVycG9z
+ZXMgb2YgYWN0aW5nIG9uIGl0IGFzIGFuIG9iamVjdCwgYnV0IHRoZW4gYWNjZXNzZXMgdGhlCj4g
+PiBlZmZlY3RpdmUgVUlEICh3aGljaCB0aGUgY3JlZGVudGlhbHMuNyBtYW4gcGFnZSBkZXNjcmli
+ZXMgYXMgIlsuLi5dIHVzZWQKPiA+IGJ5IHRoZSBrZXJuZWwgdG8gZGV0ZXJtaW5lIHRoZSBwZXJt
+aXNzaW9ucyB0aGF0IHRoZSBwcm9jZXNzIHdpbGwgaGF2ZQo+ID4gd2hlbiBhY2Nlc3Npbmcgc2hh
+cmVkIHJlc291cmNlcyBbLi4uXSIpLgo+ID4gCj4gPiBTaW5jZSB1c2FnZSBpbiBCaW5kZXIgaGFz
+IG5vdyBiZWVuIHJlbW92ZWQsIGdldCByaWQgb2YgdGhlIHJlc3VsdGluZwo+ID4gZGVhZCBjb2Rl
+Lgo+ID4gCj4gPiBDaGFuZ2VzIHRvIHRoZSB6aF9DTiB0cmFuc2xhdGlvbiB3YXMgY2FycmllZCBv
+dXQgd2l0aCB0aGUgaGVscCBvZgo+ID4gR2VtaW5pIGFuZCBHb29nbGUgVHJhbnNsYXRlLgoKPiA+
+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy96aF9DTi9zZWN1cml0eS9j
+cmVkZW50aWFscy5yc3QgYi9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy96aF9DTi9zZWN1cml0
+eS9jcmVkZW50aWFscy5yc3QKPiA+IGluZGV4IDg4ZmNkOTE1MmZmZTkxZDc5ZmMxMGJmYzdiMmEz
+N2QzMDFiNDkzOGEuLmYwYjJlZmVjMzQyNDM4YjgxYmU0MTVkYzUxMzYyMmM5NjFiYjdlNTkgMTAw
+NjQ0Cj4gPiAtLS0gYS9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy96aF9DTi9zZWN1cml0eS9j
+cmVkZW50aWFscy5yc3QKPiA+ICsrKyBiL0RvY3VtZW50YXRpb24vdHJhbnNsYXRpb25zL3poX0NO
+L3NlY3VyaXR5L2NyZWRlbnRpYWxzLnJzdAo+ID4gQEAgLTMzNywxNSArMzM3LDEzIEBAIGNvbnN0
+5oyH6ZKI5LiK5pON5L2c77yM5Zug5q2k5LiN6ZyA6KaB6L+b6KGM57G75Z6L6L2s5o2i77yM5L2G
+6ZyA6KaB5Li05pe25pS+5byDCj4gPiAgICAgIGBgX190YXNrX2NyZWQoKWBgIOeahOe7k+aenOS4
+jeW6lOebtOaOpeS8oOmAkue7mSBgYGdldF9jcmVkKClgYCDvvIwKPiA+ICAgICAg5Zug5Li66L+Z
+5Y+v6IO95LiOIGBgY29tbWl0X2NyZWQoKWBgIOWPkeeUn+ernuS6ieadoeS7tuOAggo+ID4gLei/
+mOacieS4gOS6m+aWueS+v+eahOWHveaVsOWPr+S7peiuv+mXruWPpuS4gOS4quS7u+WKoeWHreaN
+rueahOeJueWumumDqOWIhu+8jOWwhlJDVeaTjeS9nOWvueiwg+eUqOaWuemakOiXj+i1t+adpTo6
+Cj4gPiAr5pyJ5LiA5Liq5pa55L6/55qE5Ye95pWw5Y+v55So5LqO6K6/6Zeu5Y+m5LiA5Liq5Lu7
+5Yqh5Yet5o2u55qE54m55a6a6YOo5YiG77yM5LuO6ICM5a+56LCD55So5pa56ZqQ6JePUkNV5py6
+5Yi2OjoKPiAKPiBMR1RNLgo+IAo+ID4gICAJdWlkX3QgdGFza191aWQodGFzaykJCVRhc2sncyBy
+ZWFsIFVJRAo+ID4gLQl1aWRfdCB0YXNrX2V1aWQodGFzaykJCVRhc2sncyBlZmZlY3RpdmUgVUlE
+Cj4gPiAt5aaC5p6c6LCD55So5pa55Zyo5q2k5pe25bey57uP5oyB5pyJUkNV6K+76ZSB77yM5YiZ
+5bqU5L2/55SoOjoKPiA+ICvlpoLmnpzosIPnlKjmlrnlnKjmraTml7blt7Lnu4/mjIHmnIlSQ1Xo
+r7vplIHvvIzliJnlupTmlLnkuLrkvb/nlKg6Ogo+IAo+IFBsZWFzZSBrZWVwIHRoZSBvbGQgdmVy
+c2lvbi4gdGhlIG5ldyBvbmUgaXMgYSBiaXQgYW1iaWd1b3VzLgoKVGhhbmtzIGZvciBjaGVja2lu
+ZyEKCkFsaWNlCg==
 
