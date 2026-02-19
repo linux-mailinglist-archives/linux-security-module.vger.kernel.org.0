@@ -1,143 +1,274 @@
-Return-Path: <linux-security-module+bounces-14741-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14743-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kA/kDbgol2mXvQIAu9opvQ
-	(envelope-from <linux-security-module+bounces-14741-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Thu, 19 Feb 2026 16:14:00 +0100
+	id mMR9ERttl2nxyQIAu9opvQ
+	(envelope-from <linux-security-module+bounces-14743-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Thu, 19 Feb 2026 21:05:47 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7069B15FFE6
-	for <lists+linux-security-module@lfdr.de>; Thu, 19 Feb 2026 16:13:59 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id AECD5162353
+	for <lists+linux-security-module@lfdr.de>; Thu, 19 Feb 2026 21:05:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 55D6130A353D
-	for <lists+linux-security-module@lfdr.de>; Thu, 19 Feb 2026 15:06:45 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9C4C63020FCE
+	for <lists+linux-security-module@lfdr.de>; Thu, 19 Feb 2026 20:05:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EEF93431F8;
-	Thu, 19 Feb 2026 15:05:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2FB32C0F6D;
+	Thu, 19 Feb 2026 20:05:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="gnk1NPQp";
-	dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="fuWYs2EN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CuS+4c3G"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from devnull.danielhodges.dev (vps-2f6e086e.vps.ovh.us [135.148.138.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74BBE3431E7;
-	Thu, 19 Feb 2026 15:05:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.148.138.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F23612DEA9D
+	for <linux-security-module@vger.kernel.org>; Thu, 19 Feb 2026 20:05:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771513552; cv=none; b=avLU3kc/iT8ZX1P9LbzqpY3jpiuZu/VhVKPgOs9GY4XmDapWyujI/u+trWRgHct0ROyGiNg7LNMJbvA5YvnvxvJPX2Lh982hhdrL2glbURvnQpHQO2zYXQFuIesiYCbKhHiPUDDgoFxGtIdMDB5TyBMLzok2Ggu/fDzCprYSMOs=
+	t=1771531542; cv=none; b=nspA9av0fzLlBe8bhZB0AQD58aRCfGRyO/TT/pfgE53oAd0REy8GWP65TD5CkJz1VnN9hFGFvCJsqqKWmgmxjUNSEGHEtRVRKTn/YLV0MFaqgcM6qbSMMs2rxYpYaCyuO9YtR1Wskcq7lVmSbv6fvV2jyjLHLe0eeSaewTIFH4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771513552; c=relaxed/simple;
-	bh=kY+CNc6etMGmouRQiTTjRGVawYjSYZ7ooeSd481nsXw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X2lx7n8Z1+FPH+eZBDWIis7xHw7XCkicfECfIyajbj8wViME87dnh9wU622PRxHT0W/Z4PAjm3cpVFOkCSOWMW+VNxa1C1EF7uoM9iMIwBNmXuiyCk5TQW1DGJr+kPegYUcEO3rhgOOOEZatB7khUu2QE68rwc0VaP45bgrhIgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev; spf=pass smtp.mailfrom=danielhodges.dev; dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=gnk1NPQp; dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=fuWYs2EN; arc=none smtp.client-ip=135.148.138.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=danielhodges.dev
-DKIM-Signature: v=1; a=rsa-sha256; s=202510r; d=danielhodges.dev; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1771513304; bh=o7hLZZotTPOFzfWMuGMKqGC
-	Zc/cpqQOZc6BNxHF+9Sg=; b=gnk1NPQpzGN9oV/kfbSfsrhcMS/Q27v2h7aSt66f5ERJ8IZXkr
-	w8Ku7C/HnZzmPeEHr47vIfqAtgGktFqGiqxBXm0wZUWInQElShfEi3fI6fyg6o1MDYdZskVB+8L
-	BxyrMhlEOPzUDXFRF1iqJxoin57LMENtxD3lt8rjX7EiMRBi9YhhVvRBkoliFeSdIKF+8PMF5Wt
-	n9QbGPsTx7AC0+YiIeQfZbp7axBFa4zptiisqsPtLOfxXMq7JEVDZU+aPGXzYsbLh0KLeWe1r2v
-	ELpWY0RMuR7JYwmYbqy6ZG0a9GucEew2kU9ZPMgSD14Z/VmI2JSkx+8QMqE5Wiw6PCQ==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202510e; d=danielhodges.dev; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1771513304; bh=o7hLZZotTPOFzfWMuGMKqGC
-	Zc/cpqQOZc6BNxHF+9Sg=; b=fuWYs2ENdcwZTH9/cP+205XS8Nk7Zwx/MTirYIPEAAUquK1oKJ
-	JQULRPOpGgU/HNLHBlhEMdVONVhr+rWKruDQ==;
-Date: Thu, 19 Feb 2026 10:01:43 -0500
-From: Daniel Hodges <daniel@danielhodges.dev>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: Daniel Hodges <git@danielhodges.dev>, zohar@linux.ibm.com, 
-	roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, 
-	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, 
-	linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 v2] evm: check return values of crypto_shash functions
-Message-ID: <lj2loy57pavtihqeuywpc2aev7zy3k3poop346dtmelmocp75q@lbejeufrrxwr>
-References: <aYNprpzxppKE0Gf2@fb.com>
- <20260206024240.19059-1-git@danielhodges.dev>
- <6ce273a26b396232f3ee64a980575562e766c501.camel@huaweicloud.com>
- <cfbd9e3c63e03500279198ec7a80ba009dfccc63.camel@huaweicloud.com>
+	s=arc-20240116; t=1771531542; c=relaxed/simple;
+	bh=WQyPCMu2/LVxP1HRKmCCZGdKwmRzWEn+99ptBGf9kFY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=aJSK1ICcq05Y9tM+3okL3DtMR5+hy955tESKCOzZuGxOHu7o3kD5I0A02A53RjLbGMTw9q32G4fJzKlLvCl4z+ZHZD58ohx9jCbAsKFyyK205zo+TI8s0XA8ZdlUIKT0U3xBijqE6uWQRGiRD39Q6BNY9Xw+mCTIQ/GBMWGkZuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CuS+4c3G; arc=none smtp.client-ip=74.125.224.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-64ad62a294bso1336896d50.1
+        for <linux-security-module@vger.kernel.org>; Thu, 19 Feb 2026 12:05:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771531539; x=1772136339; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9i/0wTnFIm7HfE0FOOWnlBqJyTOzDQHrvyvLNh6JIe4=;
+        b=CuS+4c3GjbnXeolZKsGMH36GQxpWc/g+jwVRHrSyvmGTbbZqp/tKlLrHsNogwvn2zX
+         iX9vbck7mxdF2d5DQ2q1d8kLqSxnA6oHpoEYrmOfjz2S/4ayv1gkSF0BPupNpegdyibz
+         VN4CA2/VApttCIsvXeslfnAcpHDjncDjaXWOBdgk3N4C25Dx2J2tSSziqYDdGVN8yHYR
+         qpSqpdQi+6OUi2HrpE0FqYq8Zg6SgPRtTfrHMluqJI1bLfBQVIJHrAriV94tRlK5QuZg
+         bEGtDQutvVKkxwJNt6loklSjlMSoXYyrQS2hXiL/2j3neADa43uouYXVwWB6Cak1BKvR
+         SAGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771531539; x=1772136339;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=9i/0wTnFIm7HfE0FOOWnlBqJyTOzDQHrvyvLNh6JIe4=;
+        b=RwahZXhSVI+5peXwFfVAYw66+jrSxD7lgP0mr3S22GYgcbcaMOIIiWzgwN+bZt870+
+         SvTqVDNKVJx2GYGBIRvZmu+T521/LkTA3WsNZuzY6mlDF+y7irm7aFts3yTBbgftltv/
+         F07tSDbUjMYGzs6tLsAl9EV5vgbThaGcGdsuPkeZNXiODYyO/FWortbQ0utdAQTfxuDk
+         muhWTb+UO2ZZKuee9VvydcgkHxOwZvJ9F8QXlQL7ZIdIzEMPlt1UD/23Ww6UOQA/z3Ks
+         5G0eO5Naofbz//kMROYXRgG+B+FECkXpc5bKpRllPoDbgNqEa3DLi8A/ZhVe9oYJUC1F
+         mwvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUx0Hgd0DhxHnhdnIS/zkS9ViidODwFdWr25uFpLXL+TK9UZBU94B+efI2dAZAKo77sRAv0srk9sfDIQ2abrsjJKLjSWKg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYEmvwSCyqkKCl/wb5k+ORpIrw69YrDkL3lkysuvR9rq5plgIN
+	BysUXB2cCTKidwmOuM0q11f7EumCJ72NvR0EGcKZUa+lxQ8kQwVoeCwM
+X-Gm-Gg: AZuq6aKFbHl1pjsZCUoP5voHIWUEywbsxvOV6amMSM/DdvvjXBrTm8Qgg+Z6V1Mdwxj
+	PbJ0tpSaVugiAujyXtua+rrxaY+W/Z3stRNuUotn20oJKeEMzzpZJj6AMwdTW9Tq1jlNDL8pX8f
+	1eean1PwioTZ9ansdmYhS9BoPOJAmfpevWmyO+Mhd3qLkmCsvTAc5sFYKCBh4P/Cl2strUVTxGq
+	ZqxaPCd5XW0eYy4XoJahCtT3vNXQkEZpsqGGPm/1+GwkR1zaFcrN08XOYwPfsezyuLmpzPwVVT3
+	ULvaXM2HKa1Ubl/xfYFsL2lFbhS3KhxW0vzPKVUT8FPaJkseleEGXGPyuGiofr43jtk17XvLa8G
+	BMBQmq+7Kvx3y2dGQwlr7W3RIstYuW1ffuOhXWvlXj2y49oFV98WuUfgzp1Kk+WoYWNdQhD+h80
+	OdzSgD5WTdYcFmyeADIH+8aKNwYz0S
+X-Received: by 2002:a05:690e:16a0:b0:64a:f3fa:af58 with SMTP id 956f58d0204a3-64c21a43cf9mr15905823d50.17.1771531538628;
+        Thu, 19 Feb 2026 12:05:38 -0800 (PST)
+Received: from suesslenovo ([129.222.84.220])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64c22e73125sm7292264d50.4.2026.02.19.12.05.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Feb 2026 12:05:38 -0800 (PST)
+From: Justin Suess <utilityemal77@gmail.com>
+To: utilityemal77@gmail.com
+Cc: brauner@kernel.org,
+	demiobenour@gmail.com,
+	fahimitahera@gmail.com,
+	gnoack3000@gmail.com,
+	hi@alyssa.is,
+	horms@kernel.org,
+	ivanov.mikhail1@huawei-partners.com,
+	jannh@google.com,
+	jmorris@namei.org,
+	john.johansen@canonical.com,
+	konstantin.meskhidze@huawei.com,
+	linux-security-module@vger.kernel.org,
+	m@maowtm.org,
+	matthieu@buffet.re,
+	mic@digikod.net,
+	netdev@vger.kernel.org,
+	paul@paul-moore.com,
+	samasth.norway.ananda@oracle.com,
+	serge@hallyn.com,
+	viro@zeniv.linux.org.uk
+Subject: [PATCH v6] lsm: Add LSM hook security_unix_find
+Date: Thu, 19 Feb 2026 15:04:59 -0500
+Message-ID: <20260219200459.1474232-1-utilityemal77@gmail.com>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <aZcPd3OKqxwCZV-5@suesslenovo>
+References: <aZcPd3OKqxwCZV-5@suesslenovo>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cfbd9e3c63e03500279198ec7a80ba009dfccc63.camel@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.16 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[danielhodges.dev,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[danielhodges.dev:s=202510r,danielhodges.dev:s=202510e];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14741-lists,linux-security-module=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[3];
+	TAGGED_FROM(0.00)[bounces-14743-lists,linux-security-module=lfdr.de];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,alyssa.is,huawei-partners.com,google.com,namei.org,canonical.com,huawei.com,vger.kernel.org,maowtm.org,buffet.re,digikod.net,paul-moore.com,oracle.com,hallyn.com,zeniv.linux.org.uk];
+	RCPT_COUNT_TWELVE(0.00)[21];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[danielhodges.dev:+];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[daniel@danielhodges.dev,linux-security-module@vger.kernel.org];
-	FREEMAIL_CC(0.00)[danielhodges.dev,linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,vger.kernel.org];
-	TAGGED_RCPT(0.00)[linux-security-module];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,danielhodges.dev:email,danielhodges.dev:dkim]
-X-Rspamd-Queue-Id: 7069B15FFE6
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[utilityemal77@gmail.com,linux-security-module@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TO_DN_NONE(0.00)[];
+	TAGGED_RCPT(0.00)[linux-security-module];
+	NEURAL_HAM(-0.00)[-1.000];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: AECD5162353
 X-Rspamd-Action: no action
 
-On Thu, Feb 19, 2026 at 01:36:39PM +0100, Roberto Sassu wrote:
-> On Thu, 2026-02-19 at 10:26 +0100, Roberto Sassu wrote:
-> > On Thu, 2026-02-05 at 21:42 -0500, Daniel Hodges wrote:
-> > > The crypto_shash_update() and crypto_shash_final() functions can fail
-> > > and return error codes, but their return values were not being checked
-> > > in several places in security/integrity/evm/evm_crypto.c:
-> > > 
-> > > - hmac_add_misc() ignored returns from crypto_shash_update() and
-> > >   crypto_shash_final()
-> > > - evm_calc_hmac_or_hash() ignored returns from crypto_shash_update()
-> > > - evm_init_hmac() ignored returns from crypto_shash_update()
-> > > 
-> > > If these hash operations fail silently, the resulting HMAC could be
-> > > invalid or incomplete, which could weaken the integrity verification
-> > > security that EVM provides.
-> > > 
-> > > This patch converts hmac_add_misc() from void to int return type and
-> > > adds proper error checking and propagation for all crypto_shash_*
-> > > function calls. All callers are updated to handle the new return values.
-> > > Additionally, error messages are logged when cryptographic operations
-> > > fail to provide visibility into the failure rather than silently
-> > > returning error codes.
-> > > 
-> > > Fixes: 66dbc325afce ("evm: re-release")
-> > > Signed-off-by: Daniel Hodges <git@danielhodges.dev>
-> > 
-> > After fixing the minor issue below:
-> 
-> Already did it. The patch is here (after fixing a conflict with
-> 0496fc9cdc38 "evm: Use ordered xattrs list to calculate HMAC in
-> evm_init_hmac()"):
-> 
-> https://github.com/robertosassu/linux/commit/d5aba42198b602c6de002ef02a4e6cc1d75652d7
-> 
-> Roberto
+Add a LSM hook security_unix_find.
 
-Nice, thanks for handling that!
+This hook is called to check the path of a named unix socket before a
+connection is initiated. The peer socket may be inspected as well.
 
--Daniel
+Why existing hooks are unsuitable:
+
+Existing socket hooks, security_unix_stream_connect(),
+security_unix_may_send(), and security_socket_connect() don't provide
+TOCTOU-free / namespace independent access to the paths of sockets.
+
+(1) We cannot resolve the path from the struct sockaddr in existing hooks.
+This requires another path lookup. A change in the path between the
+two lookups will cause a TOCTOU bug.
+
+(2) We cannot use the struct path from the listening socket, because it
+may be bound to a path in a different namespace than the caller,
+resulting in a path that cannot be referenced at policy creation time.
+
+Cc: Günther Noack <gnoack3000@gmail.com>
+Cc: Tingmao Wang <m@maowtm.org>
+Signed-off-by: Justin Suess <utilityemal77@gmail.com>
+---
+ include/linux/lsm_hook_defs.h |  5 +++++
+ include/linux/security.h      | 11 +++++++++++
+ net/unix/af_unix.c            | 13 ++++++++++---
+ security/security.c           | 20 ++++++++++++++++++++
+ 4 files changed, 46 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+index 8c42b4bde09c..7a0fd3dbfa29 100644
+--- a/include/linux/lsm_hook_defs.h
++++ b/include/linux/lsm_hook_defs.h
+@@ -317,6 +317,11 @@ LSM_HOOK(int, 0, post_notification, const struct cred *w_cred,
+ LSM_HOOK(int, 0, watch_key, struct key *key)
+ #endif /* CONFIG_SECURITY && CONFIG_KEY_NOTIFICATIONS */
+ 
++#if defined(CONFIG_SECURITY_NETWORK) && defined(CONFIG_SECURITY_PATH)
++LSM_HOOK(int, 0, unix_find, const struct path *path, struct sock *other,
++	 int flags)
++#endif /* CONFIG_SECURITY_NETWORK && CONFIG_SECURITY_PATH */
++
+ #ifdef CONFIG_SECURITY_NETWORK
+ LSM_HOOK(int, 0, unix_stream_connect, struct sock *sock, struct sock *other,
+ 	 struct sock *newsk)
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 83a646d72f6f..99a33d8eb28d 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -1931,6 +1931,17 @@ static inline int security_mptcp_add_subflow(struct sock *sk, struct sock *ssk)
+ }
+ #endif	/* CONFIG_SECURITY_NETWORK */
+ 
++#if defined(CONFIG_SECURITY_NETWORK) && defined(CONFIG_SECURITY_PATH)
++
++int security_unix_find(const struct path *path, struct sock *other, int flags);
++
++#else /* CONFIG_SECURITY_NETWORK && CONFIG_SECURITY_PATH */
++static inline int security_unix_find(const struct path *path, struct sock *other, int flags)
++{
++	return 0;
++}
++#endif /* CONFIG_SECURITY_NETWORK && CONFIG_SECURITY_PATH */
++
+ #ifdef CONFIG_SECURITY_INFINIBAND
+ int security_ib_pkey_access(void *sec, u64 subnet_prefix, u16 pkey);
+ int security_ib_endport_manage_subnet(void *sec, const char *name, u8 port_num);
+diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+index f6d56e70c7a2..41698460194b 100644
+--- a/net/unix/af_unix.c
++++ b/net/unix/af_unix.c
+@@ -1231,10 +1231,17 @@ static struct sock *unix_find_bsd(struct sockaddr_un *sunaddr, int addr_len,
+ 		goto path_put;
+ 
+ 	err = -EPROTOTYPE;
+-	if (sk->sk_type == type)
+-		touch_atime(&path);
+-	else
++	if (sk->sk_type != type)
++		goto sock_put;
++
++	/*
++	 * We call the hook because we know that the inode is a socket and we
++	 * hold a valid reference to it via the path.
++	 */
++	err = security_unix_find(&path, sk, flags);
++	if (err)
+ 		goto sock_put;
++	touch_atime(&path);
+ 
+ 	path_put(&path);
+ 
+diff --git a/security/security.c b/security/security.c
+index 67af9228c4e9..c73196b8db4b 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -4731,6 +4731,26 @@ int security_mptcp_add_subflow(struct sock *sk, struct sock *ssk)
+ 
+ #endif	/* CONFIG_SECURITY_NETWORK */
+ 
++#if defined(CONFIG_SECURITY_NETWORK) && defined(CONFIG_SECURITY_PATH)
++/**
++ * security_unix_find() - Check if a named AF_UNIX socket can connect
++ * @path: path of the socket being connected to
++ * @other: peer sock
++ * @flags: flags associated with the socket
++ *
++ * This hook is called to check permissions before connecting to a named
++ * AF_UNIX socket.
++ *
++ * Return: Returns 0 if permission is granted.
++ */
++int security_unix_find(const struct path *path, struct sock *other, int flags)
++{
++	return call_int_hook(unix_find, path, other, flags);
++}
++EXPORT_SYMBOL(security_unix_find);
++
++#endif	/* CONFIG_SECURITY_NETWORK && CONFIG_SECURITY_PATH */
++
+ #ifdef CONFIG_SECURITY_INFINIBAND
+ /**
+  * security_ib_pkey_access() - Check if access to an IB pkey is allowed
+-- 
+2.52.0
+
 
