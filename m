@@ -1,334 +1,376 @@
-Return-Path: <linux-security-module+bounces-14729-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14731-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wL9gEClXlmkzeAIAu9opvQ
-	(envelope-from <linux-security-module+bounces-14729-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Thu, 19 Feb 2026 01:19:53 +0100
+	id +LaPB1TUlml4owIAu9opvQ
+	(envelope-from <linux-security-module+bounces-14731-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Thu, 19 Feb 2026 10:13:56 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBEB915B19A
-	for <lists+linux-security-module@lfdr.de>; Thu, 19 Feb 2026 01:19:52 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73ED515D3AE
+	for <lists+linux-security-module@lfdr.de>; Thu, 19 Feb 2026 10:13:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id E68CC3007B90
-	for <lists+linux-security-module@lfdr.de>; Thu, 19 Feb 2026 00:19:51 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2392C301BC32
+	for <lists+linux-security-module@lfdr.de>; Thu, 19 Feb 2026 09:13:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EE9A1A9F8D;
-	Thu, 19 Feb 2026 00:19:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="WgCFBElN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FDA3199920;
+	Thu, 19 Feb 2026 09:13:53 +0000 (UTC)
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ABDB3EBF3E
-	for <linux-security-module@vger.kernel.org>; Thu, 19 Feb 2026 00:19:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10AE831A56B;
+	Thu, 19 Feb 2026 09:13:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771460390; cv=none; b=Bo1u3wqi3o7wKP9k5bRJkHq8fDSbySKV0Yt/kdpQmpatfgMdEB5UiQYmKkOB2QCA2HD8q8MGTsYkPb7QhbZvxBrgPNDMJfUAebfbUTosTMaBEx3u+MLTy2lfN9YF4PHiXBwTLJR0itAvul+nF8WDD/MkMnXYrLNsDwuv6j7h/Dk=
+	t=1771492433; cv=none; b=kYeCt6yuCl9X3zop1hmCRkQRsPi9e3FMj6/QSKkc+C7XvdlQCetsMYtgsD0DZ3laS4Mcskptls5NCHWVJ0TZUmY0IAULmHPKau3ejBMujyznjCqW7gi2JLOpsueoShldIU6sXcbranGGhDW+IVa2bSUlQt/HcepQX58VWsyxkRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771460390; c=relaxed/simple;
-	bh=IAOX0jWZ82ui0q5Uvj8RK8BgfOdKBVkn8I2EU4xOy1Q=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=nHUNH76ryOqfCkkFycWK2+fYjwMCXoAlODUHt9CWwHAqB5rtvcufx3YSaDlgSMaZnFFGr2N3o2Tsj4uxF/BGc+IcOaMyNT9UPNmNgwfRjf1bCvkYqVwYi3Lqx41oTEZZIetzfi9bEq8zW/yRM0P/gbNYpIqZ11XQM90g3S8612c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=WgCFBElN; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 93BA03F201
-	for <linux-security-module@vger.kernel.org>; Thu, 19 Feb 2026 00:19:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1771460378;
-	bh=fDcnLOj5MRChFFcJ0EDGI1T1wH0m1QXlXfukfSer5dM=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type;
-	b=WgCFBElNOuooXEn9mYXhnwJgeqrGnDxJKWdp6mXT34FCmMSnoFiylpryLKQ0A+Uj4
-	 cX3Gsu4isoZOqAKqxNx2otnhzVoO29K7xles20t4cugtxq3E9u4GuVnwegVabjxDDn
-	 HS8vu3dbdKU25SeSAI2fh+JVUtfZbiR7bS9W+QHxGNldxbQy86EOR7g48+5EvuFv+n
-	 dLZNUs7HG8lR0Jb5Ue8nH4ifMj3FZObNawl1E/IZ5sOriitLNTEt336Q256ayfPcAC
-	 VPLmLSbukwFpUGkrOlZL2sBqAAqD2hUPO1JbgQT0m3IcDHLfe1lajmn+1ZIChdcpTA
-	 Jik/fVhnw0Yvvk6hFFnyMR/mlalVahcVUgTmyQW+ICBJd8uMp68X1SSxgjPxkS0ROR
-	 +OMJ9/naJkVstAZ/o/5JoIN2M0vjQfOAV6gwsTAHvaoBJGxPaeQ9ZF8JZaOTC2NbZb
-	 FGcBcOCW7y5bucD9HWqmYCfwPsiyR0Ob0wAu4xgvj12eUNqyWuBkoIPnHnCxuy1wZL
-	 0zIqMh3obQLViZCs2yjM5f5avbTrjgYPOnOsJF9jUqxMVszRvn5RrGMJvpR1l7YCkW
-	 aSF4hrqTXg5UTsnZ7Q1CWqQknA9KmxJBh2aI5ZKgh0kOP08wZ8WsewVqZfXDH3TZOY
-	 cY8ZjLGiIxOvGzdyacdZO0KQ=
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-3586e7cf42aso1390527a91.0
-        for <linux-security-module@vger.kernel.org>; Wed, 18 Feb 2026 16:19:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771460377; x=1772065177;
-        h=content-transfer-encoding:organization:autocrypt:content-language
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fDcnLOj5MRChFFcJ0EDGI1T1wH0m1QXlXfukfSer5dM=;
-        b=NI3Ap4UqibYJIqgbXuEVDVcsaI9Km65YYNCcOXnrVwf6vkqa4jAVQ3/Awr5zGtfDaz
-         ArCaW0mJj/qq3HOkttIaU/w7Ths0pqrL3mQrwM8+DoSEBMOyXTZ05Kve3bh3pW5OPljB
-         PvZrVS3FTyFgAC2ZtUuCLYErMZ+OxSiPyc+LswJb2U7zzgc4rpuIT0N98hdYSWsBtg2S
-         1Qg/chocbTs6bxitM97pXsLFcNpKYnSmayD/8vHIyUo9MnaqHI7gxCI+84GTAfDxf3IN
-         tAGrymnzaw7pGSqhkE1y0O40IBa0OFNO3UzqbFZXqAS0UTzPrJ++tKiTD3KY4hjHaQIi
-         Xhiw==
-X-Forwarded-Encrypted: i=1; AJvYcCUt2ibnpWMpRQCVjauduSNGfivvcftJMPghF0svgj146QbQ8j6MT9oqQ04l3/Ekj1DVaxf44jmCyeEImblFlwTSrtT91FU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwiFwNj2LqFX4KB+M8H6StOnnIezT1yYpQ4g8y5kmVCP5BZSH4I
-	DdjgnaIpvdZnYY6+WQ8+9qrd4wwzeCQ5QWkfrxqurjJMNw6jcaER5iiX75BBeHsX5N3d6PwwVN3
-	Z7ykrSpBPhsjRfZ9zY1HuhSdeqa/ODyaczr/W8gHrMO/cwVmRZCDmSgCf/LdkEm+HgU53CXP6rR
-	GNKO4v3Q/QENt3Y+4Zww==
-X-Gm-Gg: AZuq6aKfaBs1pW92+NHlINRdRbyDCjA/5Tj9E0ejXcDHcBxpVY77c6QIn9wl4i5Rhri
-	GBkWGrZWFZ6eMg5GWuf3gWMy2HdlRNBzt/21lo629Nl4HBYXA1STJtZFISkn7oZ4r+puHLbZYvc
-	EXrQ/PUnvqeJaUhQkEaTaw7VvjNAUtj4mLz41x+wBgV8Y0U7j8EVENy2h5zdzToVtUlwmLi0ESh
-	tiwwT3lXfEIpFze88+5Tzyc6zH/hUNBpgvt+iYwqV3SZHmvTSqLQfFH2MtjtC0PL04DUmDX/G3a
-	Syg1Axs35niLHI2VrLQSpWaUPwpjGOSQkwtE/sNkHtXK9WIBdpSRSe/SDzJqSb9rJg6wYYJDUCp
-	DREKAa8WiFDR+ibHeuBefGP6bnKwoLCTU+r4q
-X-Received: by 2002:a17:90b:1b41:b0:356:41c2:896f with SMTP id 98e67ed59e1d1-3584481ab30mr14734931a91.7.1771460376799;
-        Wed, 18 Feb 2026 16:19:36 -0800 (PST)
-X-Received: by 2002:a17:90b:1b41:b0:356:41c2:896f with SMTP id 98e67ed59e1d1-3584481ab30mr14734917a91.7.1771460376348;
-        Wed, 18 Feb 2026 16:19:36 -0800 (PST)
-Received: from [192.168.192.85] ([50.47.129.42])
-        by smtp.googlemail.com with ESMTPSA id 98e67ed59e1d1-35896ebfbd4sm137495a91.1.2026.02.18.16.19.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Feb 2026 16:19:34 -0800 (PST)
-Message-ID: <53c39cf4-d9e4-4ccf-ae16-dc5b143c9681@canonical.com>
-Date: Wed, 18 Feb 2026 16:19:34 -0800
+	s=arc-20240116; t=1771492433; c=relaxed/simple;
+	bh=wTm5/8QA6bhHnJcRPcPQGelupcEBfDGoJbBf3GsH+M0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=sxGMhHI1O902FBW/wL2H7JSihhR/SaD9TZWIvOauMEVnla70cBQc1iT2zImknab0I+1msA9yOhN6OQ+tNfHrfLXqIwlsBrYNxtOX3rxxMgoegwYvWMQCTjHXAhUOlhaqDl3MKMJQo+IG696ZjG0TNr2Hqu9op3Zb3mFkZfGN+zc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.224.235])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fGnF62SXHz1HBv9;
+	Thu, 19 Feb 2026 16:52:10 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 044634056E;
+	Thu, 19 Feb 2026 16:55:13 +0800 (CST)
+Received: from [10.204.63.22] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwB3j2rkz5ZpPf4VBA--.50570S2;
+	Thu, 19 Feb 2026 09:55:12 +0100 (CET)
+Message-ID: <89f51356ba5e630a8c305e5f65abd2f3ace37a48.camel@huaweicloud.com>
+Subject: Re: [PATCH v4] ima_fs: Avoid creating measurement lists for
+ unsupported hash algos
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: dima@arista.com, Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
+ <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+ Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>,
+ James Morris <jmorris@namei.org>,  "Serge E. Hallyn" <serge@hallyn.com>,
+ Silvia Sisinni <silvia.sisinni@polito.it>, Enrico Bravi
+ <enrico.bravi@polito.it>
+Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org, Dmitry Safonov
+	 <0x7f454c46@gmail.com>
+Date: Thu, 19 Feb 2026 09:54:57 +0100
+In-Reply-To: <701de3f87f0f6bde97872dd0c5bf150bfc1f2713.camel@huaweicloud.com>
+References: <20260127-ima-oob-v4-1-bf0cd7f9b4d4@arista.com>
+	 <701de3f87f0f6bde97872dd0c5bf150bfc1f2713.camel@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: John Johansen <john.johansen@canonical.com>
-Subject: [GIT PULL] AppArmor updates for 7.0-rc1
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: LKLM <linux-kernel@vger.kernel.org>,
- "open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>
-Content-Language: en-US
-Autocrypt: addr=john.johansen@canonical.com; keydata=
- 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 lT9Q
-Organization: Canonical
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:GxC2BwB3j2rkz5ZpPf4VBA--.50570S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3XFyxWFW7tF45CF4kGF1fCrg_yoWfWw1fpa
+	93WFyfCF4kJFW7trn2k3Zxur4Fv3yFy3WUWrn5Jw18AF1DWr1qkr1kCr1FkrWqgr98AFyI
+	qa1UJrsIyr15taDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
+	v3UUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAJBGmWgZsFPwAAsT
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.04 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[canonical.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[canonical.com:s=20251003];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14729-lists,linux-security-module=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-14731-lists,linux-security-module=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[canonical.com:+];
-	TO_DN_ALL(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	HAS_ORG_HEADER(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	FROM_HAS_DN(0.00)[];
+	DMARC_NA(0.00)[huaweicloud.com];
+	FREEMAIL_TO(0.00)[arista.com,linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,polito.it];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[john.johansen@canonical.com,linux-security-module@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-security-module];
+	FROM_NEQ_ENVFROM(0.00)[roberto.sassu@huaweicloud.com,linux-security-module@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-0.947];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[canonical.com:mid,canonical.com:dkim]
-X-Rspamd-Queue-Id: DBEB915B19A
+	R_DKIM_NA(0.00)[];
+	TAGGED_RCPT(0.00)[linux-security-module];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,arista.com:email,huawei.com:email,polito.it:email,huaweicloud.com:mid]
+X-Rspamd-Queue-Id: 73ED515D3AE
 X-Rspamd-Action: no action
 
-Hi Linus,
+On Tue, 2026-01-27 at 16:20 +0100, Roberto Sassu wrote:
+> On Tue, 2026-01-27 at 15:03 +0000, Dmitry Safonov via B4 Relay wrote:
+> > From: Dmitry Safonov <dima@arista.com>
+> >=20
+> > ima_init_crypto() skips initializing ima_algo_array[i] if the algorithm
+> > from ima_tpm_chip->allocated_banks[i].crypto_id is not supported.
+> > It seems avoid adding the unsupported algorithm to ima_algo_array will
+> > break all the logic that relies on indexing by NR_BANKS(ima_tpm_chip).
+>=20
+> The patch looks good, although I didn't try yet myself.
+>=20
+> I would make the commit message slightly better, with a more fluid
+> explanation.
+>=20
+> ima_tpm_chip->allocated_banks[i].crypto_id is initialized to
+> HASH_ALGO__LAST if the TPM algorithm is not supported. However there
+> are places relying on the algorithm to be valid because it is accessed
+> by hash_algo_name[].
+>=20
+> Thus solve the problem by creating a file name that does not depend on
+> the crypto algorithm to be initialized, ...
+>=20
+> Also print the template entry digest as populated by IMA.
+>=20
+> Something along these lines.
+>=20
+> Also, I have a preference for lower case instead of capital case for
+> the file name, given the other names.
 
-Below is the AppArmor update PR for 7.0
+Hi Dmitry
 
-These patches have all been merge, build, and regression tested
-against your tree as of yesterday. The code has been in linux-next
-and the many of the patches in the Ubuntu kernels for testing.
+do you have time to make these small changes, so that we queue the
+patch for the next kernel?
 
-This PR is mostly comprised of cleanups, and bug fixes, with 3 minor
-features, the first being an improvement to our kunit testing, and
-the other two extending the information available in audit messages.
+Thanks
 
-Because this is coming so late in the window (sorry life happens),
-if you would prefer I have prepared an alternate PR that contains
-the set of bug fixes that apply without the features, or cleanups,
-available via the tag bugfix-2026-02-18, which I can send a PR for
-instead.
+Roberto
 
-
-thanks
-- john
-
-
-The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
-
-   Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/jj/linux-apparmor tags/apparmor-pr-2026-02-18
-
-for you to fetch changes up to 08020dbe3125e936429e7966bf072e08fa964f36:
-
-   apparmor: fix signedness bug in unpack_tags() (2026-02-18 11:50:20 -0800)
-
-----------------------------------------------------------------
-+ Features
-   - add .kunitconfig
-   - audit execpath in userns mediation
-   - add support loading per permission tagging
-
-+ Cleanups
-   - cleanup remove unused percpu critical sections in buffer management
-   - document the buffer hold, add an overflow guard
-   - split xxx_in_ns into its two separate semantic use cases
-   - remove apply_modes_to_perms from label_match
-   - refactor/cleanup cred helper fns.
-   - guard against free attachment/data routines being called with a NULL
-   - drop in_atomic flag in common_mmap, and common_file_perm, and cleanup
-   - make str table more generic and be able to have multiple entries
-   - Replace deprecated strcpy with memcpy in gen_symlink_name
-   - Replace deprecated strcpy in d_namespace_path
-   - Replace sprintf/strcpy with scnprintf/strscpy in aa_policy_init
-   - replace sprintf with snprintf in aa_new_learning_profile
-
-+ Bug Fixes
-   - fix cast in format string DEBUG statement
-   - fix make aa_labelmatch return consistent
-   - fix fmt string type error in process_strs_entry
-   - fix kernel-doc comments for inview
-   - fix invalid deref of rawdata when export_binary is unset
-   - avoid per-cpu hold underflow in aa_get_buffer
-   - fix fast path cache check for unix sockets
-   - fix rlimit for posix cpu timers
-   - fix label and profile debug macros
-   - move check for aa_null file to cover all cases
-   - return -ENOMEM in unpack_perms_table upon alloc failure
-   - fix boolean argument in apparmor_mmap_file
-   - Fix & Optimize table creation from possibly unaligned memory
-   - Allow apparmor to handle unaligned dfa tables
-   - fix NULL deref in aa_sock_file_perm
-   - fix NULL pointer dereference in __unix_needs_revalidation
-   - fix signedness bug in unpack_tags()
-
-----------------------------------------------------------------
-Georgia Garcia (1):
-       apparmor: fix invalid deref of rawdata when export_binary is unset
-
-Helge Deller (2):
-       AppArmor: Allow apparmor to handle unaligned dfa tables
-       apparmor: Fix & Optimize table creation from possibly unaligned memory
-
-John Johansen (19):
-       apparmor: fix NULL sock in aa_sock_file_perm
-       apparmor: make str table more generic and be able to have multiple entries
-       apparmor: add support loading per permission tagging
-       apparmor: drop in_atomic flag in common_mmap, and common_file_perm
-       apparmor: guard against free routines being called with a NULL
-       apparmor: move check for aa_null file to cover all cases
-       apparmor: fix label and profile debug macros
-       apparmor: refactor/cleanup cred helper fns.
-       apparmor: fix rlimit for posix cpu timers
-       apparmor: fix fast path cache check for unix sockets
-       apparmor: remove apply_modes_to_perms from label_match
-       apparmor: make label_match return a consistent value
-       apparmor: split xxx_in_ns into its two separate semantic use cases
-       apparmor: document the buffer hold, add an overflow guard
-       apparmor: cleanup remove unused percpu critical sections in buffer management
-       apparmor: fix kernel-doc comments for inview
-       apparmor: fix fmt string type error in process_strs_entry
-       apparmor: fix aa_label to return state from compount and component match
-       apparmor: fix cast in format string DEBUG statement
-
-Massimiliano Pellizzer (1):
-       apparmor: fix signedness bug in unpack_tags()
-
-Maxime Bélair (1):
-       apparmor: userns: Add support for execpath in userns
-
-Ryan Lee (3):
-       apparmor: fix boolean argument in apparmor_mmap_file
-       apparmor: account for in_atomic removal in common_file_perm
-       apparmor: return -ENOMEM in unpack_perms_table upon alloc failure
-
-Ryota Sakamoto (1):
-       apparmor: add .kunitconfig
-
-System Administrator (1):
-       apparmor: fix NULL pointer dereference in __unix_needs_revalidation
-
-Thorsten Blum (4):
-       apparmor: replace sprintf with snprintf in aa_new_learning_profile
-       apparmor: Replace sprintf/strcpy with scnprintf/strscpy in aa_policy_init
-       apparmor: Replace deprecated strcpy in d_namespace_path
-       apparmor: Replace deprecated strcpy with memcpy in gen_symlink_name
-
-Zhengmian Hu (1):
-       apparmor: avoid per-cpu hold underflow in aa_get_buffer
-
-  security/apparmor/.kunitconfig     |   5 +
-  security/apparmor/af_unix.c        |   2 +-
-  security/apparmor/apparmorfs.c     |  23 ++-
-  security/apparmor/domain.c         |  60 +++----
-  security/apparmor/file.c           |  49 ++++--
-  security/apparmor/include/audit.h  |   2 +
-  security/apparmor/include/cred.h   | 100 +++++++----
-  security/apparmor/include/lib.h    |  37 +++-
-  security/apparmor/include/match.h  |  12 +-
-  security/apparmor/include/policy.h |  32 +++-
-  security/apparmor/label.c          |  55 +++---
-  security/apparmor/lib.c            |  29 ++--
-  security/apparmor/lsm.c            |  66 +++++---
-  security/apparmor/match.c          |  22 +--
-  security/apparmor/net.c            |   6 +-
-  security/apparmor/path.c           |  13 +-
-  security/apparmor/policy.c         |  31 +++-
-  security/apparmor/policy_compat.c  |  10 +-
-  security/apparmor/policy_unpack.c  | 336 ++++++++++++++++++++++++++++++++-----
-  security/apparmor/resource.c       |   5 +
-  security/apparmor/task.c           |  32 ++++
-  21 files changed, 687 insertions(+), 240 deletions(-)
-  create mode 100644 security/apparmor/.kunitconfig
+> Could you also avoid the >, otherwise the mailer thinks it is a reply?
+>=20
+> Thanks
+>=20
+> Roberto
+>=20
+> > On 6.12.40 I observe the following read out-of-bounds in hash_algo_name=
+:
+> >=20
+> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > BUG: KASAN: global-out-of-bounds in create_securityfs_measurement_lis=
+ts+0x396/0x440
+> > > Read of size 8 at addr ffffffff83e18138 by task swapper/0/1
+> > >=20
+> > > CPU: 4 UID: 0 PID: 1 Comm: swapper/0 Not tainted 6.12.40 #3
+> > > Call Trace:
+> > >  <TASK>
+> > >  dump_stack_lvl+0x61/0x90
+> > >  print_report+0xc4/0x580
+> > >  ? kasan_addr_to_slab+0x26/0x80
+> > >  ? create_securityfs_measurement_lists+0x396/0x440
+> > >  kasan_report+0xc2/0x100
+> > >  ? create_securityfs_measurement_lists+0x396/0x440
+> > >  create_securityfs_measurement_lists+0x396/0x440
+> > >  ima_fs_init+0xa3/0x300
+> > >  ima_init+0x7d/0xd0
+> > >  init_ima+0x28/0x100
+> > >  do_one_initcall+0xa6/0x3e0
+> > >  kernel_init_freeable+0x455/0x740
+> > >  kernel_init+0x24/0x1d0
+> > >  ret_from_fork+0x38/0x80
+> > >  ret_from_fork_asm+0x11/0x20
+> > >  </TASK>
+> > >=20
+> > > The buggy address belongs to the variable:
+> > >  hash_algo_name+0xb8/0x420
+> > >=20
+> > > The buggy address belongs to the physical page:
+> > > page: refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x=
+107ce18
+> > > flags: 0x8000000000002000(reserved|zone=3D2)
+> > > raw: 8000000000002000 ffffea0041f38608 ffffea0041f38608 0000000000000=
+000
+> > > raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000=
+000
+> > > page dumped because: kasan: bad access detected
+> > >=20
+> > > Memory state around the buggy address:
+> > >  ffffffff83e18000: 00 01 f9 f9 f9 f9 f9 f9 00 01 f9 f9 f9 f9 f9 f9
+> > >  ffffffff83e18080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> > > > ffffffff83e18100: 00 00 00 00 00 00 00 f9 f9 f9 f9 f9 00 05 f9 f9
+> > >                                         ^
+> > >  ffffffff83e18180: f9 f9 f9 f9 00 00 00 00 00 00 00 04 f9 f9 f9 f9
+> > >  ffffffff83e18200: 00 00 00 00 00 00 00 00 04 f9 f9 f9 f9 f9 f9 f9
+> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >=20
+> > Seems like the TPM chip supports sha3_256, which isn't yet in
+> > tpm_algorithms:
+> > > tpm tpm0: TPM with unsupported bank algorithm 0x0027
+> >=20
+> > Use TPM_ALG_<ID> as a postfix for file names for unsupported hashing al=
+gorithms.
+> >=20
+> > This is how it looks on the test machine I have:
+> > > # ls -1 /sys/kernel/security/ima/
+> > > ascii_runtime_measurements
+> > > ascii_runtime_measurements_TPM_ALG_27
+> > > ascii_runtime_measurements_sha1
+> > > ascii_runtime_measurements_sha256
+> > > binary_runtime_measurements
+> > > binary_runtime_measurements_TPM_ALG_27
+> > > binary_runtime_measurements_sha1
+> > > binary_runtime_measurements_sha256
+> > > policy
+> > > runtime_measurements_count
+> > > violations
+> >=20
+> > Fixes: 9fa8e7625008 ("ima: add crypto agility support for template-hash=
+ algorithm")
+> > Signed-off-by: Dmitry Safonov <dima@arista.com>
+> > Cc: Enrico Bravi <enrico.bravi@polito.it>
+> > Cc: Silvia Sisinni <silvia.sisinni@polito.it>
+> > Cc: Roberto Sassu <roberto.sassu@huawei.com>
+> > Cc: Mimi Zohar <zohar@linux.ibm.com>
+> > ---
+> > Changes in v4:
+> > - Use ima_tpm_chip->allocated_banks[algo_idx].digest_size instead of ha=
+sh_digest_size[algo]
+> >   (Roberto Sassu)
+> > - Link to v3: https://lore.kernel.org/r/20260127-ima-oob-v3-1-1dd09f4c2=
+a6a@arista.com
+> > Testing note: I test it on v6.12.40 kernel backport, which slightly dif=
+fers as
+> > lookup_template_data_hash_algo() was yet present.
+> >=20
+> > Changes in v3:
+> > - Now fix the spelling *for real* (sorry, messed it up in v2)
+> > - Link to v2: https://lore.kernel.org/r/20260127-ima-oob-v2-1-f38a18c85=
+0cf@arista.com
+> >=20
+> > Changes in v2:
+> > - Instead of skipping unknown algorithms, add files under their TPM_ALG=
+_ID (Roberto Sassu)
+> > - Fix spelling (Roberto Sassu)
+> > - Copy @stable on the fix
+> > - Link to v1: https://lore.kernel.org/r/20260127-ima-oob-v1-1-2d42f3418=
+e57@arista.com
+> > ---
+> >  security/integrity/ima/ima_fs.c | 34 ++++++++++++++++++---------------=
+-
+> >  1 file changed, 18 insertions(+), 16 deletions(-)
+> >=20
+> > diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/i=
+ma_fs.c
+> > index 012a58959ff0..9a00a0547619 100644
+> > --- a/security/integrity/ima/ima_fs.c
+> > +++ b/security/integrity/ima/ima_fs.c
+> > @@ -132,16 +132,12 @@ int ima_measurements_show(struct seq_file *m, voi=
+d *v)
+> >  	char *template_name;
+> >  	u32 pcr, namelen, template_data_len; /* temporary fields */
+> >  	bool is_ima_template =3D false;
+> > -	enum hash_algo algo;
+> >  	int i, algo_idx;
+> > =20
+> >  	algo_idx =3D ima_sha1_idx;
+> > -	algo =3D HASH_ALGO_SHA1;
+> > =20
+> > -	if (m->file !=3D NULL) {
+> > +	if (m->file !=3D NULL)
+> >  		algo_idx =3D (unsigned long)file_inode(m->file)->i_private;
+> > -		algo =3D ima_algo_array[algo_idx].algo;
+> > -	}
+> > =20
+> >  	/* get entry */
+> >  	e =3D qe->entry;
+> > @@ -160,7 +156,8 @@ int ima_measurements_show(struct seq_file *m, void =
+*v)
+> >  	ima_putc(m, &pcr, sizeof(e->pcr));
+> > =20
+> >  	/* 2nd: template digest */
+> > -	ima_putc(m, e->digests[algo_idx].digest, hash_digest_size[algo]);
+> > +	ima_putc(m, e->digests[algo_idx].digest,
+> > +		 ima_tpm_chip->allocated_banks[algo_idx].digest_size);
+> > =20
+> >  	/* 3rd: template name size */
+> >  	namelen =3D !ima_canonical_fmt ? strlen(template_name) :
+> > @@ -229,16 +226,12 @@ static int ima_ascii_measurements_show(struct seq=
+_file *m, void *v)
+> >  	struct ima_queue_entry *qe =3D v;
+> >  	struct ima_template_entry *e;
+> >  	char *template_name;
+> > -	enum hash_algo algo;
+> >  	int i, algo_idx;
+> > =20
+> >  	algo_idx =3D ima_sha1_idx;
+> > -	algo =3D HASH_ALGO_SHA1;
+> > =20
+> > -	if (m->file !=3D NULL) {
+> > +	if (m->file !=3D NULL)
+> >  		algo_idx =3D (unsigned long)file_inode(m->file)->i_private;
+> > -		algo =3D ima_algo_array[algo_idx].algo;
+> > -	}
+> > =20
+> >  	/* get entry */
+> >  	e =3D qe->entry;
+> > @@ -252,7 +245,8 @@ static int ima_ascii_measurements_show(struct seq_f=
+ile *m, void *v)
+> >  	seq_printf(m, "%2d ", e->pcr);
+> > =20
+> >  	/* 2nd: template hash */
+> > -	ima_print_digest(m, e->digests[algo_idx].digest, hash_digest_size[alg=
+o]);
+> > +	ima_print_digest(m, e->digests[algo_idx].digest,
+> > +			 ima_tpm_chip->allocated_banks[algo_idx].digest_size);
+> > =20
+> >  	/* 3th:  template name */
+> >  	seq_printf(m, " %s", template_name);
+> > @@ -404,16 +398,24 @@ static int __init create_securityfs_measurement_l=
+ists(void)
+> >  		char file_name[NAME_MAX + 1];
+> >  		struct dentry *dentry;
+> > =20
+> > -		sprintf(file_name, "ascii_runtime_measurements_%s",
+> > -			hash_algo_name[algo]);
+> > +		if (algo =3D=3D HASH_ALGO__LAST)
+> > +			sprintf(file_name, "ascii_runtime_measurements_TPM_ALG_%x",
+> > +				ima_tpm_chip->allocated_banks[i].alg_id);
+> > +		else
+> > +			sprintf(file_name, "ascii_runtime_measurements_%s",
+> > +				hash_algo_name[algo]);
+> >  		dentry =3D securityfs_create_file(file_name, S_IRUSR | S_IRGRP,
+> >  						ima_dir, (void *)(uintptr_t)i,
+> >  						&ima_ascii_measurements_ops);
+> >  		if (IS_ERR(dentry))
+> >  			return PTR_ERR(dentry);
+> > =20
+> > -		sprintf(file_name, "binary_runtime_measurements_%s",
+> > -			hash_algo_name[algo]);
+> > +		if (algo =3D=3D HASH_ALGO__LAST)
+> > +			sprintf(file_name, "binary_runtime_measurements_TPM_ALG_%x",
+> > +				ima_tpm_chip->allocated_banks[i].alg_id);
+> > +		else
+> > +			sprintf(file_name, "binary_runtime_measurements_%s",
+> > +				hash_algo_name[algo]);
+> >  		dentry =3D securityfs_create_file(file_name, S_IRUSR | S_IRGRP,
+> >  						ima_dir, (void *)(uintptr_t)i,
+> >  						&ima_measurements_ops);
+> >=20
+> > ---
+> > base-commit: 63804fed149a6750ffd28610c5c1c98cce6bd377
+> > change-id: 20260127-ima-oob-9fa83a634d7b
+> >=20
+> > Best regards,
 
 
