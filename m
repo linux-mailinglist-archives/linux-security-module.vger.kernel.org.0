@@ -1,304 +1,289 @@
-Return-Path: <linux-security-module+bounces-14845-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14847-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wLTDJl/VnGkJLAQAu9opvQ
-	(envelope-from <linux-security-module+bounces-14845-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Mon, 23 Feb 2026 23:31:59 +0100
+	id oLYEEycVnWkGMwQAu9opvQ
+	(envelope-from <linux-security-module+bounces-14847-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 04:04:07 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B04417E624
-	for <lists+linux-security-module@lfdr.de>; Mon, 23 Feb 2026 23:31:59 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58A4B181404
+	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 04:04:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 536613113431
-	for <lists+linux-security-module@lfdr.de>; Mon, 23 Feb 2026 22:30:26 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id EEAED301E739
+	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 03:04:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18A7537B3EC;
-	Mon, 23 Feb 2026 22:30:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ACF527BF79;
+	Tue, 24 Feb 2026 03:04:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ownmail.net header.i=@ownmail.net header.b="djhRLti+";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kVmRdWfn"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="Eu1qAumU"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from flow-a3-smtp.messagingengine.com (flow-a3-smtp.messagingengine.com [103.168.172.138])
+Received: from bg5.exmail.qq.com (bg5.exmail.qq.com [43.154.197.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA66D334C35;
-	Mon, 23 Feb 2026 22:30:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62B4F1CBEB9
+	for <linux-security-module@vger.kernel.org>; Tue, 24 Feb 2026 03:03:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.154.197.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771885825; cv=none; b=ok1rklj0xKwZUP+/X4N1k+bPj1RbacGiPftlLdnRe9UkViiHvrtF+ZNPzqIyFveqi5VAfCYtJ3pISB7CMzHVfMRVY3gJruqYmu0C01E5qyIBPfFJIEbUEtmvtynKVGnhLCMFcGdoJX7HgPxHQwm1TOr8SVI9WkzRcC0cvXMnx2I=
+	t=1771902240; cv=none; b=tijRCfQvfRPp94UMd9T0uQsYnux2TFK288m/+qZ9PY9Dns0+t0zhlndTL+pU8SU6rVp+wtfWKf1Bx78/YsXxHtnVTS+guKwzRmMYhuhgl5kUamZ74oi9jB4qzbnOn5mgPAT1Ccg5b1DDu0WuaWzbCnf1vwEl+8xYBZsjntlsoow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771885825; c=relaxed/simple;
-	bh=/5WFghxPGeFYVrk72aGIi9ZnNXwEdI2MoZ8rzkMC3Kk=;
-	h=Content-Type:MIME-Version:From:To:Cc:Subject:In-reply-to:
-	 References:Date:Message-id; b=LHex+miy5xXaIerO+TZMxsxqBDQ1TJ0/h7VTAVhJB+dvVkg+Np9LfKtpmmPobW8l0FdlQtyyf86n4G63xODdtz+fFXp0QMtQH964RF31mgMRlEDu4XgAwQail8uVptTqEnJRhbl0oXqtr96DPgYalxDjNvt7ToeOMSbIrvdtJS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ownmail.net; spf=pass smtp.mailfrom=ownmail.net; dkim=pass (2048-bit key) header.d=ownmail.net header.i=@ownmail.net header.b=djhRLti+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kVmRdWfn; arc=none smtp.client-ip=103.168.172.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ownmail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ownmail.net
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailflow.phl.internal (Postfix) with ESMTP id F1CAA1380AB6;
-	Mon, 23 Feb 2026 17:30:22 -0500 (EST)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Mon, 23 Feb 2026 17:30:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ownmail.net; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:reply-to:subject:subject:to:to; s=fm3; t=
-	1771885822; x=1771893022; bh=QzPV/qCsvxJY4RwTgulk7KEWJKUjbc4FEPm
-	hIim+IiA=; b=djhRLti+RvB4XemjfWD0EGKH+SyajCh3gm9zwfTCWq4STAmXhK6
-	u2+/KfXPPOvJdAeU54mCxbV71Pi1BCNPB17vZnN2110NQSzU4FGeZkXDaDS2AF7b
-	G/ezW2vhfH0RO5zFxgazqijD1F+SMVKZSUeUVdAE7VhDjDMs2oY3wSlkFuTOWJIm
-	GqdKEmRTD3DHvuon+RnZ0A6a4NRyTeTkgqOuVg7zFtCltMu40B6gWucVLaWrHoqB
-	TYnsKZ4h6jgbYKkYuHY9vzfknKqMf4mud88OA8e6yJFrx19KO3aVO7y60QWiwnkj
-	KDk/ISG745cbpvclm1EQjUSQRC2prpvPpiQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1771885822; x=
-	1771893022; bh=QzPV/qCsvxJY4RwTgulk7KEWJKUjbc4FEPmhIim+IiA=; b=k
-	VmRdWfnIrkeJyEoqdscTtwVT706JFZqlgJWfXPtESrxAPRmLPhIxguvo3m9eCjv6
-	EPTSmJcXbrVXTs5wxxQMu6ZmrMxaXNlhXH7dMdg/HUQh8AnTHsQxs766764EN1K9
-	Pl1GUL3dFynomKEenFL8gRr/iWKUGU5xF9kdwsPUvtfjCTsias/z4Ora+NhB+HvA
-	/ONGi/I1SHx3V3FGSnEeiI/Mx0KOwlK6pqAhyw3udewuNZ+FQAVgUtLvg9jPIMof
-	K2/CDV2eimzzbpRZlM3ycw1rJJRGy8q7cNpOAt7S4CmaHcKQBeHi2YARveRlxsR/
-	Lt6IeYvaPpPsa8OcYhhPQ==
-X-ME-Sender: <xms:_tScaYCVOuOT5HF7SS7Ns-60gnJ9sHBVIc4G4rgk7eCI06DME4NG4g>
-    <xme:_tScaWrW5IwCYdtB8R1FACRpoo7NbI-dLI5fXlDaub2sLit8cTFp4OtrASLfWECHR
-    B0YKnggJSYi2Vo4mvXKq_CdfDjTDbbna361hTsCMUUZaCVRpg>
-X-ME-Received: <xmr:_tScaXbTFFTa5dkWNYh-O-hx7ORzbjajQ29KCg8vwjcV07r-8ojO9nWqJ9z0rLYt3WzMeuPRRRN1lRfkPawTdkgjLU-ER6jIBfbmMILB3mlk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvfeekgeegucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurheptgfgggfhvfevufgjfhffkfhrsehtqhertddttdejnecuhfhrohhmpefpvghilheu
-    rhhofihnuceonhgvihhlsgesohifnhhmrghilhdrnhgvtheqnecuggftrfgrthhtvghrnh
-    epleejtdefgeeukeeiteduveehudevfeffvedutefgteduhfegvdfgtdeigeeuudejnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepnhgvihhlsg
-    esohifnhhmrghilhdrnhgvthdpnhgspghrtghpthhtohepvdefpdhmohguvgepshhmthhp
-    ohhuthdprhgtphhtthhopehvihhrohesiigvnhhivhdrlhhinhhugidrohhrghdruhhkpd
-    hrtghpthhtohepshgvlhhinhhugiesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphht
-    thhopehlihhnuhigqdhunhhiohhnfhhssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtoheplhhinhhugidqshgvtghurhhithihqdhmohguuhhlvgesvhhgvghrrdhkvghr
-    nhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhnfhhssehvghgvrhdrkhgvrhhnvg
-    hlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhn
-    vghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqfhhsuggvvhgvlhesvhhgvghrrdhkvg
-    hrnhgvlhdrohhrghdprhgtphhtthhopehmihhklhhoshesshiivghrvgguihdrhhhupdhr
-    tghpthhtohepjhgrtghksehsuhhsvgdrtgii
-X-ME-Proxy: <xmx:_tScaYGo_lqp-egiVcRdWUjPAhdxRr-P0HT0Gek5_qsPVsGfDLpXkA>
-    <xmx:_tScadZVvLvB_E-eV5b_oH55r9FAloGTyz4tjDrjkZiagukPs_ZL1A>
-    <xmx:_tScadfFBTM_fc4MAdPMac2eX6IsH3FJBHJWmkD9DMvxzQW5YAwsDQ>
-    <xmx:_tScaZDD1MGGGm2IS_KjTsY4Jp5l0Plp2q95xNlGhLq3BdTcMO1phA>
-    <xmx:_tScae7MQvlqGATc6P23ySuIK9WPMcHeQyrDKLc_2QLOT0hbBUadUWqj>
-Feedback-ID: i9d664b8f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 23 Feb 2026 17:30:16 -0500 (EST)
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1771902240; c=relaxed/simple;
+	bh=UnMnE4AvOgoDaUKHQu4BcSAPw0V33aqjiXmilLNGAEg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fNU09XBe7kwCnhTsYNozf1Lr1e34uVWmpXK+k6JTy4lzoH1MoiR0L1A+mJ62md/Bbf1EzlRHEf3JrAJFcyC6QCo5XHpzWJsDTQ19SdNWkIPb9aVYWN3ORt9extGvpC7Hk+ZNd+mt94cihUvwq2i8oREaPJ/77kJYY8tPktBqNc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=Eu1qAumU; arc=none smtp.client-ip=43.154.197.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1771902170;
+	bh=z1N0LEged4wL71tJBsKAdaCRqLDVKlZWiBUjoaRGemQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=Eu1qAumUY8tikZfcjtznaN74o/ZLkETtB2T/nq5dTfUS31UXHI5eepHl0q76eQx1P
+	 FwqaZOoUrlKAoK1A2Db9thEfCDlY7uJlBObPw7KGhUBMDnj2JeGJhZwRPCw6byv3ef
+	 GfbngeaElKjE9/QHi4t7bGqUSyUUf3ZCgvoyxcCE=
+X-QQ-mid: esmtpsz17t1771902167tded7203f
+X-QQ-Originating-IP: wyBaZQ66MIhq9o4z2CIlULeYrkn9Ii6Fkwa5WBELUjg=
+Received: from [10.10.74.107] ( [123.114.60.34])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 24 Feb 2026 11:02:44 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 327181849731919882
+Message-ID: <D0013EA515055145+3e08a07b-e384-4c08-ab17-f558f0130d30@uniontech.com>
+Date: Tue, 24 Feb 2026 11:02:44 +0800
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: NeilBrown <neilb@ownmail.net>
-To: "Chris Mason" <clm@meta.com>
-Cc: "Christian Brauner" <brauner@kernel.org>,
- "Alexander Viro" <viro@zeniv.linux.org.uk>,
- "David Howells" <dhowells@redhat.com>, "Jan Kara" <jack@suse.cz>,
- "Chuck Lever" <chuck.lever@oracle.com>, "Jeff Layton" <jlayton@kernel.org>,
- "Miklos Szeredi" <miklos@szeredi.hu>, "Amir Goldstein" <amir73il@gmail.com>,
- "John Johansen" <john.johansen@canonical.com>,
- "Paul Moore" <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>,
- "Serge E. Hallyn" <serge@hallyn.com>,
- "Stephen Smalley" <stephen.smalley.work@gmail.com>,
- "Darrick J. Wong" <djwong@kernel.org>, linux-kernel@vger.kernel.org,
- netfs@lists.linux.dev, linux-fsdevel@vger.kernel.org,
- linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org,
- apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
- selinux@vger.kernel.org
-Subject: Re: [PATCH v2 12/15] ovl: change ovl_create_real() to get a new lock
- when re-opening created file.
-In-reply-to: <20260223132424.105125-1-clm@meta.com>
-References: <20260223011210.3853517-1-neilb@ownmail.net>,
- <20260223011210.3853517-13-neilb@ownmail.net>,
- <20260223132424.105125-1-clm@meta.com>
-Date: Tue, 24 Feb 2026 09:30:14 +1100
-Message-id: <177188581436.8396.15474182964858193799@noble.neil.brown.name>
-Reply-To: NeilBrown <neil@brown.name>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [syzbot] [kernel?] INFO: task hung in
+ restrict_one_thread_callback
+To: =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>
+Cc: =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack3000@gmail.com>,
+ syzbot <syzbot+7ea2f5e9dfd468201817@syzkaller.appspotmail.com>,
+ =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+ linux-security-module@vger.kernel.org, Jann Horn <jannh@google.com>,
+ Paul Moore <paul@paul-moore.com>
+References: <69995a88.050a0220.340abe.0d25.GAE@google.com>
+ <00A9E53EDC82309F+7b1dfc69-95f8-4ffc-a67c-967de0e2dfee@uniontech.com>
+ <20260221.5d8a306bcaf1@gnoack.org> <20260221.3ff0e30e4010@gnoack.org>
+ <20260223.52c45aed20f8@gnoack.org>
+ <32095877A7CB47CB+bb9e1be8-59c2-46d9-b1ef-f22d2d8c386e@uniontech.com>
+ <aZxvXARvYf6aQBUv@google.com>
+From: Ding Yihan <dingyihan@uniontech.com>
+In-Reply-To: <aZxvXARvYf6aQBUv@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpsz:uniontech.com:qybglogicsvrsz:qybglogicsvrsz4b-0
+X-QQ-XMAILINFO: MMgPz8MirN77H54mtFG/ehL6q2az4y039GcpTksbRWlClofnXiaIZS3c
+	btkpZWmTZI7wm/Vra2sRdT4QlpSVXKRpFj3mAKsq6xikFg1o/bee4fz8s1/hRqBJfxlptTc
+	V2dkB2H7Bu9YlvW5KWPb4dlXURdNxAqIbkKgEPL8jmupVT5p+tLnBDN1H9r8h5Xqxvelru2
+	QnWCyFfnds9zRwl7Zd7ZQcnbJPvoL3CIl47OsYDVAv/dSwybnWemWvF5HpR3XEHQQDoDjSW
+	gefA2ar/f/ivtZ/nuXPvjz3QggQTpiCVD31NBUGA4Uqf4gUuzgIeVUhJtgzdWpgTNEiwD8v
+	gbHwnqF3tzzmB5yIAgUAggLRClmA3xxgetnr9f0rUBqMwkRlMOX2SzQON9tFhdnGlBZdjSZ
+	JCBlA7i0yV3OcsKfdLtGXl53+e4ennU+odYoUrj7uribx9Hx7tcmQNZBVRWrNnaoHMQbV1n
+	mpzOY18f0q/yS0UnmNWVZlYgw8Lhse4aGe+Z2uyRDC1kDrwAJWluewhhY1sRj9m2vJfsep3
+	LXyBUQPcoprZovFLCXOkOtreFSBmtwnBh5nFH2678zeYSo/1Eaw1J96xfb35pSLrvyz0rhf
+	2Xik8/wHwxEBo10Uj9YdeP8TLbeQq+5zbckna9A9FjR6EBSR5WMVZBOxgwhCZZ0jaaUJbiA
+	x/ci1Ee/srJfL1Bk7bkg98+/lc6+ZN1Knrql24rAwQ6JMcyJ8Un2/a/NeufcacwwH0dQZR/
+	tqPIQTLGOHJ6mwyHgc9HRVP//IWbot7mB2ExOcxsb1oZPWzC8J3OhXyqdf3KgOuiQeT3A24
+	YQ1rje61AH8xUO5ZjH0FDYKq2PmA/a+9pK1DC9x39EWU4WVn4S4dllR5udm9LQfRiGZU6G4
+	mOpc4aWdDVbw7du1apISsDicx2lHpVDdn9WsM98ck7dzFvsMdNmO/Ys0DJXmybyTizO2+H5
+	D9lCv699L9z36UioRK/LEFQTgLO7CPMpd7uP+9ok1M4Bbhsp/P5btz53D01V/AxsDfbjyT7
+	BQxvqs/yHTaFulz3D2
+X-QQ-XMRINFO: OD9hHCdaPRBwLDy8cgx64ga/W8i2gvq5OA==
+X-QQ-RECHKSPAM: 0
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ownmail.net,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[ownmail.net:s=fm3,messagingengine.com:s=fm3];
+	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14845-lists,linux-security-module=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[23];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_FROM(0.00)[ownmail.net];
-	FREEMAIL_CC(0.00)[kernel.org,zeniv.linux.org.uk,redhat.com,suse.cz,oracle.com,szeredi.hu,gmail.com,canonical.com,paul-moore.com,namei.org,hallyn.com,vger.kernel.org,lists.linux.dev,lists.ubuntu.com];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	DKIM_TRACE(0.00)[ownmail.net:+,messagingengine.com:+];
-	RCVD_COUNT_FIVE(0.00)[6];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[neilb@ownmail.net,linux-security-module@vger.kernel.org];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-security-module];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	HAS_REPLYTO(0.00)[neil@brown.name];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,uniontech.com:mid,uniontech.com:dkim];
+	FORGED_MUA_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14847-lists,linux-security-module=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[brown.name:replyto,brown.name:email,messagingengine.com:dkim,noble.neil.brown.name:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,ownmail.net:email,ownmail.net:dkim]
-X-Rspamd-Queue-Id: 3B04417E624
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[gmail.com,syzkaller.appspotmail.com,digikod.net,vger.kernel.org,google.com,paul-moore.com];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dingyihan@uniontech.com,linux-security-module@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[uniontech.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-security-module,7ea2f5e9dfd468201817];
+	SUBJECT_HAS_QUESTION(0.00)[]
+X-Rspamd-Queue-Id: 58A4B181404
 X-Rspamd-Action: no action
 
-On Tue, 24 Feb 2026, Chris Mason wrote:
-> NeilBrown <neilb@ownmail.net> wrote:
-> > From: NeilBrown <neil@brown.name>
-> >=20
-> > When ovl_create_real() is used to create a file on the upper filesystem
-> > it needs to return the resulting dentry - positive and hashed.
-> > It is usually the case the that dentry passed to the create function
-> > (e.g.  vfs_create()) will be suitable but this is not guaranteed.  The
-> > filesystem may unhash that dentry forcing a repeat lookup next time the
-> > name is wanted.
-> >=20
->=20
-> Hi everyone,
->=20
-> Amir suggested I run these through, and this commit was flagged:
->=20
-> commit 62d49d1e44667e4f93bec415faabec5526992ac0
-> Author: NeilBrown <neil@brown.name>
->=20
-> ovl: change ovl_create_real() to get a new lock when re-opening created fil=
-e.
->=20
-> This commit changes ovl_create_real() to drop the directory lock and
-> reacquire a new lock for lookup when the created dentry is unhashed. It
-> also removes ovl_lookup_upper() which is no longer used.
->=20
-> Signed-off-by: NeilBrown <neil@brown.name>
->=20
-> > diff --git a/fs/overlayfs/dir.c b/fs/overlayfs/dir.c
-> > index c4feb89ad1e39..6285069ccc590 100644
-> > --- a/fs/overlayfs/dir.c
-> > +++ b/fs/overlayfs/dir.c
-> > @@ -159,7 +159,8 @@ int ovl_cleanup_and_whiteout(struct ovl_fs *ofs, stru=
-ct dentry *dir,
-> >  }
-> >
-> >  struct dentry *ovl_create_real(struct ovl_fs *ofs, struct dentry *parent,
-> > -			       struct dentry *newdentry, struct ovl_cattr *attr)
-> > +			       struct dentry *newdentry, struct qstr *qname,
-> > +			       struct ovl_cattr *attr)
-> >  {
-> >  	struct inode *dir =3D parent->d_inode;
-> >  	int err;
-> > @@ -221,19 +222,29 @@ struct dentry *ovl_create_real(struct ovl_fs *ofs, =
-struct dentry *parent,
-> >  		struct dentry *d;
-> >  		/*
-> >  		 * Some filesystems (i.e. casefolded) may return an unhashed
-> > -		 * negative dentry from the ovl_lookup_upper() call before
-> > +		 * negative dentry from the ovl_start_creating_upper() call before
-> >  		 * ovl_create_real().
-> >  		 * In that case, lookup again after making the newdentry
-> >  		 * positive, so ovl_create_upper() always returns a hashed
-> > -		 * positive dentry.
-> > +		 * positive dentry.  We lookup using qname which should be
-> > +		 * the same name as newentry, but is certain not to change.
-> > +		 * As we have to drop the lock before the lookup a race
-> > +		 * could result in a lookup failure.  In that case we return
-> > +		 * an error.
-> >  		 */
-> > -		d =3D ovl_lookup_upper(ofs, newdentry->d_name.name, parent,
-> > -				     newdentry->d_name.len);
-> > -		dput(newdentry);
-> > -		if (IS_ERR_OR_NULL(d))
-> > +		end_creating_keep(newdentry);
-> > +		d =3D ovl_start_creating_upper(ofs, parent, qname);
-> > +
-> > +		if (IS_ERR_OR_NULL(d)) {
-> >  			err =3D d ? PTR_ERR(d) : -ENOENT;
-> > +		} else if (d->d_inode !=3D newdentry->d_inode) {
-> > +			err =3D -EIO;
-> > +			dput(newdentry);
-> > +		} else {
-> > +			dput(newdentry);
-> >  			return d;
-> > +		}
-> > +		return ERR_PTR(err);
-> >  	}
->=20
-> Does this leak the newdentry reference when IS_ERR_OR_NULL(d) is true?
->=20
-> The code now calls end_creating_keep(newdentry) which keeps the reference,
-> then calls ovl_start_creating_upper(). If that returns an error or NULL,
-> the function returns ERR_PTR(err) without cleaning up newdentry:
->=20
-> 	end_creating_keep(newdentry);
-> 	d =3D ovl_start_creating_upper(ofs, parent, qname);
->=20
-> 	if (IS_ERR_OR_NULL(d)) {
-> 		err =3D d ? PTR_ERR(d) : -ENOENT;
-> 	} ...
-> 	return ERR_PTR(err);
->=20
-> The old code always went through the 'out:' label which called
-> end_creating(newdentry) on error. The new code bypasses that cleanup.
->=20
->=20
-> Does this leak both the parent lock and the dentry 'd' when the lookup
-> returns a different inode?
->=20
-> When d->d_inode !=3D newdentry->d_inode, the code sets err =3D -EIO and cal=
-ls
-> dput(newdentry), but doesn't clean up 'd':
->=20
-> 	} else if (d->d_inode !=3D newdentry->d_inode) {
-> 		err =3D -EIO;
-> 		dput(newdentry);
-> 	} ...
-> 	return ERR_PTR(err);
->=20
-> The dentry 'd' was returned by ovl_start_creating_upper() with the parent
-> directory lock held. The code needs to call end_creating(d) to release the
-> lock via end_dirop()->inode_unlock() and release the dentry reference via
-> end_dirop()->dput().
->=20
->=20
+Hi Günther,
 
-Yes, that code is rather messed up - thanks.
+Thank you for the detailed analysis! I completely agree that serializing the TSYNC 
+operations is the right way to prevent this deadlock. I have drafted a patch using 
+`exec_update_lock` (similar to how seccomp uses `cred_guard_mutex`).
 
-I've made it:
+Regarding your proposal to split this into two patches (one for the cleanup 
+path and one for the lock): Maybe combining them into a single patch is a better choice. Here is why:
 
-		end_creating_keep(newdentry);
-		d =3D ovl_start_creating_upper(ofs, parent, qname);
+We actually *cannot* remove `wait_for_completion(&shared_ctx.all_prepared)` 
+in the interrupt recovery path. Since `shared_ctx` is allocated on the local 
+stack of the caller, removing the wait would cause a severe Use-After-Free (UAF) if the 
+thread returns to userspace while sibling task_works are still executing and dereferencing `ctx`. 
 
-		if (IS_ERR_OR_NULL(d)) {
-			err =3D d ? PTR_ERR(d) : -ENOENT;
-		} else if (d->d_inode !=3D newdentry->d_inode) {
-			err =3D -EIO;
-		} else {
-			dput(newdentry);
-			return d;
-		}
-		end_creating(d);
-		dput(newdentry);
-		return ERR_PTR(err);
+By adding the lock, we inherently resolve the deadlock, meaning the sibling task_works 
+will never get stuck. Thus, `wait_for_completion` becomes perfectly safe to keep, 
+and it remains strictly necessary to protect the stack memory. Therefore, the "fix" for the 
+cleanup path is simply updating the comments to reflect this reality, which is tightly coupled with the locking fix. 
+It felt more cohesive as a single patch.
 
-Thanks,
-NeilBrown
+I have test the patch on my laptop,and it will not trigger the issue.Let's have syzbot test this combined logic:
+
+#syz test: 
+
+--- a/security/landlock/tsync.c
+
++++ b/security/landlock/tsync.c
+
+@@ -447,6 +447,12 @@ int landlock_restrict_sibling_threads(const struct cred *old_cred,
+
+        shared_ctx.new_cred = new_cred;
+
+        shared_ctx.set_no_new_privs = task_no_new_privs(current);
+
+ 
+
++       /*
+
++        * Serialize concurrent TSYNC operations to prevent deadlocks
+
++        * when multiple threads call landlock_restrict_self() simultaneously.
+
++        */
+
++       down_write(&current->signal->exec_update_lock);
+
++
+
+        /*
+
+         * We schedule a pseudo-signal task_work for each of the calling task's
+
+         * sibling threads.  In the task work, each thread:
+
+@@ -527,14 +533,17 @@ int landlock_restrict_sibling_threads(const struct cred *old_cred,
+
+                                           -ERESTARTNOINTR);
+
+ 
+
+                                /*
+
+-                                * Cancel task works for tasks that did not start running yet,
+
+-                                * and decrement all_prepared and num_unfinished accordingly.
+
++                                * Opportunistic improvement: try to cancel task works
+
++                                * for tasks that did not start running yet. We do not
+
++                                * have a guarantee that it cancels any of the enqueued
+
++                                * task works (because task_work_run() might already have
+
++                                * dequeued them).
+
+                                 */
+
+                                cancel_tsync_works(&works, &shared_ctx);
+
+ 
+
+                                /*
+
+-                                * The remaining task works have started running, so waiting for
+
+-                                * their completion will finish.
+
++                                * We must wait for the remaining task works to finish to
+
++                                * prevent a use-after-free of the local shared_ctx.
+
+                                 */
+
+                                wait_for_completion(&shared_ctx.all_prepared);
+
+                        }
+
+@@ -557,5 +566,7 @@ int landlock_restrict_sibling_threads(const struct cred *old_cred,
+
+ 
+
+        tsync_works_release(&works);
+
+ 
+
++       up_write(&current->signal->exec_update_lock);
+
++
+
+        return atomic_read(&shared_ctx.preparation_error);
+
+ }
+
+--
+在 2026/2/23 23:16, Günther Noack 写道:
+> Hello!
+> 
+> On Mon, Feb 23, 2026 at 07:29:56PM +0800, Ding Yihan wrote:
+>> Thank you for the detailed analysis and the clear breakdown. 
+>> Apologies for the delayed response. I spent the last couple of days
+>> thoroughly reading through the previous mailing list discussions. I
+>> was trying hard to see if there was any viable pure lockless design
+>> that could solve this concurrency issue while preserving the original
+>> architecture. 
+>> ﻿
+>> However, after looking at the complexities you outlined, I completely
+>> agree with your conclusion: serializing the TSYNC operations is indeed
+>> the most robust and reasonable path forward to prevent the deadlock.
+>> ﻿
+>> Regarding the lock choice, since 'cred_guard_mutex' is explicitly
+>> marked as deprecated for new code in the kernel,maybe we can use its
+>> modern replacement: 'exec_update_lock' (using down_write_trylock /
+>> up_write on current->signal). This aligns with the current subsystem
+>> standards and was also briefly touched upon by Jann in the older
+>> discussions.
+>> ﻿
+>> I fully understand the requirement for the two-part patch series:
+>> 1. Cleaning up the cancellation logic and comments.
+>> 2. Introducing the serialization lock for TSYNC.
+>> ﻿
+>> I will take some time to draft and test this patch series properly. 
+>> I also plan to discuss this with my kernel colleagues here at 
+>> UnionTech to see if they have any additional suggestions on the 
+>> implementation details before I submit it.
+>> ﻿
+>> I will send out the v1 patch series to the list as soon as it is
+>> ready. Thanks again for your guidance and the great discussion!
+> 
+> Thank you, Ding, this is much appreciated!
+> 
+> I agree, the `exec_update_lock` might be the better solution;
+> I also need to familiarize myself more with it to double-check.
+> 
+> —Günther
+> 
+
 
