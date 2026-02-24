@@ -1,294 +1,200 @@
-Return-Path: <linux-security-module+bounces-14846-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14848-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2PDMABAVnWkGMwQAu9opvQ
-	(envelope-from <linux-security-module+bounces-14846-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 04:03:44 +0100
+	id ZnUYOSFFnWmoOAQAu9opvQ
+	(envelope-from <linux-security-module+bounces-14848-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 07:28:49 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BB1C1813F2
-	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 04:03:42 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 159841826B2
+	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 07:28:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id A0B02301CC59
-	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 03:03:40 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EC3CC302E7DE
+	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 06:28:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C427726F2A1;
-	Tue, 24 Feb 2026 03:03:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F23AD29B76F;
+	Tue, 24 Feb 2026 06:28:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="g70woF2n"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com [209.85.210.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C9C87E0E4
-	for <linux-security-module@vger.kernel.org>; Tue, 24 Feb 2026 03:03:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B73F1E3DF2;
+	Tue, 24 Feb 2026 06:28:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771902217; cv=none; b=vELT+7DTQoRfVvDLL3NtC1YAacRwy0gxCfDq3X/6CvZRFq/xVcRI/v4bEZAq5JmedwjeTpqevO1z9AlEoIge1oz4qb0MFx97exwfq1Cvn/xdX2ujt6XE7oxNliCEoGPhN5xzrpxlBU285af8tYZ34ZtMS1mMiid5s7QXs83X4G4=
+	t=1771914526; cv=none; b=jzhKbrvvlkcXuyLNXgBmmd0WJMcvjGYCUzPZNKwVqZhj8WQDuAMQZfzwyKoW5OdQQ18uPnmP9+6d8b1pyI65Bo6BNSsdx/AODrRPUJQNrarTPkdmGaVcYchvdMES1vPFHQIbMpyOPKpPlOieuoJ2oyg/ZxfCwJwuYakM6z7ldOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771902217; c=relaxed/simple;
-	bh=3azx9TY+N/T/gVu+rBV2aHoCCfVR5fzqQMxuu3VVMuE=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=kCI5ygwOejG4DMNo9yYNllaJf4b8nLiMJ4QCGYtTmKHsiC/NmTu7aX5Nzuz7oc2YPIOjZXdM/Y4IBwT0vOUWpsibGWX/j5YRkdCFnoaeMrYCe0onLrAGlvtONaR4yq9o44kHaYxLpDK2VsG6Yu3ZC9ChAc7PCbj7lhudD/mOk1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.210.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-7d4bd8c44f3so56246857a34.1
-        for <linux-security-module@vger.kernel.org>; Mon, 23 Feb 2026 19:03:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771902215; x=1772507015;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:in-reply-to
-         :date:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QupUmDECJGjAmJzsEg1ul2yke0jPQCzLFh+A+i8ekKU=;
-        b=T+5hMOrbQiPNoqXFpK/bGmNd2cXBXXLmRiMmCovpZQUeFNnCrvt/7sTKOD+Qrjdawy
-         CN3Xb6mfkWDq5jahAx3SDGBfWItK1u2V3e4CYzTnQ1kb3SUw5wu44eYsFkHc8vCvvrHH
-         Hdevo7ns3QotqRBV65r1wmzmCNwpKM7s3NZJ4QLaCseRbtwK59PdMYe4COaEKrihIPwL
-         PRP5cUWSRSUJF+IOv45/VndrFkfzLkvVAPtquCEiG/43VpNPsAeokOop3+jrSECNxPYP
-         IAGpKlJEFkYf9NyS6fNG8VLn1t3DWUw/V61JV7wjF6WDhuUrDCSvKWL5JmxjU6/lqTEJ
-         KjoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVVIlNa9wcGj8Bceu9VpZzes8bLSgzoOnXti3s0nbaufa1RszkZNj33Z5zyMH//gsFjEFirLTl204mhVw6yzKnUcwW/SKU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIF6ejZz8DqrB0sc+mMZPeM8b8VzJj0FwC/+j/mj0PdUjIT3QF
-	z8dJavsrOfJPh4nHFF77WG3DRPskRSZPOQNPW0fY5n551G8YDdFLgtR5QYYN97J9pbofUdTPfJi
-	WsV2M3VCrWkajAqRSYA59eYu3DYCE64dIdd6RgjSWj72GSFII6zHpGiEuPFk=
+	s=arc-20240116; t=1771914526; c=relaxed/simple;
+	bh=ssdTypkf95WIjIR2G3xExhZix6AYU1TRYPWUXdRr+fg=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=awrfnhJCjZV/dj2d7NJ8E9dzyAzqVtcdA6dpQYdyigPMJ4Jig0WhAe9CClCRsGPBabX+tHeQruNolZqPVX3kQ24c7BJuWi8IG5HNlb67GxPBfiPOXVUOI9gbIhYWoGcA4SrhLugGGwDmSbgbbOOVG+4oRyOGtxxvB47K8ZAK45Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=g70woF2n; arc=none smtp.client-ip=54.243.244.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1771914476;
+	bh=TSmwE93KQD55x1ZswDe8TbcHAZBzVfGMLdAaso06Zso=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=g70woF2n7Up6nZirIWXdXZz2FUmxW3BgS+Zdub208Jo9FHUXYnYB4LchzZpNDbBfY
+	 ImfJSEoj53v+lL1yVdMszQxluXYsD+3nOznlCgOYFPvk3sQZpvBiLMz2/egayhdMz6
+	 Noj2KjNR09UkLPMBU80WHILuJFqEGkdllbYJi1cQ=
+X-QQ-mid: zesmtpgz1t1771914459tefe2f9ed
+X-QQ-Originating-IP: EKSQIoDKuP5Ac55xNvtuLfhOCa+CXcgxnTrd5I5UHvU=
+Received: from localhost.localdomain ( [123.114.60.34])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 24 Feb 2026 14:27:32 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 4948026446942565648
+EX-QQ-RecipientCnt: 8
+From: Yihan Ding <dingyihan@uniontech.com>
+To: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack3000@gmail.com>
+Cc: Paul Moore <paul@paul-moore.com>,
+	Jann Horn <jannh@google.com>,
+	linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	syzbot+7ea2f5e9dfd468201817@syzkaller.appspotmail.com,
+	Yihan Ding <dingyihan@uniontech.com>
+Subject: [PATCH] landlock: Fix deadlock in restrict_one_thread_callback
+Date: Tue, 24 Feb 2026 14:27:29 +0800
+Message-Id: <20260224062729.2908692-1-dingyihan@uniontech.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20260223.52c45aed20f8@gnoack.org>
+References: <20260223.52c45aed20f8@gnoack.org>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:4c04:b0:677:48f4:3c66 with SMTP id
- 006d021491bc7-679c46121ebmr6729752eaf.67.1771902215237; Mon, 23 Feb 2026
- 19:03:35 -0800 (PST)
-Date: Mon, 23 Feb 2026 19:03:35 -0800
-In-Reply-To: <D0013EA515055145+3e08a07b-e384-4c08-ab17-f558f0130d30@uniontech.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <699d1507.a00a0220.121a60.00f2.GAE@google.com>
-Subject: Re: [syzbot] [kernel?] INFO: task hung in restrict_one_thread_callback
-From: syzbot <syzbot+7ea2f5e9dfd468201817@syzkaller.appspotmail.com>
-To: dingyihan@uniontech.com
-Cc: dingyihan@uniontech.com, gnoack3000@gmail.com, gnoack@google.com, 
-	jannh@google.com, linux-security-module@vger.kernel.org, mic@digikod.net, 
-	paul@paul-moore.com, linux-kernel@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpgz:uniontech.com:qybglogicsvrsz:qybglogicsvrsz4b-0
+X-QQ-XMAILINFO: MPAlP4yRn0xgw057EAB+ncm80IwrJWEbEqbMy4H1yQ2Eg79J696PftX2
+	LLJBxKKdj3zH8bOTdT1Ta/jumtMThV698nQKaaMRboWNJ++9f4aqIaoUMMnEwVRqZJ8/8bK
+	11kOEozYJKfKI8eEBwGrkUY4dP9DuYAw9n53elL+HsqZ+HvhIq2I+BD3h37LlTf6JJjbQLA
+	AYQ2i4DgglIh12y9eZs/hozMDVMsWXjcU7eTeedo9I9G9yDKjY+XoakW5iNCYcYjslpF3oV
+	/EvffeDjkMEwIlv8zIGELeN85T63ytRwYhtHRrmZP1AF1DIfBVBzaz519x3NuUsOik0o1F+
+	r8si1bTf3cjg+1vDCj5wYS0tlS4Ox6CNoLrHieqiZgQIiXxbxGhHi0AriRhHlUFhcJFyydy
+	PAMqe34AvmfavTOBI9qiMehmTjBWpE/DmziVCPzOBVwDEHMh6X9SFWh/Mw2iMJGqxDALH0k
+	4afLC77rTmxgHMlS4GnHOYAAlIXaFwoRdi88pEH7Z7aYGcMZKI/lnGmN9Ee2K1IrVZ3YToB
+	XQ6I2+gAu2ULtwghWe9kj8+ksL48yXmK3dywHjKsKovgD2jHBA3OIl2IkkAWWNERS6dAZR8
+	VulYzNwQ4KMHde3UrHprgSPM3GFeFivWj0IxgP9easHYezSD4tLLzVSK6c/XvHFAkJGX7jw
+	B8+Znn8pOQuWgwq4APDDX1RfQYosJCQrvs16/10rHNUajUrFv2JLFYcmeMgWB5DAgsh0zQA
+	cUCVQUJ2r71AkaWxsfzfbsCqWlhyuvj8a1n12Pxuk1fogxoMgyXGMP91WEPpnaUARMsDd1S
+	2f9BL2hhw8y0BtuNxIegmhMbOJLN5cxtP4CY+HTfxGuOuarL5hp4KQ/Y07OkaCzsjjfNjMQ
+	JqLD3cYBRzkc/IBuwliEx03pGFLV5Rc0O2E+tO9hu6xE0nOICPTFSq60AXpw/EXKUQvXcQ1
+	KDhAG9+G1VRmXOkVr9VmoMgQeHTtXC2J2IRfW24k1+T7EipQOMq0c8jEr+jLfZUGSKVo5gN
+	0yNiEUTWjzYRcbSLqoFbF4hXtzT74y6Ub2/G1joQ==
+X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
+X-QQ-RECHKSPAM: 0
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.36 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[uniontech.com,gmail.com,google.com,vger.kernel.org,digikod.net,paul-moore.com,googlegroups.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14846-lists,linux-security-module=lfdr.de,7ea2f5e9dfd468201817];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	RCVD_COUNT_THREE(0.00)[4];
-	SUBJECT_HAS_QUESTION(0.00)[];
-	TAGGED_RCPT(0.00)[linux-security-module];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-security-module@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_NONE(0.00)[];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 2BB1C1813F2
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[digikod.net,gmail.com];
+	TAGGED_FROM(0.00)[bounces-14848-lists,linux-security-module=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dingyihan@uniontech.com,linux-security-module@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[uniontech.com:+];
+	NEURAL_HAM(-0.00)[-0.997];
+	TAGGED_RCPT(0.00)[linux-security-module,7ea2f5e9dfd468201817];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,uniontech.com:mid,uniontech.com:dkim,uniontech.com:email,appspotmail.com:email,syzkaller.appspot.com:url]
+X-Rspamd-Queue-Id: 159841826B2
 X-Rspamd-Action: no action
 
-> Hi G=C3=BCnther,
->
-> Thank you for the detailed analysis! I completely agree that serializing =
-the TSYNC=20
-> operations is the right way to prevent this deadlock. I have drafted a pa=
-tch using=20
-> `exec_update_lock` (similar to how seccomp uses `cred_guard_mutex`).
->
-> Regarding your proposal to split this into two patches (one for the clean=
-up=20
-> path and one for the lock): Maybe combining them into a single patch is a=
- better choice. Here is why:
->
-> We actually *cannot* remove `wait_for_completion(&shared_ctx.all_prepared=
-)`=20
-> in the interrupt recovery path. Since `shared_ctx` is allocated on the lo=
-cal=20
-> stack of the caller, removing the wait would cause a severe Use-After-Fre=
-e (UAF) if the=20
-> thread returns to userspace while sibling task_works are still executing =
-and dereferencing `ctx`.=20
->
-> By adding the lock, we inherently resolve the deadlock, meaning the sibli=
-ng task_works=20
-> will never get stuck. Thus, `wait_for_completion` becomes perfectly safe =
-to keep,=20
-> and it remains strictly necessary to protect the stack memory. Therefore,=
- the "fix" for the=20
-> cleanup path is simply updating the comments to reflect this reality, whi=
-ch is tightly coupled with the locking fix.=20
-> It felt more cohesive as a single patch.
->
-> I have test the patch on my laptop,and it will not trigger the issue.Let'=
-s have syzbot test this combined logic:
->
-> #syz test:=20
+syzbot found a deadlock in landlock_restrict_sibling_threads().
+When multiple threads concurrently call landlock_restrict_self() with
+sibling thread restriction enabled, they can deadlock by mutually
+queueing task_works on each other and then blocking in kernel space
+(waiting for the other to finish).
 
-"---" does not look like a valid git repo address.
+Fix this by serializing the TSYNC operations within the same process
+using the exec_update_lock. This prevents concurrent invocations
+from deadlocking.
 
->
-> --- a/security/landlock/tsync.c
->
-> +++ b/security/landlock/tsync.c
->
-> @@ -447,6 +447,12 @@ int landlock_restrict_sibling_threads(const struct c=
-red *old_cred,
->
->         shared_ctx.new_cred =3D new_cred;
->
->         shared_ctx.set_no_new_privs =3D task_no_new_privs(current);
->
-> =20
->
-> +       /*
->
-> +        * Serialize concurrent TSYNC operations to prevent deadlocks
->
-> +        * when multiple threads call landlock_restrict_self() simultaneo=
-usly.
->
-> +        */
->
-> +       down_write(&current->signal->exec_update_lock);
->
-> +
->
->         /*
->
->          * We schedule a pseudo-signal task_work for each of the calling =
-task's
->
->          * sibling threads.  In the task work, each thread:
->
-> @@ -527,14 +533,17 @@ int landlock_restrict_sibling_threads(const struct =
-cred *old_cred,
->
->                                            -ERESTARTNOINTR);
->
-> =20
->
->                                 /*
->
-> -                                * Cancel task works for tasks that did n=
-ot start running yet,
->
-> -                                * and decrement all_prepared and num_unf=
-inished accordingly.
->
-> +                                * Opportunistic improvement: try to canc=
-el task works
->
-> +                                * for tasks that did not start running y=
-et. We do not
->
-> +                                * have a guarantee that it cancels any o=
-f the enqueued
->
-> +                                * task works (because task_work_run() mi=
-ght already have
->
-> +                                * dequeued them).
->
->                                  */
->
->                                 cancel_tsync_works(&works, &shared_ctx);
->
-> =20
->
->                                 /*
->
-> -                                * The remaining task works have started =
-running, so waiting for
->
-> -                                * their completion will finish.
->
-> +                                * We must wait for the remaining task wo=
-rks to finish to
->
-> +                                * prevent a use-after-free of the local =
-shared_ctx.
->
->                                  */
->
->                                 wait_for_completion(&shared_ctx.all_prepa=
-red);
->
->                         }
->
-> @@ -557,5 +566,7 @@ int landlock_restrict_sibling_threads(const struct cr=
-ed *old_cred,
->
-> =20
->
->         tsync_works_release(&works);
->
-> =20
->
-> +       up_write(&current->signal->exec_update_lock);
->
-> +
->
->         return atomic_read(&shared_ctx.preparation_error);
->
->  }
->
-> --
-> =E5=9C=A8 2026/2/23 23:16, G=C3=BCnther Noack =E5=86=99=E9=81=93:
->> Hello!
->>=20
->> On Mon, Feb 23, 2026 at 07:29:56PM +0800, Ding Yihan wrote:
->>> Thank you for the detailed analysis and the clear breakdown.=20
->>> Apologies for the delayed response. I spent the last couple of days
->>> thoroughly reading through the previous mailing list discussions. I
->>> was trying hard to see if there was any viable pure lockless design
->>> that could solve this concurrency issue while preserving the original
->>> architecture.=20
->>> =EF=BB=BF
->>> However, after looking at the complexities you outlined, I completely
->>> agree with your conclusion: serializing the TSYNC operations is indeed
->>> the most robust and reasonable path forward to prevent the deadlock.
->>> =EF=BB=BF
->>> Regarding the lock choice, since 'cred_guard_mutex' is explicitly
->>> marked as deprecated for new code in the kernel,maybe we can use its
->>> modern replacement: 'exec_update_lock' (using down_write_trylock /
->>> up_write on current->signal). This aligns with the current subsystem
->>> standards and was also briefly touched upon by Jann in the older
->>> discussions.
->>> =EF=BB=BF
->>> I fully understand the requirement for the two-part patch series:
->>> 1. Cleaning up the cancellation logic and comments.
->>> 2. Introducing the serialization lock for TSYNC.
->>> =EF=BB=BF
->>> I will take some time to draft and test this patch series properly.=20
->>> I also plan to discuss this with my kernel colleagues here at=20
->>> UnionTech to see if they have any additional suggestions on the=20
->>> implementation details before I submit it.
->>> =EF=BB=BF
->>> I will send out the v1 patch series to the list as soon as it is
->>> ready. Thanks again for your guidance and the great discussion!
->>=20
->> Thank you, Ding, this is much appreciated!
->>=20
->> I agree, the `exec_update_lock` might be the better solution;
->> I also need to familiarize myself more with it to double-check.
->>=20
->> =E2=80=94G=C3=BCnther
->>=20
->
+Additionally, update the comments in the interrupt recovery path to
+clarify that cancel_tsync_works() is an opportunistic cleanup, and
+waiting for completion is strictly necessary to prevent a Use-After-Free
+of the stack-allocated shared_ctx.
+
+Fixes: 42fc7e6543f6 ("landlock: Multithreading support for landlock_restrict_self()")
+Reported-by: syzbot+7ea2f5e9dfd468201817@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=7ea2f5e9dfd468201817
+Signed-off-by: Yihan Ding <dingyihan@uniontech.com>
+---
+ security/landlock/tsync.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
+
+diff --git a/security/landlock/tsync.c b/security/landlock/tsync.c
+index de01aa899751..4e91af271f3b 100644
+--- a/security/landlock/tsync.c
++++ b/security/landlock/tsync.c
+@@ -447,6 +447,12 @@ int landlock_restrict_sibling_threads(const struct cred *old_cred,
+ 	shared_ctx.new_cred = new_cred;
+ 	shared_ctx.set_no_new_privs = task_no_new_privs(current);
+ 
++	/*
++	 * Serialize concurrent TSYNC operations to prevent deadlocks
++	 * when multiple threads call landlock_restrict_self() simultaneously.
++	 */
++	down_write(&current->signal->exec_update_lock);
++
+ 	/*
+ 	 * We schedule a pseudo-signal task_work for each of the calling task's
+ 	 * sibling threads.  In the task work, each thread:
+@@ -527,14 +533,17 @@ int landlock_restrict_sibling_threads(const struct cred *old_cred,
+ 					   -ERESTARTNOINTR);
+ 
+ 				/*
+-				 * Cancel task works for tasks that did not start running yet,
+-				 * and decrement all_prepared and num_unfinished accordingly.
++				 * Opportunistic improvement: try to cancel task works
++				 * for tasks that did not start running yet. We do not
++				 * have a guarantee that it cancels any of the enqueued
++				 * task works (because task_work_run() might already have
++				 * dequeued them).
+ 				 */
+ 				cancel_tsync_works(&works, &shared_ctx);
+ 
+ 				/*
+-				 * The remaining task works have started running, so waiting for
+-				 * their completion will finish.
++				 * We must wait for the remaining task works to finish to
++				 * prevent a use-after-free of the local shared_ctx.
+ 				 */
+ 				wait_for_completion(&shared_ctx.all_prepared);
+ 			}
+@@ -557,5 +566,7 @@ int landlock_restrict_sibling_threads(const struct cred *old_cred,
+ 
+ 	tsync_works_release(&works);
+ 
++	up_write(&current->signal->exec_update_lock);
++
+ 	return atomic_read(&shared_ctx.preparation_error);
+ }
+-- 
+2.51.0
+
 
