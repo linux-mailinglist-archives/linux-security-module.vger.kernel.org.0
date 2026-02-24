@@ -1,185 +1,224 @@
-Return-Path: <linux-security-module+bounces-14870-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14871-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sNR0C034nWlzSwQAu9opvQ
-	(envelope-from <linux-security-module+bounces-14870-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 20:13:17 +0100
+	id eOMVB4Alnmn5TgQAu9opvQ
+	(envelope-from <linux-security-module+bounces-14871-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 23:26:08 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA68A18BB90
-	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 20:13:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B8D1F18D1F6
+	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 23:26:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DA2FB305BABB
-	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 19:12:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 017F73048B21
+	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 22:26:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13BD6239E80;
-	Tue, 24 Feb 2026 19:12:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20758344D8B;
+	Tue, 24 Feb 2026 22:26:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="KhhbuuKj"
+	dkim=pass (2048-bit key) header.d=ownmail.net header.i=@ownmail.net header.b="Bm41EYvD";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YVWCZYzt"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-a2-smtp.messagingengine.com (flow-a2-smtp.messagingengine.com [103.168.172.137])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D49902FF144
-	for <linux-security-module@vger.kernel.org>; Tue, 24 Feb 2026 19:12:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.175
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771960372; cv=pass; b=N6gPPgt8bUn6A5UCfXTiUaUs7SrgU6fqlB5ZRqp0WYexAB3CPyKD8DaGRKUCTkxDIM3mvbbFE8XH7sHTyhnBIawZzhhQ+T0G9N7XV4AFhUfapoGgtpj406kLU3yXrwX3bdauAfsxjRiufp39eE8dtPAndrwrzJd3lRoAXcBIIBA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771960372; c=relaxed/simple;
-	bh=Mx7EWvPLyqSJRzwqUTOqp6F3rZbh1xURjor89wXlRdI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AA5c5VTR8e571lVvrTE+CFNVP1QqD9EC7oitZGgbY2y3VKaNRMlPZa7XRFGCHtUIyI3ikGXWIJi9xUyEgLl0paABX4uyZw9GfSxdOVbSHyxzdBu3HSKWKZZIAcQe/+4jQ46gvn3B/HWf2xz8aDoOTLfY+YBtVli9Aq+F/qiuRKQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=KhhbuuKj; arc=pass smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2aaf59c4f7cso27118945ad.1
-        for <linux-security-module@vger.kernel.org>; Tue, 24 Feb 2026 11:12:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771960370; cv=none;
-        d=google.com; s=arc-20240605;
-        b=RHMMDZvzr6bxIFwIUAzRyN+/sHbim8Bdu8nXR1b80Q3a9HY8QcD3tckMuM6epFA4CA
-         n1iRdSzP8btFGlVnDGTkHGdmegH/w7MNAbX4jkHZZkouXVHZhHUON7MM61AzGwYoyxbw
-         cn2wwH06JbpS0DY2jxVnEa3Ve228py9sSPo3ovT1uxyTCm1z2JBmyon/jk7BoDdIfGe6
-         ypMZhBY/RzzajTKrKzkI9/bkr00qE1zAwYCnCUFB/heJKq5S1mh7ycEDqu6QKLLHS1Ic
-         MJh9P2Z0k0jvLpMO+HczB4ee8yQDq6bsZDANAUb5a27Xc+qFtpHH2liD8pRYRHtyorxM
-         a55w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Dyx0e+eGptURv94NFLlxLMfCeHkSe565dVokgpHON3E=;
-        fh=Mqw/l8T2gKgQtLQS4hWTdwC5RNkGzFqg+dO+cNJQi3A=;
-        b=E7qOAnd++DT+3/9MBWC90NjkBHdNl+jtfQplK8IFIj6lvgXxww2CQLbPn4bkkPZDwr
-         kivLuscGH9/p9k7nZ1f6Y4rcuXSAzRgxIPL8nA/QY8DlD0fdpPSe7ibP48ztI0atbZst
-         qZU/oLsLazigMZFMDingqRPbvXoxjAJ2NfpPPEO0hPSgB8g0LS0Vtm6flMacihZB+qrQ
-         5y0sWlfAuu6MkAABXXYc+A11PVQAipXtmErGtYyZ4WLaEBHOdovdtK3Gr6jU8gZKzh0s
-         Kq8aZCLcTxpsiXTgZrSGcPj3u8lrszMWEaG6BCrER2uRF+jPDhF/z/o3pLm/HBx/moPt
-         eIkQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1771960370; x=1772565170; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Dyx0e+eGptURv94NFLlxLMfCeHkSe565dVokgpHON3E=;
-        b=KhhbuuKjR2JZaDvUwlguZ7AuuMNvsmzE4zIPHLqtgm2iz89AuXVcj8Hm/uzUNYTJpc
-         4kDewaiBV/FCaeIN++4HzE1v45Gx3PptJ2DCUFJtfGrFGipyl9O9u/msqwZsFDmSbRh+
-         Yyi+W8+d/Qgzh1UKgo6+hLF1RrGHLQ8HGiPvsc66YIGxomqKrxgLCXTY9BwWzeH9GlKS
-         Oeqh5fBzOB99TnDnZf1EowhWVBj6VUmkQmmprTAbcZHN+gZRle9uH1aKwY+pZBPkssTQ
-         V4LgTNhI3mYkzL3NWPU9S5pvZBSE/9gMjl1wL3BM5r6x3Aon9H3s1fl3dZxbCO2ioL/c
-         vpsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771960370; x=1772565170;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Dyx0e+eGptURv94NFLlxLMfCeHkSe565dVokgpHON3E=;
-        b=Ja3n1DWiEJojTrNtvyP+QXgcTo1+5nfcJ5+qvGllsgzPWGTTgOzHkURNNfp5fMHIYv
-         k289tx5Go4PsKNV20mxZCSMRvQryrSwBqFL2nO+Z8bgR74qIcAzyav6daBzFbBG1pQ+F
-         2kSE2etWhPStetfkonQbAZMLxaZmKp4oXJbsZWM3Y6TLbwSRW5IIFe4nrv9XDHkPKKYf
-         iYJLGecQNz4S9oikX1c6owp94wIfGdfhly3NkzQK71VVgg5KZfqwCwyEGGsab181USuO
-         ef5bFEpKod4ZEQ6m4Fw77FX9uircexeHZ1TVwOa2TjFfTU/PkP2LxxhjeZpE1b/lmKQM
-         6mbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV0xiKFcz16zXJP9pVfyO0RVUE7u0zF3YAPy1hXUivhVo/0lzOdHuGON8+1yHQE4w8kZnyQeNRoxOkRdzKu8dekw+cnII0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwYxxwG2wEUASBzIl2PsQa8lvzK54z2FTROIPVY0Xk7gOHnRdDZ
-	AwCqWq4vnaW+MzyjfSVpXlf22WtEt+WZDtpIKn5aIJcS789VKC4u+RbiXNE/16cRNCY/Gi+TGpC
-	LYNndyCvDH7W1rR6YwsLYnL1rm1WjrQWwtnVi960V
-X-Gm-Gg: ATEYQzxYmryNDgeu3UtOUO689kAORwYKYqKgWAhMG9dCcq+tTh9Ua6DivsIQJ2C9jeT
-	YXq9U2XZgCwUT1UsvD3mmBoZ27rnCnPKn67/FKSsZqdRnU8NwTggzYInP7PnvUrZs/3+45CWQYs
-	BMR+gAKKKXQ6RT+beePTEK1MLeUMnE59GAXIkup8jxEX61k7oKcvBxLgeB4Ec88Y7SYmgn+BTNF
-	HQ1yciR4VK/VgbyIgHml9a6vvhjjIPWK98zFWRUKaatsnGEaotamwSd11SyyPjic73TxOfQkOrh
-	BIROJUs=
-X-Received: by 2002:a17:903:3850:b0:2ad:3e57:91b7 with SMTP id
- d9443c01a7336-2ad74447156mr109545555ad.16.1771960370108; Tue, 24 Feb 2026
- 11:12:50 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F6FB33A9C4;
+	Tue, 24 Feb 2026 22:25:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.137
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771971962; cv=none; b=CX1XtqMiUWoFYxxNbwiRWqB8t26d3UIuL+thzkn7Mbw+CQxw7xOT+/MjAjTCapb0/8F/Uk7GHwLWAqAlgXUrFPRWuM/D6XYNRHdRm7HdbiianuSVNjJYXY0t1Of5UNu0K8L1q+Tl2VRiA++QVhrfSitfoIUPY2wJGB2+lkxRFDo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771971962; c=relaxed/simple;
+	bh=XNsgNmZoNlsbdzYWAoyx+rMJkU0C5hWhl58m7ePFqX8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JMAVZm8FpKEv8A1iJbO3iKwS+SwnPZZCQKWuAbC4LVyjaXIEe70ednw5htv9S3FVtVkMQLWjiJgu0akPfEKA/8kTFxsDADBWZJVaaql8i/W4i9ss8Fq/tYyvgZ+O0wstU2TVH4sexWAZcJk7l+YNf13f8Cw4v09HTw/R81JIkd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ownmail.net; spf=pass smtp.mailfrom=ownmail.net; dkim=pass (2048-bit key) header.d=ownmail.net header.i=@ownmail.net header.b=Bm41EYvD; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YVWCZYzt; arc=none smtp.client-ip=103.168.172.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ownmail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ownmail.net
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailflow.phl.internal (Postfix) with ESMTP id 3CA271380B87;
+	Tue, 24 Feb 2026 17:25:58 -0500 (EST)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Tue, 24 Feb 2026 17:25:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ownmail.net; h=
+	cc:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:reply-to:subject
+	:subject:to:to; s=fm3; t=1771971958; x=1771979158; bh=h1rNXkHkcZ
+	4cMhepaUBJCHY4sMt0fLPm1jE4sfNdLx8=; b=Bm41EYvDY3wWjoKO9Dg4GQs+K7
+	cZ+9rkdCqW4DWg2/n02Xxhll8WET1UKRv2xjVnyISv5eTeXPxw9lMuqv5LWlj2/l
+	YzC39szJXiGzqhHmPIW5unvAljd9AINf44jC46QUbSkxJC4Uzj5S8g9wTyymc5eK
+	6umAKASGZ5SNoXvX4WYCPTmKnbviVxKOlaNXi81+nMH7HsX3Dwh2OQCaVce5MXUm
+	TOefBGwt4W4JhCs2+rPA2w1fHcgyz/0nJrkPoTgnTm7f1ragqA5M49ZsUqF41+Lz
+	48FljGfvzG8iuI1HHzhizGeeqEg7uEPgx68xfh1Fw0MLAPKTcktOG4vlSi/g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1771971958; x=1771979158; bh=h1rNXkHkcZ4cMhepaUBJCHY4sMt0
+	fLPm1jE4sfNdLx8=; b=YVWCZYztzFJEgw0/P15jwVo2Zq6mHpQLCPU8/3LKBLGh
+	57MvUxA/kPjZOfEgwroCqeJIvAocpDonpTTzeO7VkSd0vdcYEgfAjfz1S+J27yPH
+	ibp9xn/SlbXIOAANLTgfTdZ1VBtOVuFLNu74RzyUBZ2rzwFmi84V1lO1ee7nU5eU
+	Swv0iwDFvsYUytGKwUXuWkuDN3ReejDJF50ww/Sv1JfeqxdlO97psVCMg5qpJdLN
+	l5589hLjqQ/AdCfNnx6DH184ui/VMrHllibdRaU1oS7s4SUxTuLHTlhmeIUXIPmc
+	3w/hA6dPTMTYuh/8a/5BjLr6Ydwxhtk1buo0GnixtA==
+X-ME-Sender: <xms:dCWeaeN68INVWUP76lm6LSn_-KPn-BpbZV20agYBbf3-MRusda4nxg>
+    <xme:dCWeaQ6MOi1M6jhBiz321-vu_icRM95I_6tTHrBS3kjPG6P4H7qv4MS40GFqlOXeL
+    JWaPc9gZdbNSC717W5pWIYUDnEX-0yoZjFskhRJ0jAXvUrcsPs>
+X-ME-Received: <xmr:dCWeadx1Z2VeucV0GVjerBQHJFbLfewF1ivvXIk7V7xM93rCDRjuVW8hJh3_pbP0Wvi7GoOlKRPxJbTKzbfoXXp4xdHx9RB-R1G_GBK_NM7c>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvgedufeejucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhephffvvefufffkofhrggfgsedtkeertdertddtnecuhfhrohhmpefpvghilheurhho
+    fihnuceonhgvihhlsgesohifnhhmrghilhdrnhgvtheqnecuggftrfgrthhtvghrnhepge
+    etfeegtddtvdeigfegueevfeelleelgfejueefueektdelieeikeevtdelveelnecuvehl
+    uhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepnhgvihhlsgesoh
+    ifnhhmrghilhdrnhgvthdpnhgspghrtghpthhtohepvddvpdhmohguvgepshhmthhpohhu
+    thdprhgtphhtthhopehvihhrohesiigvnhhivhdrlhhinhhugidrohhrghdruhhkpdhrtg
+    hpthhtohepshgvlhhinhhugiesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthho
+    pehlihhnuhigqdhunhhiohhnfhhssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpth
+    htoheplhhinhhugidqshgvtghurhhithihqdhmohguuhhlvgesvhhgvghrrdhkvghrnhgv
+    lhdrohhrghdprhgtphhtthhopehlihhnuhigqdhnfhhssehvghgvrhdrkhgvrhhnvghlrd
+    horhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghl
+    rdhorhhgpdhrtghpthhtoheplhhinhhugidqfhhsuggvvhgvlhesvhhgvghrrdhkvghrnh
+    gvlhdrohhrghdprhgtphhtthhopehmihhklhhoshesshiivghrvgguihdrhhhupdhrtghp
+    thhtohepjhgrtghksehsuhhsvgdrtgii
+X-ME-Proxy: <xmx:dCWeaYTnnAGgE05nS_GR7sZfZRuy59Y0zqIVusI9LOlQQpHGDIRuzA>
+    <xmx:dCWead99R1zdBpDm82pTcMeZYBPKAx6sGnfp62gsSSCupDW5ykpRug>
+    <xmx:dCWeadIDZPDRPdCUp43NByezinPatv8WUvR63xK4ud410k9ifxlfSw>
+    <xmx:dCWeaZtyjSe5uARiEy6VurJ-WbKbb-zsEPhCG0-qX0zcrp0SUVBvMg>
+    <xmx:diWeaSWS-R28POMt9UY8aq--iCqH1D9ZQByHSNfCqNcdrRW7UTOfk-tL>
+Feedback-ID: i9d664b8f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 24 Feb 2026 17:25:50 -0500 (EST)
+From: NeilBrown <neilb@ownmail.net>
+To: Christian Brauner <brauner@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	David Howells <dhowells@redhat.com>,
+	Jan Kara <jack@suse.cz>,
+	Chuck Lever <chuck.lever@oracle.com>,
+	Jeff Layton <jlayton@kernel.org>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Amir Goldstein <amir73il@gmail.com>,
+	John Johansen <john.johansen@canonical.com>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	"Darrick J. Wong" <djwong@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	netfs@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-nfs@vger.kernel.org,
+	linux-unionfs@vger.kernel.org,
+	apparmor@lists.ubuntu.com,
+	linux-security-module@vger.kernel.org,
+	selinux@vger.kernel.org
+Subject: [PATCH v3 00/15] Further centralising of directory locking for name ops.
+Date: Wed, 25 Feb 2026 09:16:45 +1100
+Message-ID: <20260224222542.3458677-1-neilb@ownmail.net>
+X-Mailer: git-send-email 2.50.0.107.gf914562f5916.dirty
+Reply-To: NeilBrown <neil@brown.name>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260220195405.30612-1-danieldurning.work@gmail.com>
- <9229d70d-aa7a-459f-b005-695e99888783@schaufler-ca.com> <CAHC9VhSp+X8YNocS7sDz+UyhdJh2yY8CRoi6dwV1eOGdCu9f9w@mail.gmail.com>
- <CAEjxPJ79V7hM=VnbB1dVA96jjr1yeN9qsLjXb4ALv1VmcRfJ-A@mail.gmail.com>
-In-Reply-To: <CAEjxPJ79V7hM=VnbB1dVA96jjr1yeN9qsLjXb4ALv1VmcRfJ-A@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 24 Feb 2026 14:12:38 -0500
-X-Gm-Features: AaiRm503rW9ZOS4V4zxiebdUBzdo3Pfwr2D3jQYLmSqJvm2WIFtI559N_YW2Cig
-Message-ID: <CAHC9VhRmAH+mymmoEivKKNgGScUHyD-2t8t-ed+=r_mNzT5wzQ@mail.gmail.com>
-Subject: Re: [PATCH] lsm: move inode IS_PRIVATE checks to individual LSMs
-To: Stephen Smalley <stephen.smalley.work@gmail.com>
-Cc: Casey Schaufler <casey@schaufler-ca.com>, danieldurning.work@gmail.com, 
-	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, jmorris@namei.org, serge@hallyn.com, 
-	john.johansen@canonical.com, zohar@linux.ibm.com, roberto.sassu@huawei.com, 
-	dmitry.kasatkin@gmail.com, mic@digikod.net, takedakn@nttdata.co.jp, 
-	penguin-kernel@i-love.sakura.ne.jp
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[paul-moore.com,none];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[ownmail.net,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[ownmail.net:s=fm3,messagingengine.com:s=fm3];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[paul-moore.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-14870-lists,linux-security-module=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[paul-moore.com:+];
+	REPLYTO_DN_EQ_FROM_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
+	RCPT_COUNT_TWELVE(0.00)[22];
+	TAGGED_FROM(0.00)[bounces-14871-lists,linux-security-module=lfdr.de];
+	FREEMAIL_FROM(0.00)[ownmail.net];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[kernel.org,zeniv.linux.org.uk,redhat.com,suse.cz,oracle.com,szeredi.hu,gmail.com,canonical.com,paul-moore.com,namei.org,hallyn.com];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	HAS_REPLYTO(0.00)[neil@brown.name];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[paul@paul-moore.com,linux-security-module@vger.kernel.org];
-	FREEMAIL_CC(0.00)[schaufler-ca.com,gmail.com,vger.kernel.org,namei.org,hallyn.com,canonical.com,linux.ibm.com,huawei.com,digikod.net,nttdata.co.jp,i-love.sakura.ne.jp];
+	RCVD_COUNT_FIVE(0.00)[6];
+	FROM_NEQ_ENVFROM(0.00)[neilb@ownmail.net,linux-security-module@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_TRACE(0.00)[ownmail.net:+,messagingengine.com:+];
 	TAGGED_RCPT(0.00)[linux-security-module];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[paul-moore.com:dkim,paul-moore.com:url,paul-moore.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: AA68A18BB90
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,brown.name:replyto,messagingengine.com:dkim]
+X-Rspamd-Queue-Id: B8D1F18D1F6
 X-Rspamd-Action: no action
 
-On Tue, Feb 24, 2026 at 9:44=E2=80=AFAM Stephen Smalley
-<stephen.smalley.work@gmail.com> wrote:
-> On Mon, Feb 23, 2026 at 5:21=E2=80=AFPM Paul Moore <paul@paul-moore.com> =
-wrote:
-> > I'm not going to argue with that, and perhaps that is a good next
-> > step: send a quick RFC patch to the VFS folks, with the LSM list CC'd,
-> > that drops setting the S_PRIVATE flag to see if they complain too
-> > loudly.  Based on other threads, Christian is aware that we are
-> > starting to look at better/proper handling of pidfds/pidfs so he may
-> > be open to dropping S_PRIVATE since it doesn't really have much impact
-> > outside of the LSM, but who knows; the VFS folks have been growing a
-> > bit more anti-LSM as of late.
->
-> Adding S_PRIVATE to pidfs inodes was originally motivated by this bug rep=
-ort:
-> https://lore.kernel.org/linux-fsdevel/20240222190334.GA412503@dev-arch.th=
-elio-3990X/
-> when pidfs was first introduced as its own distinct filesystem type.
-> Otherwise, Fedora (and likely any other system enforcing SELinux)
-> stopped working.
-> So we can't unconditionally remove S_PRIVATE from pidfs inodes without br=
-eaking
-> existing userspace/policy. If we want to introduce controls over pidfs
-> inodes and do so in a
-> backward-compatible manner, we have to either move the S_PRIVATE
-> handling into the
-> individual LSMs ...
+Following Chris Mason's tool-based review, here is v3 with some fixes.
+Particularly 06/15 mistakenly tested the result of start_creating for NULL
+and 09/15 had some really messed up flow in error handling.
+Also human-language typos fixed.
 
-... just like was originally proposed.  Just do that and be done with
-it; back-n-forth like this just wastes time and energy.
+This code is in 
+  github.com:neilbrown/linux.git
+  branch pdirops
 
---=20
-paul-moore.com
+For anyone interested, my next batch is in branch pdirops-next
+
+Original patch description below.
+
+Thanks,
+NeilBrown
+
+I am working towards changing the locking rules for name-operations: locking
+the name rather than the whole directory.
+
+The current part of this process is centralising all the locking so that
+it can be changed in one place.
+
+Recently "start_creating", "start_removing", "start_renaming" and related
+interaces were added which combine the locking and the lookup.  At that time
+many callers were changed to use the new interfaces.  However there are still
+an assortment of places out side of fs/namei.c where the directory is locked
+explictly, whether with inode_lock() or lock_rename() or similar.  These were
+missed in the first pass for an assortment of uninteresting reasons.
+
+This series addresses the remaining places where explicit locking is
+used, and changes them to use the new interfaces, or otherwise removes
+the explicit locking.
+
+The biggest changes are in overlayfs.  The other changes are quite
+simple, though maybe the cachefiles changes is the least simple of those.
+
+I'm running the --overlay tests in xfstests and nothing has popped yet.
+I'll continue with this and run some NFS tests too.
+
+Thanks for your review of these patches!
+
+NeilBrown
+
+ [PATCH v3 01/15] VFS: note error returns in documentation for various
+ [PATCH v3 02/15] fs/proc: Don't lock root inode when creating "self"
+ [PATCH v3 03/15] VFS: move the start_dirop() kerndoc comment to
+ [PATCH v3 04/15] libfs: change simple_done_creating() to use
+ [PATCH v3 05/15] Apparmor: Use simple_start_creating() /
+ [PATCH v3 06/15] selinux: Use simple_start_creating() /
+ [PATCH v3 07/15] nfsd: switch purge_old() to use
+ [PATCH v3 08/15] VFS: make lookup_one_qstr_excl() static.
+ [PATCH v3 09/15] ovl: Simplify ovl_lookup_real_one()
+ [PATCH v3 10/15] cachefiles: change cachefiles_bury_object to use
+ [PATCH v3 11/15] ovl: pass name buffer to ovl_start_creating_temp()
+ [PATCH v3 12/15] ovl: change ovl_create_real() to get a new lock when
+ [PATCH v3 13/15] ovl: use is_subdir() for testing if one thing is a
+ [PATCH v3 14/15] ovl: remove ovl_lock_rename_workdir()
+ [PATCH v3 15/15] VFS: unexport lock_rename(), lock_rename_child(),
 
