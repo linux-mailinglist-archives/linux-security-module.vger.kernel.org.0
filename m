@@ -1,139 +1,232 @@
-Return-Path: <linux-security-module+bounces-14852-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14853-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sLM0IadunWk9QAQAu9opvQ
-	(envelope-from <linux-security-module+bounces-14852-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 10:25:59 +0100
+	id 0PUdOsqCnWlsQQQAu9opvQ
+	(envelope-from <linux-security-module+bounces-14853-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 11:51:54 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3FC418489F
-	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 10:25:58 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D634185AB1
+	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 11:51:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E9C75301E6F8
-	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 09:20:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A9A13312153C
+	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 10:42:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D8C536B07D;
-	Tue, 24 Feb 2026 09:20:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 692713793C1;
+	Tue, 24 Feb 2026 10:42:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d33MvPat"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GAU2pdQX"
 X-Original-To: linux-security-module@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 367DB36B05C;
-	Tue, 24 Feb 2026 09:20:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4327A378D8D;
+	Tue, 24 Feb 2026 10:42:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771924854; cv=none; b=anxpV3M16Ykh8djxUbvR7USPr80VrFiqF/3ktXc+ndKijX1ebgGeRp0IiLAiU2MaAsBn3gWhoCuPJPQTriRbfuhbq5zrXqyC/QKXffiaIy2p4hHBD744o44yBCCBDhIsM9JQH+HNcuMvvnDadSQ6KDM6adgPMeApIY1MubZW99o=
+	t=1771929741; cv=none; b=T8vY59VbCBAaIxVwFZBX7UhmbdWc8ypiaw4M9GNcvPyKw8wtkEf74ttFct5+v0wCbdwLPwvP3nc/EKZ3+7Anxw0rPG1zOYIksmqhpri2rGF3m2XQ3R2Dic+pw2jzee6TocttOVew1U6XIGlotzBtz20QUh4Yqw7itcEvUPnbFAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771924854; c=relaxed/simple;
-	bh=zQsck/PbdutrfjuyGfWsZrSGCznNVHiinSu2WQcwhXM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qUlHm2UqmPRIGoPnjlvQb0GhPbYirJt677h9/a20VDdnvOS7zWc5xGdc+osxAyGSKHU+rF6XVJU6qCQfcNawb5UUEtyy0lWs56V5kgkuoAWGTkimCmapEt6eBscPVqakFri6twkSO5IZWIdCWOlkbf3GUfzL5JlqdGZUxDWZK6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d33MvPat; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFC04C116D0;
-	Tue, 24 Feb 2026 09:20:48 +0000 (UTC)
+	s=arc-20240116; t=1771929741; c=relaxed/simple;
+	bh=EdYMSneYGYWOu2MY/gnpVM4ln8olb1RiXGDKI2avrXU=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=FSthP+NnFq7VbL49MUl8+sx8aA8HHXdF9zCaO5LinPf30IjPb9l/QN8QfAeHwwrcksaE468/gnLBf4bwy/BRXD84TBXqWOgPnonKFJyMV3KY46ymy6cHop84LrL5H/ne1bUQQgUjqu8KFE3gTNI5+UL8aJ0H8NsXmULbJ+wwlUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GAU2pdQX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 158D2C116D0;
+	Tue, 24 Feb 2026 10:42:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771924853;
-	bh=zQsck/PbdutrfjuyGfWsZrSGCznNVHiinSu2WQcwhXM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=d33MvPatWU9dWg+Iyd8o/6Y/ldYwKOH8cRg0Twmt0370/HtNEBoWP3z5uOe6wmFXJ
-	 YM9ycD9PQCBY6f2pUjrO96/u5KF7xm8ivKI2Fh9vCGLwg5th0xGGx+/N3bPn616+er
-	 dlPZiqPuHcSGvxYT6sAfWt7q6WkwtO/P0RFeZQS+YU296u3wkl+HM6Pc0aQp5zvzEE
-	 X6nxMKN1zyPs4ALdzch6DfnAy/FTnYRsMnHX+NVzC9EriWNJBe5KoE1zL64sE0Qrsj
-	 no9HXBs4Wj5/XGONNbVLX4l0ye+IcMDVik2w/nSZhnQyRG+ywegsYDlZMV36f9l8VM
-	 i7cfOC2T30jgw==
-Date: Tue, 24 Feb 2026 10:20:46 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Chris Mason <clm@meta.com>
-Cc: NeilBrown <neil@brown.name>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	David Howells <dhowells@redhat.com>, Jan Kara <jack@suse.cz>, Chuck Lever <chuck.lever@oracle.com>, 
-	Jeff Layton <jlayton@kernel.org>, Miklos Szeredi <miklos@szeredi.hu>, 
-	Amir Goldstein <amir73il@gmail.com>, John Johansen <john.johansen@canonical.com>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	"Darrick J. Wong" <djwong@kernel.org>, linux-kernel@vger.kernel.org, netfs@lists.linux.dev, 
-	linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org, 
-	apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Subject: Re: [PATCH v2 12/15] ovl: change ovl_create_real() to get a new lock
- when re-opening created file.
-Message-ID: <20260224-granulat-joggen-cd082d178959@brauner>
-References: <20260223011210.3853517-1-neilb@ownmail.net>
- <20260223011210.3853517-13-neilb@ownmail.net>
- <20260223132424.105125-1-clm@meta.com>
+	s=k20201202; t=1771929740;
+	bh=EdYMSneYGYWOu2MY/gnpVM4ln8olb1RiXGDKI2avrXU=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=GAU2pdQXeucHDr93YOJlBQA+9WyQyiqX3XUv0GPdy5+63ewH++MkxyrNYQumwLA4W
+	 YPvSJkU9bCvwg0PQISCbL7pQ53LDJwxCiV6mlupfv3XGnYbITTh1piGzZ+A4mlBMuk
+	 4BLlREPZdKFZhle5va0yKY3MgMD1Ru8Hzm9tCf+z8+JaypVhehj82iMeu/g36i61cS
+	 LOK6GF96u2rd6HmI4kigzcpkbtJ/Mu3uUKlP3KL6U4B3ccmjM1712HCHbTYCUdiqco
+	 kxP5N90jQc3VZcobz2Hi+vK6uI3CzGRjwp0bzDuDcBOAuwMIDp5V4VWUl94VWRudG1
+	 gdUVkzkXXqWYQ==
+From: Andreas Hindborg <a.hindborg@kernel.org>
+To: aliceryhl@google.com
+Cc: Miguel Ojeda <ojeda@kernel.org>, Gary Guo <gary@garyguo.net>,
+ =?utf-8?Q?Bj=C3=B6rn?= Roy
+ Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, Trevor
+ Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Dave
+ Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, Leon
+ Romanovsky <leon@kernel.org>, Paul Moore <paul@paul-moore.com>, Serge
+ Hallyn <sergeh@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, David
+ Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Alexander
+ Viro <viro@zeniv.linux.org.uk>, Christian
+ Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Igor Korotin
+ <igor.korotin.linux@gmail.com>, Daniel Almeida
+ <daniel.almeida@collabora.com>, Lorenzo Stoakes
+ <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen
+ Boyd <sboyd@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Krzysztof
+ =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Boqun
+ Feng <boqun@kernel.org>, linux-kernel@vger.kernel.org,
+ rust-for-linux@vger.kernel.org, linux-block@vger.kernel.org,
+ linux-security-module@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ linux-pm@vger.kernel.org, linux-pci@vger.kernel.org, Asahi Lina
+ <lina+kernel@asahilina.net>, Oliver Mangold <oliver.mangold@pm.me>
+Subject: Re: [PATCH v15 1/9] rust: types: Add Ownable/Owned types
+In-Reply-To: <aZ1VQmtapuoerpVo@google.com>
+References: <20260220-unique-ref-v15-0-893ed86b06cc@kernel.org>
+ <20260220-unique-ref-v15-1-893ed86b06cc@kernel.org>
+ <aZg44EmMWKK-z5KP@google.com>
+ <87wm0333qt.fsf@t14s.mail-host-address-is-not-set>
+ <IFU05rWmgywK-tzaInc7eF2Kmy1zf-BDkCrQZfRI_2JN6E0-p3zFaUMu3V6T1YTeQG9xC1hHzXThLCORJqpoWA==@protonmail.internalid>
+ <aZ1VQmtapuoerpVo@google.com>
+Date: Tue, 24 Feb 2026 11:41:45 +0100
+Message-ID: <87a4wy2zkm.fsf@t14s.mail-host-address-is-not-set>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260223132424.105125-1-clm@meta.com>
+Content-Type: text/plain
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [3.84 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+X-Spamd-Result: default: False [9.34 / 15.00];
+	URIBL_BLACK(7.50)[types.rs:url];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	R_MISSING_CHARSET(0.50)[];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	BAD_REP_POLICIES(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14852-lists,linux-security-module=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14853-lists,linux-security-module=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[40];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[23];
-	FREEMAIL_CC(0.00)[brown.name,zeniv.linux.org.uk,redhat.com,suse.cz,oracle.com,kernel.org,szeredi.hu,gmail.com,canonical.com,paul-moore.com,namei.org,hallyn.com,vger.kernel.org,lists.linux.dev,lists.ubuntu.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[brauner@kernel.org,linux-security-module@vger.kernel.org];
+	R_DKIM_ALLOW(0.00)[kernel.org:s=k20201202];
+	GREYLIST(0.00)[pass,body];
+	FREEMAIL_CC(0.00)[kernel.org,garyguo.net,protonmail.com,umich.edu,linuxfoundation.org,intel.com,paul-moore.com,gmail.com,ffwll.ch,zeniv.linux.org.uk,suse.cz,collabora.com,oracle.com,ti.com,google.com,vger.kernel.org,lists.freedesktop.org,kvack.org,asahilina.net,pm.me];
+	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-security-module];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_RCPT(0.00)[linux-security-module,kernel];
+	FROM_NEQ_ENVFROM(0.00)[a.hindborg@kernel.org,linux-security-module@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	R_SPF_ALLOW(0.00)[+ip6:2600:3c0a:e001:db::/64:c];
+	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	NEURAL_SPAM(0.00)[1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,brown.name:email,ownmail.net:email]
-X-Rspamd-Queue-Id: C3FC418489F
-X-Rspamd-Action: no action
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[collabora.com:email,garyguo.net:email,types.rs:url,pm.me:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,asahilina.net:email,t14s.mail-host-address-is-not-set:mid]
+X-Rspamd-Queue-Id: 3D634185AB1
+X-Rspamd-Action: add header
+X-Spam: Yes
 
-On Mon, Feb 23, 2026 at 05:23:00AM -0800, Chris Mason wrote:
-> NeilBrown <neilb@ownmail.net> wrote:
-> > From: NeilBrown <neil@brown.name>
-> > 
-> > When ovl_create_real() is used to create a file on the upper filesystem
-> > it needs to return the resulting dentry - positive and hashed.
-> > It is usually the case the that dentry passed to the create function
-> > (e.g.  vfs_create()) will be suitable but this is not guaranteed.  The
-> > filesystem may unhash that dentry forcing a repeat lookup next time the
-> > name is wanted.
-> > 
-> 
-> Hi everyone,
-> 
-> Amir suggested I run these through, and this commit was flagged:
-> 
-> commit 62d49d1e44667e4f93bec415faabec5526992ac0
-> Author: NeilBrown <neil@brown.name>
-> 
-> ovl: change ovl_create_real() to get a new lock when re-opening created file.
-> 
-> This commit changes ovl_create_real() to drop the directory lock and
-> reacquire a new lock for lookup when the created dentry is unhashed. It
-> also removes ovl_lookup_upper() which is no longer used.
-> 
-> Signed-off-by: NeilBrown <neil@brown.name>
+<aliceryhl@google.com> writes:
 
-Fwiw, all patches that are applied go through AI review. My plan is to
-have a discussion on getting automation set up for this at LSFMM so that
-we can have the bot directly reply to reviews but under our control so
-we can vet reviews.
+> On Mon, Feb 23, 2026 at 03:59:22PM +0100, Andreas Hindborg wrote:
+>> Alice Ryhl <aliceryhl@google.com> writes:
+>>
+>> > On Fri, Feb 20, 2026 at 10:51:10AM +0100, Andreas Hindborg wrote:
+>> >> From: Asahi Lina <lina+kernel@asahilina.net>
+>> >>
+>> >> By analogy to `AlwaysRefCounted` and `ARef`, an `Ownable` type is a
+>> >> (typically C FFI) type that *may* be owned by Rust, but need not be. Unlike
+>> >> `AlwaysRefCounted`, this mechanism expects the reference to be unique
+>> >> within Rust, and does not allow cloning.
+>> >>
+>> >> Conceptually, this is similar to a `KBox<T>`, except that it delegates
+>> >> resource management to the `T` instead of using a generic allocator.
+>> >>
+>> >> [ om:
+>> >>   - Split code into separate file and `pub use` it from types.rs.
+>> >>   - Make from_raw() and into_raw() public.
+>> >>   - Remove OwnableMut, and make DerefMut dependent on Unpin instead.
+>> >>   - Usage example/doctest for Ownable/Owned.
+>> >>   - Fixes to documentation and commit message.
+>> >> ]
+>> >>
+>> >> Link: https://lore.kernel.org/all/20250202-rust-page-v1-1-e3170d7fe55e@asahilina.net/
+>> >> Signed-off-by: Asahi Lina <lina+kernel@asahilina.net>
+>> >> Co-developed-by: Oliver Mangold <oliver.mangold@pm.me>
+>> >> Signed-off-by: Oliver Mangold <oliver.mangold@pm.me>
+>> >> Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+>> >> Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
+>> >> [ Andreas: Updated documentation, examples, and formatting ]
+>> >> Reviewed-by: Gary Guo <gary@garyguo.net>
+>> >> Co-developed-by: Andreas Hindborg <a.hindborg@kernel.org>
+>> >> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
+>> >
+>> >> +///         let result = NonNull::new(KBox::into_raw(result))
+>> >> +///             .expect("Raw pointer to newly allocation KBox is null, this should never happen.");
+>> >
+>> > KBox should probably have an into_raw_nonnull().
+>>
+>> I can add that.
+>>
+>> >
+>> >> +///    let foo = Foo::new().expect("Failed to allocate a Foo. This shouldn't happen");
+>> >> +///    assert!(*FOO_ALLOC_COUNT.lock() == 1);
+>> >
+>> > Use ? here.
+>>
+>> Ok.
+>>
+>> >
+>> >> +/// }
+>> >> +/// // `foo` is out of scope now, so we expect no live allocations.
+>> >> +/// assert!(*FOO_ALLOC_COUNT.lock() == 0);
+>> >> +/// ```
+>> >> +pub unsafe trait Ownable {
+>> >> +    /// Releases the object.
+>> >> +    ///
+>> >> +    /// # Safety
+>> >> +    ///
+>> >> +    /// Callers must ensure that:
+>> >> +    /// - `this` points to a valid `Self`.
+>> >> +    /// - `*this` is no longer used after this call.
+>> >> +    unsafe fn release(this: NonNull<Self>);
+>> >
+>> > Honestly, not using it after this call may be too strong. I can imagine
+>> > wanting a value where I have both an ARef<_> and Owned<_> reference to
+>> > something similar to the existing Arc<_>/ListArc<_> pattern, and in that
+>> > case the value may in fact be accessed after this call if you still have
+>> > an ARef<_>.
+>>
+>> I do not understand your use case.
+>>
+>> You are not supposed to have both an `ARef` and an `Owned` at the same
+>> time. The `Owned` is to `ARef` what `UniqueArc` is to `Arc`. It is
+>> supposed to be unique and no `ARef` can be live while the `Owned` is
+>> live.
+>>
+>> A `ListArc` is "at most one per list link" and it takes a refcount on
+>> the object by owning an `Arc`. As far as I recall, it does not provide
+>> mutable access to anything but the list link. To me, that is a very
+>> different situation.
+>
+> I mean, even Page is kind of an example like that.
+>
+> Pages are refcounted, but when you have a higher-order page, the
+> __free_pages() call does something special beyond what put_page(). For
+> example, if you have an order-2 page, which consists of 4 pages, then
+> the refcount only keeps the first page alive, and __free_pages() frees
+> the 3 extra pages right away even if refcount is still non-zero. The
+> first page then stays alive until the last put_page() is called.
+
+I see. We currently only support order 0 pages. I think we can handle
+this situation later, if we need to handle higher order pages.
+
+In that case, we could hand out `Owned<Page>` for the head page and then
+provide some way of getting a `&Page` for the tail pages. Obtaining
+`Owned<Page>` for a tail page does not make sense.
+
+More likely we will build an abstraction for `struct folio`. We can
+still hand some kind of page reference for tail pages from an `Owned<Folio>`.
+
+Best regards,
+Andreas Hindborg
+
+
 
