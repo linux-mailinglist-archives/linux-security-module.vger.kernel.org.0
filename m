@@ -1,62 +1,89 @@
-Return-Path: <linux-security-module+bounces-14854-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-14866-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UC31BUuJnWnBQQQAu9opvQ
-	(envelope-from <linux-security-module+bounces-14854-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 12:19:39 +0100
+	id iKB6Bx25nWntRQQAu9opvQ
+	(envelope-from <linux-security-module+bounces-14866-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 15:43:41 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 346931860F0
-	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 12:19:38 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 703B218893A
+	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 15:43:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id AC0E6305B022
-	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 11:18:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2E5783014649
+	for <lists+linux-security-module@lfdr.de>; Tue, 24 Feb 2026 14:43:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 233F937C102;
-	Tue, 24 Feb 2026 11:18:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDBB92264CA;
+	Tue, 24 Feb 2026 14:43:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wxf1lCXl"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LVYFb3/2"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA46137BE91;
-	Tue, 24 Feb 2026 11:18:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F7AC38BF60
+	for <linux-security-module@vger.kernel.org>; Tue, 24 Feb 2026 14:43:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771931936; cv=none; b=Ldl3Iq5xQJ5pc55x5JMuVhJ5bhp7oDGHXZvDED4pPscpgAt9JJhNSD2W+iQrz9utC8vndy+N7Q9y32EKv2aoigXY3myLQIj4Qccd1xhzNDTKGp4TsXoh6TprJLGoc0YjqkiSJvBGrdpqwy4O/OTM+XYeEoTkipsLbOwrFRd43z8=
+	t=1771944217; cv=none; b=sMUG4mb18LtQfDGzhoDFWT328RYQ75W4qeefsoreOaOxJUhFvqqSvhlZhPj7MkJRWTlz6DgxcDY/mvd8Nu0yFmOzWghL6zG9RSePnsRMM0lPDXITfSQdOXrxImObPuPnctoGH96+KiaLbsKUgEsrhb9JacLJHHNQC+erKjJVMwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771931936; c=relaxed/simple;
-	bh=CATKDKa2uGpd7sHZMSNUih88RUZlznJauHdO/GUeTF4=;
+	s=arc-20240116; t=1771944217; c=relaxed/simple;
+	bh=49VT7mN4XyjuEankpsfUwF5ENUVjd8PIzkNyE8/ZPOE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WjWew3+v3xljY8KSLFkqd3i6TazsdCwMefn3Pws/rRjkbKaNDXt1224rrhkWTGB4hYGRRxshDgi3rJUz73UiFT6a5PmoeEx4N3xoNKXNIsDfg1AB3oXTmgUG0HeLIEtgFvGhYELUfcGeu730HOnhBP/Sb+7PoPnl9RSkqGy5Z6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wxf1lCXl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98C26C19424;
-	Tue, 24 Feb 2026 11:18:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771931936;
-	bh=CATKDKa2uGpd7sHZMSNUih88RUZlznJauHdO/GUeTF4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Wxf1lCXl+lJ0Co7kXivrfwAqGXijzoffhjR9eZU+NmPDftcplF9o3Qsw5NFAiBIhR
-	 0kIMnNjSYLlwFUxNvP9VY0YhI0gn06UvM2j05Z5DYQeDJJfkYTrB0xoAin3gEKBNeJ
-	 UvoI7s+Rvujr5r/TOT9tKA5/v+VslFKJXjdQCzobvuGAfg1Ggw9ezB1Z8/ZICGQAFd
-	 bwhMnOqnAK7amG7auTuDHZ6m+D4WfEgI54SYKfP1d3mCn6NYw4EmvNnIqmdjKDulx2
-	 4QpTGbSOdVsr8mHI3+zrBbM4Yar3zCS2W5f0rTEfJwIS+YZjalFEh+7IZo/2drV9HZ
-	 UiaoNkcmBtyEA==
-Date: Tue, 24 Feb 2026 12:18:51 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Daniel Durning <danieldurning.work@gmail.com>
-Cc: linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	selinux@vger.kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz, paul@paul-moore.com, 
-	stephen.smalley.work@gmail.com, omosnace@redhat.com, Oleg Nesterov <oleg@redhat.com>
-Subject: Re: [RFC PATCH] fs/pidfs: Add permission check to pidfd_info()
-Message-ID: <20260224-wohle-abarbeiten-25effeed0479@brauner>
-References: <20260206180248.12418-1-danieldurning.work@gmail.com>
- <20260209-spanplatten-zerrt-73851db30f18@brauner>
- <CAKrb_fEXR0uQnX5iK-ACH=amKMQ8qBSPGXmJb=1PgvEq8qsDEQ@mail.gmail.com>
- <20260217-abgedankt-eilte-2386c98b3ef7@brauner>
- <CAKrb_fFEvf5VzY_-zcc800wjVGOFbiGrpzC7S6Ghy9qhYJrZ1w@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=RX4dgxnc/MLt/IW5TP7q+lwA4+6KJVj2j5diXHMmEfIvf/W6iZW/4nRCI1YTTuWJ8aT8/SdW4wGrnLfYjHKuqUi6ju5otkwQuK6t+tE/Uh2ROcuADvte8UMVs3XkKOhmPH0dvRMEe8EsU9ngFvWmpjI8v6tUjbAYj34+UordM30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LVYFb3/2; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4833115090dso54262285e9.3
+        for <linux-security-module@vger.kernel.org>; Tue, 24 Feb 2026 06:43:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1771944215; x=1772549015; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=49VT7mN4XyjuEankpsfUwF5ENUVjd8PIzkNyE8/ZPOE=;
+        b=LVYFb3/24rMXuG8pwlnJDjWA9xHY4WupMqX4dWK9plmJ2pMvaKCLlxuQRLD9LgZ5IQ
+         vZOAC6FFzSj8rWkOSltQtBkdL8MCbr4Kj+wa9LEudx+F/NyQZzxpmakOqp9Bd2IeDVS0
+         qGL/km2sdVXdMSLizSwbCmAiY/aWjEi3xpZO8rHJ6bO3WxK3dYloJYA5rSL1gR8/8yqj
+         /R6skGairTb0N3ks4HtYAHFHkz8MKSUx/lh78pBVfMqeIOkICBmPXFYJtUCKh/J4ywZ4
+         gkxrosYqJ64MuPQNRodoICIrAODMeVvDHXEenju6uMSZ0W3H0TgbWs4TdCweTE7WbB2Z
+         49jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771944215; x=1772549015;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=49VT7mN4XyjuEankpsfUwF5ENUVjd8PIzkNyE8/ZPOE=;
+        b=q4l4JKZk7SPP/KjUjvS3Ymn3prRAxpXB6UXLVPZnlBOTzC9qk1NvibCQjOgfdSgVZZ
+         o6mhsKJmlLuSaqCD9kOmz6D9m3iDYkhBgQTv2zZvvZ8LQRdfGBGkABvo7GdoeBt3/lWA
+         pOY0akaF2mZGIastK4upS7T4qFkBlGiaJN09DmxcUA5AbhbL9FNdzpXolJAbso5cQWOF
+         9LkBHWVc5kGVUS0Ae54jut8nFwGx162i2ecaHZqwd3t/xSv9oTV3S3QAcJuFtvQLjnCB
+         w5MJBRFLSfT0KIfXeH4X4+07JFKIaYQ7gr+GcWgtsHUyhsEYrKHKbNkmS5qRNPHTr8C+
+         xM8g==
+X-Gm-Message-State: AOJu0YwcBYk6KG2pdVWYKN2fad83Q+ewCCy72Uq/NN2dGkqId3Fm5hKo
+	JjqCjQddZPn/wY3sWqoTnpwbQSQgxjbx2dXdc0LejjVHqc5gLnE/1oDsDo9xdzl7NZQwJxBM2pv
+	6DPKunw==
+X-Gm-Gg: AZuq6aLIiC4cPRvQ+an1twRjlqhVQ+n+rmlicKvFy/c36VLNSZ4uE3leWPubWLlbF+Y
+	jYCYhN8hXpIhSCjNgU0j8YdgrDL6fXmc1z75MJLrjvlryQQsLzFbbzrChRCFXd5HYftsGJKSA5y
+	JwRe0EYZKJdfSPyuski0jo5vgx5pD9HPCcpXYBV4KDDKWeUoEXU67SZYN90tISI3Ylk9UiOjtH4
+	65o1CqDrZCkFVQ2jzpvx5WEXAxBI1MdOXMJ0Is3XCpdsxt1Srya4JUKSA588J8l0T3Xvpog+hFD
+	fr+Jtmjp9paMcWQyxnGzfxI16ayVeCKnILDaaHe+3m7WFbd1+022KEWtJXZmRBa5vCdfCeK1U/F
+	0QNiMJNegxY0EZCj1VN8FIH1PLhgmeVDU85TzoVFSd+USxBtijXp8Wsr8bL5Aa2kvaNnFybpToR
+	CfCNI0CPR32W8QnBjirQYx+OfYJB+WX574TLjUGYrW5ak2bRS19ejJ/w==
+X-Received: by 2002:a05:600c:6206:b0:465:a51d:d4 with SMTP id 5b1f17b1804b1-483a95b6debmr196639815e9.6.1771944214417;
+        Tue, 24 Feb 2026 06:43:34 -0800 (PST)
+Received: from google.com ([2a00:79e0:288a:8:6a64:ac1e:3081:9ccd])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483bd72bd66sm3181155e9.11.2026.02.24.06.43.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Feb 2026 06:43:33 -0800 (PST)
+Date: Tue, 24 Feb 2026 15:43:29 +0100
+From: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>
+To: syzbot <syzbot+7ea2f5e9dfd468201817@syzkaller.appspotmail.com>
+Cc: linux-security-module@vger.kernel.org
+Subject: Re: [syzbot] [kernel?] INFO: task hung in
+ restrict_one_thread_callback
+Message-ID: <aZ25EThvPMUptRlY@google.com>
+References: <69995a88.050a0220.340abe.0d25.GAE@google.com>
+ <00A9E53EDC82309F+7b1dfc69-95f8-4ffc-a67c-967de0e2dfee@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
@@ -65,119 +92,39 @@ List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKrb_fFEvf5VzY_-zcc800wjVGOFbiGrpzC7S6Ghy9qhYJrZ1w@mail.gmail.com>
+In-Reply-To: <00A9E53EDC82309F+7b1dfc69-95f8-4ffc-a67c-967de0e2dfee@uniontech.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [3.84 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	DKIM_TRACE(0.00)[google.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-14866-lists,linux-security-module=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	RCPT_COUNT_TWO(0.00)[2];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-14854-lists,linux-security-module=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[vger.kernel.org,zeniv.linux.org.uk,suse.cz,paul-moore.com,gmail.com,redhat.com];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.971];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[brauner@kernel.org,linux-security-module@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_SEVEN(0.00)[10];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-security-module];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 346931860F0
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gnoack@google.com,linux-security-module@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	SINGLE_SHORT_PART(0.00)[];
+	TAGGED_RCPT(0.00)[linux-security-module,7ea2f5e9dfd468201817];
+	SUBJECT_HAS_QUESTION(0.00)[]
+X-Rspamd-Queue-Id: 703B218893A
 X-Rspamd-Action: no action
 
-On Fri, Feb 20, 2026 at 03:45:00PM -0500, Daniel Durning wrote:
-> On Tue, Feb 17, 2026 at 7:01 AM Christian Brauner <brauner@kernel.org> wrote:
-> >
-> > On Wed, Feb 11, 2026 at 02:43:21PM -0500, Daniel Durning wrote:
-> > > On Mon, Feb 9, 2026 at 9:01 AM Christian Brauner <brauner@kernel.org> wrote:
-> > > >
-> > > > On Fri, Feb 06, 2026 at 06:02:48PM +0000, danieldurning.work@gmail.com wrote:
-> > > > > From: Daniel Durning <danieldurning.work@gmail.com>
-> > > > >
-> > > > > Added a permission check to pidfd_info(). Originally, process info
-> > > > > could be retrieved with a pidfd even if proc was mounted with hidepid
-> > > > > enabled, allowing pidfds to be used to bypass those protections. We
-> > > > > now call ptrace_may_access() to perform some DAC checking as well
-> > > > > as call the appropriate LSM hook.
-> > > > >
-> > > > > The downside to this approach is that there are now more restrictions
-> > > > > on accessing this info from a pidfd than when just using proc (without
-> > > > > hidepid). I am open to suggestions if anyone can think of a better way
-> > > > > to handle this.
-> > > >
-> > > > This isn't really workable since this would regress userspace quite a
-> > > > bit. I think we need a different approach. I've given it some thought
-> > > > and everything's kinda ugly but this might work.
-> > > >
-> > > > In struct pid_namespace record whether anyone ever mounted a procfs
-> > > > with hidepid turned on for this pidns. In pidfd_info() we check whether
-> > > > hidepid was ever turned on. If it wasn't we're done and can just return
-> > > > the info. This will be the common case. If hidepid was ever turned on
-> > > > use kern_path("/proc") to lookup procfs. If not found check
-> > > > ptrace_may_access() to decide whether to return the info or not. If
-> > > > /proc is found check it's hidepid settings and make a decision based on
-> > > > that.
-> > > >
-> > > > You can probably reorder this to call ptrace_may_access() first and then
-> > > > do the procfs lookup dance. Thoughts?
-> > >
-> > > Thanks for the feedback. I think your solution makes sense.
-> > >
-> > > Unfortunately, it seems like systemd mounts procfs with hidepid enabled on
-> > > boot for services with the ProtectProc option enabled. This means that
-> > > procfs will always have been mounted with hidepid in the init pid namespace.
-> > > Do you think it would be viable to record whether or not procfs was mounted
-> > > with hidepid enabled in the mount namespace instead?
-> >
-> > I guess we can see what it looks like.
-> 
-> Having looked into this some more I am not sure if the mount
-> namespace is viable either since a single proc instance could be in
-> multiple mount namespaces. In addition the mount namespace
-> does not seem to be easily accessible in the function where proc
-> mount options are applied. I also considered adding an option
-> similar to hidepid to pidfs, but since pidfs is not userspace-mounted
-> I do not think that is possible without some significant changes.
-> 
-> Doing a proc lookup with kern_path() does work, but it does not seem
-> practical in terms of performance unless we had some other way to
-> skip it in the common case.
-> 
-> Curious if anyone else has any ideas or suggestions on how this
-> could be implemented.
-
-Ok, so there's another series that adds support for allowing to mount
-procfs with subset=pid. That series currently uses an arcane mechanism
-where it walks all mounts in the caller mounts namespace to find procfs
-mounts and check its mount options (mount_too_revealing()). To get away
-from this barbaric hack I proposed recording all fully visible procfs
-mounts in a separate list on struct mnt_namespace that it can walk
-whenever a new procfs mount gets plugged in. Once we've done that work
-we effectively track whenever a procfs mount comes and goes from a given
-mount namespace. When we plug in that mount we simply remember the
-option used for the least restrictive procfs mount in that namespace in
-a per-mntns "proc_visiblity" field or something.
-
-Then in pidfs we simply do a:
-
-visibility_restricted = READ_ONCE(current->ns_proxy->mnt_ns);
-
-and be done with it. No locks, no lookup, no perf hit. Thoughts?
+#syz set subsystems: lsm, kernel
 
