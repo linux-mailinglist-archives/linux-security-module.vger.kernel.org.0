@@ -1,48 +1,48 @@
-Return-Path: <linux-security-module+bounces-15036-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-15034-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OBoAK8Qromkq0gQAu9opvQ
-	(envelope-from <linux-security-module+bounces-15036-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Sat, 28 Feb 2026 00:41:56 +0100
+	id eBu4Ipkromkq0gQAu9opvQ
+	(envelope-from <linux-security-module+bounces-15034-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Sat, 28 Feb 2026 00:41:13 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 241CE1BF12F
-	for <lists+linux-security-module@lfdr.de>; Sat, 28 Feb 2026 00:41:55 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0986E1BF0D3
+	for <lists+linux-security-module@lfdr.de>; Sat, 28 Feb 2026 00:41:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D284A30FBEF6
-	for <lists+linux-security-module@lfdr.de>; Fri, 27 Feb 2026 23:40:12 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C24FB30B046F
+	for <lists+linux-security-module@lfdr.de>; Fri, 27 Feb 2026 23:40:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E130F47B42A;
-	Fri, 27 Feb 2026 23:39:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 784AB44B698;
+	Fri, 27 Feb 2026 23:39:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="gzghteCX"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="VCj9Gs34"
 X-Original-To: linux-security-module@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB27E43DA38;
-	Fri, 27 Feb 2026 23:39:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B725843DA3E;
+	Fri, 27 Feb 2026 23:39:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772235593; cv=none; b=L9/9k6Np+s6MWA6LMlNn1bcx69vzHweyjz6gImXk6lZJWFhGPixa/3FeSIcAUNUnRFfrwAgmdKXraGPwV7+IIKJqw8Mm45oU76i8cbj4U7j+wbFv9K9KLkWPHIJvVC31H2aTiYyofkNdjc1wEDSPhqpYvxB/u94H72mpxB6QSGY=
+	t=1772235591; cv=none; b=i4GAbowHk22GpQRhYsSpgfzcX5d7/lJ5K3JSI1hdJijpCj/0KvaDEA0X633oIIZUSXoOLlEH86xuv9btursgNTs1ECvp+ekz/z6MnRHn8z+Jai6Ta7S7WK8tPPg2d1bDi7+QKTFRPXjp9HWDoLBksS/6dJKyiSOvYREJpot96iU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772235593; c=relaxed/simple;
-	bh=D+VW+R8K0POrbRrS2dDXlHwIgvGIZ20tTK8oobQrcU8=;
+	s=arc-20240116; t=1772235591; c=relaxed/simple;
+	bh=efWQ3uwQ9TRgjJI5J0dzhCvyJQL1oXnhm6feNoZ+vhY=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kEEMf3H799sY+zkyKMM/euDIWRVQw7FKmD3fYwZC2gDXMMiUsaQrW4JxmXrRtC9bF9BdsVp7RmM/MD273e9EGxp5xGU/FmB+Vt7bZvHLrtjb4VF4tEy/HoVDuG3h+mm/2ejv3aarcFgq7NNRA2kRXFxM7kG4V5NHhd1dXv/H8tg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=gzghteCX; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=ka2tRozAuQiY62rMxPdw1Vj1yAdDQ+lX/BehUp2c6QHOhAtzorlVP39beg4HAr8pKl1uSKAKK4vNInlttXuPmLwkWt5oATTYasbRen9MNKQVf7mrT0aAi+CwpikQNuGHHya0BHAHqJ3gRE3ik1ESVUKCeS8/iIccL6F99AcNsv8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=VCj9Gs34; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from narnia.corp.microsoft.com (unknown [40.86.183.173])
-	by linux.microsoft.com (Postfix) with ESMTPSA id D68AE20B6F05;
-	Fri, 27 Feb 2026 15:39:44 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D68AE20B6F05
+	by linux.microsoft.com (Postfix) with ESMTPSA id E383A20B6F04;
+	Fri, 27 Feb 2026 15:39:46 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E383A20B6F04
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1772235586;
-	bh=RWTkY/Qz36aGS7+IlbNK7vvrm7c3OmK6+02GyFNw8gk=;
+	s=default; t=1772235588;
+	bh=Vcnjy1FVFqEfr+gPqq1dmSGVbAmjZA9nCoYY+v0aeg0=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=gzghteCXxMr2ovaOFA76QgqeGTaOnZ+Ss/fLEghoEd70NUqAkYsKBTXhc5AxOoRVz
-	 vs0oOYKBucm7sJ8ytZICGDcHLclOy/MOBc8j4SV2f/URau/dlUEeQT+9rIWMgO1ImE
-	 d0wMMfjA5epeBcbJLI0GnkG27sAZB7+X8du0UGAg=
+	b=VCj9Gs34T0bB7bJtJ23NdA7nq7gG0imNSRd+XsI4mqLoGo/ufJjThxibOZFwHrAwf
+	 cBcIClNN+Goc7DFd6VksExyzjgPl4hpQiXZ2Bb1dSXYBaLk5EfgyeAGWzau4IsZnnF
+	 yMZsO0EhMU6Pi0UPb3s0YOLxTGTyGnNhHmdkKu+Y=
 From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
 To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>,
 	Jonathan Corbet <corbet@lwn.net>,
@@ -61,9 +61,9 @@ To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH v2 02/10] crypto: pkcs7: add flag for validated trust on a signed info block
-Date: Fri, 27 Feb 2026 15:38:31 -0800
-Message-ID: <20260227233930.2418522-3-bboscaccy@linux.microsoft.com>
+Subject: [PATCH v2 03/10] crypto: pkcs7: allow pkcs7_digest() to be called from pkcs7_trust
+Date: Fri, 27 Feb 2026 15:38:32 -0800
+Message-ID: <20260227233930.2418522-4-bboscaccy@linux.microsoft.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260227233930.2418522-1-bboscaccy@linux.microsoft.com>
 References: <20260227233930.2418522-1-bboscaccy@linux.microsoft.com>
@@ -82,13 +82,13 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[linux.microsoft.com,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[linux.microsoft.com:s=default];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCPT_COUNT_TWELVE(0.00)[17];
 	FREEMAIL_TO(0.00)[linux.microsoft.com,lwn.net,paul-moore.com,namei.org,hallyn.com,digikod.net,google.com,treblig.org,linux-foundation.org,HansenPartnership.com,redhat.com,kernel.org,gmail.com,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-15036-lists,linux-security-module=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15034-lists,linux-security-module=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -99,51 +99,102 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[bboscaccy@linux.microsoft.com,linux-security-module@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[linux.microsoft.com:+];
-	NEURAL_HAM(-0.00)[-0.992];
+	NEURAL_HAM(-0.00)[-0.991];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-security-module];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.microsoft.com:mid,linux.microsoft.com:dkim,hansenpartnership.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 241CE1BF12F
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.microsoft.com:mid,linux.microsoft.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,hansenpartnership.com:email]
+X-Rspamd-Queue-Id: 0986E1BF0D3
 X-Rspamd-Action: no action
 
 From: James Bottomley <James.Bottomley@HansenPartnership.com>
 
-Allow consumers of struct pkcs7_message to tell if any of the sinfo
-fields has passed a trust validation.  Note that this does not happen
-in parsing, pkcs7_validate_trust() must be explicitly called or called
-via validate_pkcs7_trust().
+Trying to run pkcs7_validate_trust() on something that parsed
+correctly but is not verified doesn't work because the signature
+digest hasn't been calculated.  Fix this by adding a digest calclation
+in to pkcs7_validate_one().  This is almost a nop if the digest exists.
+
+Additionally, the trust validation doesn't know the data payload, so
+adjust the digest calculator to skip checking the data digest if
+pkcs7->data is NULL.  A check is added in pkcs7_verify() for
+pkcs7->data being null (returning -EBADMSG) to guard against someone
+forgetting to supply data and getting an invalid success return.
 
 Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
 ---
- crypto/asymmetric_keys/pkcs7_parser.h | 1 +
- crypto/asymmetric_keys/pkcs7_trust.c  | 1 +
- 2 files changed, 2 insertions(+)
+ crypto/asymmetric_keys/pkcs7_parser.h |  3 +++
+ crypto/asymmetric_keys/pkcs7_trust.c  |  8 ++++++++
+ crypto/asymmetric_keys/pkcs7_verify.c | 13 +++++++++----
+ 3 files changed, 20 insertions(+), 4 deletions(-)
 
 diff --git a/crypto/asymmetric_keys/pkcs7_parser.h b/crypto/asymmetric_keys/pkcs7_parser.h
-index 6ef9f335bb17..203062a33def 100644
+index 203062a33def..cbe823aeac06 100644
 --- a/crypto/asymmetric_keys/pkcs7_parser.h
 +++ b/crypto/asymmetric_keys/pkcs7_parser.h
-@@ -20,6 +20,7 @@ struct pkcs7_signed_info {
- 	unsigned	index;
- 	bool		unsupported_crypto;	/* T if not usable due to missing crypto */
- 	bool		blacklisted;
-+	bool		verified; /* T if this signer has validated trust */
- 
- 	/* Message digest - the digest of the Content Data (or NULL) */
- 	const void	*msgdigest;
+@@ -66,3 +66,6 @@ struct pkcs7_message {
+ 	size_t		data_hdrlen;	/* Length of Data ASN.1 header */
+ 	const void	*data;		/* Content Data (or 0) */
+ };
++
++int pkcs7_digest(struct pkcs7_message *pkcs7,
++		 struct pkcs7_signed_info *sinfo);
 diff --git a/crypto/asymmetric_keys/pkcs7_trust.c b/crypto/asymmetric_keys/pkcs7_trust.c
-index 9a87c34ed173..78ebfb6373b6 100644
+index 78ebfb6373b6..7cb0a6bc7b32 100644
 --- a/crypto/asymmetric_keys/pkcs7_trust.c
 +++ b/crypto/asymmetric_keys/pkcs7_trust.c
-@@ -127,6 +127,7 @@ static int pkcs7_validate_trust_one(struct pkcs7_message *pkcs7,
- 		for (p = sinfo->signer; p != x509; p = p->signer)
- 			p->verified = true;
+@@ -30,6 +30,14 @@ static int pkcs7_validate_trust_one(struct pkcs7_message *pkcs7,
+ 
+ 	kenter(",%u,", sinfo->index);
+ 
++	/*
++	 * if we're being called immediately after parse, the
++	 * signature won't have a calculated digest yet, so calculate
++	 * one.  This function returns immediately if a digest has
++	 * already been calculated
++	 */
++	pkcs7_digest(pkcs7, sinfo);
++
+ 	if (sinfo->unsupported_crypto) {
+ 		kleave(" = -ENOPKG [cached]");
+ 		return -ENOPKG;
+diff --git a/crypto/asymmetric_keys/pkcs7_verify.c b/crypto/asymmetric_keys/pkcs7_verify.c
+index 474e2c1ae21b..3080f0ec52e0 100644
+--- a/crypto/asymmetric_keys/pkcs7_verify.c
++++ b/crypto/asymmetric_keys/pkcs7_verify.c
+@@ -19,8 +19,8 @@
+ /*
+  * Digest the relevant parts of the PKCS#7 data
+  */
+-static int pkcs7_digest(struct pkcs7_message *pkcs7,
+-			struct pkcs7_signed_info *sinfo)
++int pkcs7_digest(struct pkcs7_message *pkcs7,
++		 struct pkcs7_signed_info *sinfo)
+ {
+ 	struct public_key_signature *sig = sinfo->sig;
+ 	struct crypto_shash *tfm;
+@@ -93,8 +93,8 @@ static int pkcs7_digest(struct pkcs7_message *pkcs7,
+ 			goto error;
+ 		}
+ 
+-		if (memcmp(sig->m, sinfo->msgdigest,
+-			   sinfo->msgdigest_len) != 0) {
++		if (pkcs7->data && memcmp(sig->m, sinfo->msgdigest,
++					  sinfo->msgdigest_len) != 0) {
+ 			pr_warn("Sig %u: Message digest doesn't match\n",
+ 				sinfo->index);
+ 			ret = -EKEYREJECTED;
+@@ -463,6 +463,11 @@ int pkcs7_verify(struct pkcs7_message *pkcs7,
+ 		return -EINVAL;
  	}
-+	sinfo->verified = true;
- 	kleave(" = 0");
- 	return 0;
- }
+ 
++	if (!pkcs7->data) {
++		pr_warn("Data not supplied to verify operation\n");
++		return -EBADMSG;
++	}
++
+ 	for (sinfo = pkcs7->signed_infos; sinfo; sinfo = sinfo->next) {
+ 		ret = pkcs7_verify_one(pkcs7, sinfo);
+ 		if (sinfo->blacklisted) {
 -- 
 2.52.0
 
