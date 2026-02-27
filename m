@@ -1,48 +1,48 @@
-Return-Path: <linux-security-module+bounces-15039-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-15041-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AKSQGxIsomk/0gQAu9opvQ
-	(envelope-from <linux-security-module+bounces-15039-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Sat, 28 Feb 2026 00:43:14 +0100
+	id aD7/Ii8somk/0gQAu9opvQ
+	(envelope-from <linux-security-module+bounces-15041-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Sat, 28 Feb 2026 00:43:43 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9F251BF1A5
-	for <lists+linux-security-module@lfdr.de>; Sat, 28 Feb 2026 00:43:13 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id E32241BF1D8
+	for <lists+linux-security-module@lfdr.de>; Sat, 28 Feb 2026 00:43:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6C4083122163
-	for <lists+linux-security-module@lfdr.de>; Fri, 27 Feb 2026 23:40:36 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 90263307BA68
+	for <lists+linux-security-module@lfdr.de>; Fri, 27 Feb 2026 23:40:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F14DF45BD78;
-	Fri, 27 Feb 2026 23:40:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99D3C47CC81;
+	Fri, 27 Feb 2026 23:40:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="QJBfTcF0"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="LZaVvUrL"
 X-Original-To: linux-security-module@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF85244BCA9;
-	Fri, 27 Feb 2026 23:40:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E7203E95AD;
+	Fri, 27 Feb 2026 23:40:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772235605; cv=none; b=ChMj4hJCIqoRuTetKvQVsDumoSa/rC1U4opLr98rOjgkEOeXSGAvLOkeV4GG9h2lgMooZD7KznzVetqPdDeONROSsVWOEigvF0vzmFIAGtqGEFC53M7IpivjsTcFIH1X/gBo3xgJhYuMXIjADy2YlptR+uK/7wlaZ01P1Kjzbdo=
+	t=1772235607; cv=none; b=bCGNrh2A1Nmu47kjCQ2LyCQlHRpbhrsUZQK7yGoT7AyvjS6NIlSID4NAKZ7N79A8LLaT2Y5M6Ud5Re/1zY0G2+Ogp2skoCP3aq6wCSPGoAmC2IEWSaJRFUXHenG1gP4edcHzVfFRZF1+4nh4oOt4g3WAWgwWKlGym9lfluo/OZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772235605; c=relaxed/simple;
-	bh=VtAO1aHUhC9GAwsrw7oglChv2WQS/B5QX4FczTnXMHg=;
+	s=arc-20240116; t=1772235607; c=relaxed/simple;
+	bh=FCSz4JmYeI47a0qPI/iOpBthZR/hTXr9Qy3qNEEWEdQ=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=t82GD/qVMU9W7q1JDE0pF/pMsim2GqcSN0MVx62CFAWiUTu55UoeGU4Yq8iiNghD4Y4U68qeJfjcfbGn7x/GzUE/MXGNnc6MNsUcJjs/xKDPQ+U/0aTOzKbzGoyf+wW9d4ddqn95alFv67wVTQ2rX0YM0HuMTS4YJuxhMBo3tN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=QJBfTcF0; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=NY1zrw/FLpL9lFB4fmNmdJex1133LNRUEdVTSVEugL1Evl+ALOwrVFM8F7ueD0Vsk97JErTWkfN67xsMgkK8CH6BE14K7lqQSLxVNLafihTn0gixTRAezAbbBymXuBw7F0IbedlvS4Nv/FsACVuTRtODVdF842JrtFD6UA3woUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=LZaVvUrL; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from narnia.corp.microsoft.com (unknown [40.86.183.173])
-	by linux.microsoft.com (Postfix) with ESMTPSA id EF1AC20B6F03;
-	Fri, 27 Feb 2026 15:40:00 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EF1AC20B6F03
+	by linux.microsoft.com (Postfix) with ESMTPSA id 3B04220B6F05;
+	Fri, 27 Feb 2026 15:40:02 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3B04220B6F05
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1772235602;
-	bh=RBqj14ByqU03ua4MJUgxwy9+3AHd3KDJxeUsz+GRKaE=;
+	s=default; t=1772235605;
+	bh=zwavUBQq7pklRef1PggkLK7yE3m4QZq2PNfPVrS/blw=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=QJBfTcF0octRPXIelj/NvbPllJ6T5DXkXY3DfdZ+M06E6yWiZmHvaM13N9xm+ITLr
-	 5X9EjdLZmadIDmZasTiGesxO4JrlrJxhexU85lqSRdFSmKSq31ZSd0Insdu6Jn1IHc
-	 /+x90Gpx528iazKvUBXI/khZaZK5W6019zzEAUlo=
+	b=LZaVvUrLS98WQ7H275vWX8kp3+ZAI0tSCu07txrPwUy23nds4lGfNFRTnxD+x+KLW
+	 2sZvOOCBeQ+sprUa2Dpe9rJIuZ9znb+yuq/5xhoQqbRqvtqX3/QB1Uowtcc6Tv8vdk
+	 /G+SKeXg1MnlX8CjTaCpe51FcVXhltw/SfufgKnE=
 From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
 To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>,
 	Jonathan Corbet <corbet@lwn.net>,
@@ -61,9 +61,9 @@ To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH v2 09/10] hornet: Add a light skeleton data extractor scripts
-Date: Fri, 27 Feb 2026 15:38:38 -0800
-Message-ID: <20260227233930.2418522-10-bboscaccy@linux.microsoft.com>
+Subject: [PATCH v2 10/10] selftests/hornet: Add a selftest for the Hornet LSM
+Date: Fri, 27 Feb 2026 15:38:39 -0800
+Message-ID: <20260227233930.2418522-11-bboscaccy@linux.microsoft.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260227233930.2418522-1-bboscaccy@linux.microsoft.com>
 References: <20260227233930.2418522-1-bboscaccy@linux.microsoft.com>
@@ -82,13 +82,13 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[linux.microsoft.com,none];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[linux.microsoft.com:s=default];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCPT_COUNT_TWELVE(0.00)[17];
 	FREEMAIL_TO(0.00)[linux.microsoft.com,lwn.net,paul-moore.com,namei.org,hallyn.com,digikod.net,google.com,treblig.org,linux-foundation.org,HansenPartnership.com,redhat.com,kernel.org,gmail.com,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-15039-lists,linux-security-module=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15041-lists,linux-security-module=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -99,127 +99,175 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[bboscaccy@linux.microsoft.com,linux-security-module@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[linux.microsoft.com:+];
-	NEURAL_HAM(-0.00)[-0.990];
+	NEURAL_HAM(-0.00)[-0.987];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-security-module];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.microsoft.com:mid,linux.microsoft.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: D9F251BF1A5
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.microsoft.com:mid,linux.microsoft.com:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: E32241BF1D8
 X-Rspamd-Action: no action
 
-These script eases light skeleton development against Hornet by
-generating a data payloads which can be used for signing a light
-skeleton binary using gen_sig.
+This selftest contains a testcase that utilizes light skeleton eBPF
+loaders and exercises hornet's map validation.
 
 Signed-off-by: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
 ---
- scripts/hornet/extract-insn.sh | 27 +++++++++++++++++++++++++++
- scripts/hornet/extract-map.sh  | 27 +++++++++++++++++++++++++++
- scripts/hornet/extract-skel.sh | 27 +++++++++++++++++++++++++++
- 3 files changed, 81 insertions(+)
- create mode 100755 scripts/hornet/extract-insn.sh
- create mode 100755 scripts/hornet/extract-map.sh
- create mode 100755 scripts/hornet/extract-skel.sh
+ tools/testing/selftests/Makefile             |  1 +
+ tools/testing/selftests/hornet/Makefile      | 63 ++++++++++++++++++++
+ tools/testing/selftests/hornet/loader.c      | 21 +++++++
+ tools/testing/selftests/hornet/trivial.bpf.c | 33 ++++++++++
+ 4 files changed, 118 insertions(+)
+ create mode 100644 tools/testing/selftests/hornet/Makefile
+ create mode 100644 tools/testing/selftests/hornet/loader.c
+ create mode 100644 tools/testing/selftests/hornet/trivial.bpf.c
 
-diff --git a/scripts/hornet/extract-insn.sh b/scripts/hornet/extract-insn.sh
-new file mode 100755
-index 000000000000..52338f057ff6
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 450f13ba4cca..4e2d1cd88c82 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -44,6 +44,7 @@ TARGETS += ftrace
+ TARGETS += futex
+ TARGETS += gpio
+ TARGETS += hid
++TARGETS += hornet
+ TARGETS += intel_pstate
+ TARGETS += iommu
+ TARGETS += ipc
+diff --git a/tools/testing/selftests/hornet/Makefile b/tools/testing/selftests/hornet/Makefile
+new file mode 100644
+index 000000000000..432bce59f54e
 --- /dev/null
-+++ b/scripts/hornet/extract-insn.sh
-@@ -0,0 +1,27 @@
-+#!/bin/bash
++++ b/tools/testing/selftests/hornet/Makefile
+@@ -0,0 +1,63 @@
 +# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright (c) 2025 Microsoft Corporation
-+#
-+# This program is free software; you can redistribute it and/or
-+# modify it under the terms of version 2 of the GNU General Public
-+# License as published by the Free Software Foundation.
++include ../../../build/Build.include
++include ../../../scripts/Makefile.arch
++include ../../../scripts/Makefile.include
 +
-+function usage() {
-+    echo "Sample script for extracting instructions"
-+    echo "autogenerated eBPF lskel headers"
-+    echo ""
-+    echo "USAGE: header_file"
-+    exit
-+}
++CLANG ?= clang
++CFLAGS := -g -O2 -Wall
++BPFTOOL ?= $(TOOLSDIR)/bpf/bpftool/bpftool
++SCRIPTSDIR := $(abspath ../../../../scripts/hornet)
++TOOLSDIR := $(abspath ../../..)
++LIBDIR := $(TOOLSDIR)/lib
++BPFDIR := $(LIBDIR)/bpf
++TOOLSINCDIR := $(TOOLSDIR)/include
++APIDIR := $(TOOLSINCDIR)/uapi
++CERTDIR := $(abspath ../../../../certs)
++PKG_CONFIG ?= $(CROSS_COMPILE)pkg-config
 +
-+ARGC=$#
++TEST_GEN_PROGS := loader
++TEST_GEN_FILES := vmlinux.h loader.h trivial.bpf.o map.bin sig.bin insn.bin signed_loader.h
++$(TEST_GEN_PROGS): LDLIBS += -lbpf
++$(TEST_GEN_PROGS): $(TEST_GEN_FILES)
 +
-+EXPECTED_ARGS=1
++include ../lib.mk
 +
-+if [ $ARGC -ne $EXPECTED_ARGS ] ; then
-+    usage
-+else
-+    printf $(gcc -E $1 | grep "opts_insn" | \
-+		 awk -F"=" '{print $2}' | sed 's/;\+$//' | sed 's/\"//g')
-+fi
-diff --git a/scripts/hornet/extract-map.sh b/scripts/hornet/extract-map.sh
-new file mode 100755
-index 000000000000..c309f505c623
++BPF_CFLAGS := -target bpf \
++	-D__TARGET_ARCH_$(ARCH) \
++	-I/usr/include/$(shell uname -m)-linux-gnu \
++	$(KHDR_INCLUDES)
++
++vmlinux.h:
++	$(BPFTOOL) btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
++
++trivial.bpf.o: trivial.bpf.c vmlinux.h
++	$(CLANG) $(CFLAGS) $(BPF_CFLAGS) -c $< -o $@
++
++loader.h: trivial.bpf.o
++	$(BPFTOOL) gen skeleton -S -k $(CERTDIR)/signing_key.pem -i $(CERTDIR)/signing_key.x509 \
++		-L $< name trivial > $@
++
++insn.bin: loader.h
++	$(SCRIPTSDIR)/extract-insn.sh $< > $@
++
++map.bin: loader.h
++	$(SCRIPTSDIR)/extract-map.sh $< > $@
++
++$(OUTPUT)/gen_sig: ../../../../scripts/hornet/gen_sig.c
++	$(call msg,GEN_SIG,,$@)
++	$(Q)$(CC) $(shell $(PKG_CONFIG) --cflags libcrypto 2> /dev/null) \
++		  $< -o $@ \
++		  $(shell $(PKG_CONFIG) --libs libcrypto 2> /dev/null || echo -lcrypto)
++
++sig.bin: insn.bin map.bin $(OUTPUT)/gen_sig
++	$(OUTPUT)/gen_sig --key $(CERTDIR)/signing_key.pem --cert $(CERTDIR)/signing_key.x509 \
++		--data insn.bin --add map.bin:0 --out sig.bin
++
++signed_loader.h: sig.bin
++	$(SCRIPTSDIR)/write-sig.sh loader.h sig.bin > $@
++
++loader: loader.c signed_loader.h
++	$(CC) $(CFLAGS) -I$(LIBDIR) -I$(APIDIR) $< -o $@ -lbpf
++
++
++EXTRA_CLEAN = $(OUTPUT)/gen_sig
+diff --git a/tools/testing/selftests/hornet/loader.c b/tools/testing/selftests/hornet/loader.c
+new file mode 100644
+index 000000000000..f27580c7262b
 --- /dev/null
-+++ b/scripts/hornet/extract-map.sh
-@@ -0,0 +1,27 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright (c) 2025 Microsoft Corporation
-+#
-+# This program is free software; you can redistribute it and/or
-+# modify it under the terms of version 2 of the GNU General Public
-+# License as published by the Free Software Foundation.
++++ b/tools/testing/selftests/hornet/loader.c
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
 +
-+function usage() {
-+    echo "Sample script for extracting instructions"
-+    echo "autogenerated eBPF lskel headers"
-+    echo ""
-+    echo "USAGE: header_file"
-+    exit
++#include <stdio.h>
++#include <unistd.h>
++#include <stddef.h>
++#include <sys/resource.h>
++#include <bpf/libbpf.h>
++#include <errno.h>
++#include  "signed_loader.h"
++
++int main(int argc, char **argv)
++{
++	struct trivial *skel;
++
++	skel = trivial__open_and_load();
++	if (!skel)
++		return -1;
++
++	trivial__destroy(skel);
++	return 0;
 +}
-+
-+ARGC=$#
-+
-+EXPECTED_ARGS=1
-+
-+if [ $ARGC -ne $EXPECTED_ARGS ] ; then
-+    usage
-+else
-+    printf $(gcc -E $1 | grep "opts_data" | \
-+		 awk -F"=" '{print $2}' | sed 's/;\+$//' | sed 's/\"//g')
-+fi
-diff --git a/scripts/hornet/extract-skel.sh b/scripts/hornet/extract-skel.sh
-new file mode 100755
-index 000000000000..6550a86b8991
+diff --git a/tools/testing/selftests/hornet/trivial.bpf.c b/tools/testing/selftests/hornet/trivial.bpf.c
+new file mode 100644
+index 000000000000..d38c5b53ff93
 --- /dev/null
-+++ b/scripts/hornet/extract-skel.sh
-@@ -0,0 +1,27 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright (c) 2025 Microsoft Corporation
-+#
-+# This program is free software; you can redistribute it and/or
-+# modify it under the terms of version 2 of the GNU General Public
-+# License as published by the Free Software Foundation.
++++ b/tools/testing/selftests/hornet/trivial.bpf.c
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
 +
-+function usage() {
-+    echo "Sample script for extracting instructions and map data out of"
-+    echo "autogenerated eBPF lskel headers"
-+    echo ""
-+    echo "USAGE: header_file field"
-+    exit
++#include "vmlinux.h"
++
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_core_read.h>
++
++char LICENSE[] SEC("license") = "Dual BSD/GPL";
++
++int monitored_pid = 0;
++
++SEC("tracepoint/syscalls/sys_enter_unlinkat")
++int handle_enter_unlink(struct trace_event_raw_sys_enter *ctx)
++{
++	char filename[128] = { 0 };
++	struct task_struct *task;
++	unsigned long start_time = 0;
++	int pid = bpf_get_current_pid_tgid() >> 32;
++	char *pathname_ptr = (char *) BPF_CORE_READ(ctx, args[1]);
++
++	bpf_probe_read_str(filename, sizeof(filename), pathname_ptr);
++	task = (struct task_struct *)bpf_get_current_task();
++	start_time = BPF_CORE_READ(task, start_time);
++
++	bpf_printk("BPF triggered unlinkat by PID: %d, start_time %ld. pathname = %s",
++		   pid, start_time, filename);
++
++	if (monitored_pid == pid)
++		bpf_printk("target pid found");
++
++	return 0;
 +}
-+
-+ARGC=$#
-+
-+EXPECTED_ARGS=2
-+
-+if [ $ARGC -ne $EXPECTED_ARGS ] ; then
-+    usage
-+else
-+    printf $(gcc -E $1 | grep "static const char opts_$2" | \
-+		 awk -F"=" '{print $2}' | sed 's/;\+$//' | sed 's/\"//g')
-+fi
 -- 
 2.52.0
 
