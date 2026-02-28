@@ -1,274 +1,175 @@
-Return-Path: <linux-security-module+bounces-15041-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-15044-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aD7/Ii8somk/0gQAu9opvQ
-	(envelope-from <linux-security-module+bounces-15041-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Sat, 28 Feb 2026 00:43:43 +0100
+	id XxT2BNc9omnn1AQAu9opvQ
+	(envelope-from <linux-security-module+bounces-15044-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Sat, 28 Feb 2026 01:59:03 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id E32241BF1D8
-	for <lists+linux-security-module@lfdr.de>; Sat, 28 Feb 2026 00:43:42 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55A581BF90C
+	for <lists+linux-security-module@lfdr.de>; Sat, 28 Feb 2026 01:59:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 90263307BA68
-	for <lists+linux-security-module@lfdr.de>; Fri, 27 Feb 2026 23:40:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3FCB1304BCE0
+	for <lists+linux-security-module@lfdr.de>; Sat, 28 Feb 2026 00:57:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99D3C47CC81;
-	Fri, 27 Feb 2026 23:40:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 183B5274FDF;
+	Sat, 28 Feb 2026 00:57:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="LZaVvUrL"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Hoq+0YE/"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E7203E95AD;
-	Fri, 27 Feb 2026 23:40:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FED9368978;
+	Sat, 28 Feb 2026 00:57:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772235607; cv=none; b=bCGNrh2A1Nmu47kjCQ2LyCQlHRpbhrsUZQK7yGoT7AyvjS6NIlSID4NAKZ7N79A8LLaT2Y5M6Ud5Re/1zY0G2+Ogp2skoCP3aq6wCSPGoAmC2IEWSaJRFUXHenG1gP4edcHzVfFRZF1+4nh4oOt4g3WAWgwWKlGym9lfluo/OZ0=
+	t=1772240261; cv=none; b=M6ERIOcbAkXDAw63kdrboLsgLCVkWB2TI+yjlXvcHvW1f1wTyvW8KQCuc84dH1FVpqhYEVhUrn3waxp0Ns1/Lb3k62tInVaKrBQQ968GiJRlREmDWGbyVWC5QP7mRqV4vPggP3NMdv14qllv2w5XzySzb1QHaG/NsrVk8qGSXLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772235607; c=relaxed/simple;
-	bh=FCSz4JmYeI47a0qPI/iOpBthZR/hTXr9Qy3qNEEWEdQ=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NY1zrw/FLpL9lFB4fmNmdJex1133LNRUEdVTSVEugL1Evl+ALOwrVFM8F7ueD0Vsk97JErTWkfN67xsMgkK8CH6BE14K7lqQSLxVNLafihTn0gixTRAezAbbBymXuBw7F0IbedlvS4Nv/FsACVuTRtODVdF842JrtFD6UA3woUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=LZaVvUrL; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from narnia.corp.microsoft.com (unknown [40.86.183.173])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 3B04220B6F05;
-	Fri, 27 Feb 2026 15:40:02 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3B04220B6F05
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1772235605;
-	bh=zwavUBQq7pklRef1PggkLK7yE3m4QZq2PNfPVrS/blw=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=LZaVvUrLS98WQ7H275vWX8kp3+ZAI0tSCu07txrPwUy23nds4lGfNFRTnxD+x+KLW
-	 2sZvOOCBeQ+sprUa2Dpe9rJIuZ9znb+yuq/5xhoQqbRqvtqX3/QB1Uowtcc6Tv8vdk
-	 /G+SKeXg1MnlX8CjTaCpe51FcVXhltw/SfufgKnE=
-From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
-	"Dr. David Alan Gilbert" <linux@treblig.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	James.Bottomley@HansenPartnership.com,
-	dhowells@redhat.com,
-	Fan Wu <wufan@kernel.org>,
-	Ryan Foster <foster.ryan.r@gmail.com>,
-	linux-security-module@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH v2 10/10] selftests/hornet: Add a selftest for the Hornet LSM
-Date: Fri, 27 Feb 2026 15:38:39 -0800
-Message-ID: <20260227233930.2418522-11-bboscaccy@linux.microsoft.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260227233930.2418522-1-bboscaccy@linux.microsoft.com>
-References: <20260227233930.2418522-1-bboscaccy@linux.microsoft.com>
+	s=arc-20240116; t=1772240261; c=relaxed/simple;
+	bh=THrk0S1hUifkCD5Acw2ePMoclJ4QRq7m4suO6JFURgc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=RIpEZkoelalLc9WYp/rQMMLdzKkPn1JR9xUjlzn72x+avnSJpJjCYBMXgbcoS9W2VghyRQPUMqtHCkIs4h20A/vRWswLwAm+37a5+1mNVGtcsF2YhUjdmqI3sUMcIxw77Bc3ijy9cn4SEVhfxh7DGyWE6iySecE0SPL7Ln9kCa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Hoq+0YE/; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
+	bh=9qDDL8pSQ7Li0UdiwzA94dKuksU5huQcWTQy5Af+yjw=; b=Hoq+0YE/aWhYQe0nJSb4LxSNR6
+	rHGSWDZJ+4dcH5WoyxxffTnc+v1y/x1eJnAGPQaDe+76DnubVZe8EMK6uiccMadST84d9rvF2TVu7
+	4wVaEAtvYatY6i4okkMsinC9W1BjAteubAYLCwmJejDdi5n0slUEydvohWqV/65+ozx+YIfiYHn9x
+	fbBYcVks8d7kjlU+d8ukuMrrE0ECA4PGfBo0WaLjD5D3hCxvXK6OdYXd3CkBM9CI+3VMZZEc873zm
+	pCu4PFaXAdoUW4LEXiu3hMCm+EB3YI3NPjuyhvaUG7d5E+krDZEFZ24HFhEjWr4Nu285dZmvAPhfm
+	MU6kM/ig==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vw8e6-00000009MWc-0BxN;
+	Sat, 28 Feb 2026 00:57:26 +0000
+Message-ID: <9b9d841c-1b56-4202-ba04-0a176ab15218@infradead.org>
+Date: Fri, 27 Feb 2026 16:57:23 -0800
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 06/10] lsm: framework for BPF integrity verification
+To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>,
+ Jonathan Corbet <corbet@lwn.net>, Paul Moore <paul@paul-moore.com>,
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
+ =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+ =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
+ "Dr. David Alan Gilbert" <linux@treblig.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ James.Bottomley@HansenPartnership.com, dhowells@redhat.com,
+ Fan Wu <wufan@kernel.org>, Ryan Foster <foster.ryan.r@gmail.com>,
+ linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+References: <20260227233930.2418522-1-bboscaccy@linux.microsoft.com>
+ <20260227233930.2418522-7-bboscaccy@linux.microsoft.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20260227233930.2418522-7-bboscaccy@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[linux.microsoft.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[linux.microsoft.com:s=default];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	DMARC_POLICY_ALLOW(-0.50)[infradead.org,none];
+	R_DKIM_ALLOW(-0.20)[infradead.org:s=bombadil.20210309];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	FREEMAIL_TO(0.00)[linux.microsoft.com,lwn.net,paul-moore.com,namei.org,hallyn.com,digikod.net,google.com,treblig.org,linux-foundation.org,HansenPartnership.com,redhat.com,kernel.org,gmail.com,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-15041-lists,linux-security-module=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-15044-lists,linux-security-module=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bboscaccy@linux.microsoft.com,linux-security-module@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[linux.microsoft.com,lwn.net,paul-moore.com,namei.org,hallyn.com,digikod.net,google.com,treblig.org,linux-foundation.org,HansenPartnership.com,redhat.com,kernel.org,gmail.com,vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[linux.microsoft.com:+];
-	NEURAL_HAM(-0.00)[-0.987];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.998];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[rdunlap@infradead.org,linux-security-module@vger.kernel.org];
+	DKIM_TRACE(0.00)[infradead.org:+];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-security-module];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.microsoft.com:mid,linux.microsoft.com:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: E32241BF1D8
+	RCPT_COUNT_TWELVE(0.00)[17];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: 55A581BF90C
 X-Rspamd-Action: no action
 
-This selftest contains a testcase that utilizes light skeleton eBPF
-loaders and exercises hornet's map validation.
+Hi Blaise--
 
-Signed-off-by: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
----
- tools/testing/selftests/Makefile             |  1 +
- tools/testing/selftests/hornet/Makefile      | 63 ++++++++++++++++++++
- tools/testing/selftests/hornet/loader.c      | 21 +++++++
- tools/testing/selftests/hornet/trivial.bpf.c | 33 ++++++++++
- 4 files changed, 118 insertions(+)
- create mode 100644 tools/testing/selftests/hornet/Makefile
- create mode 100644 tools/testing/selftests/hornet/loader.c
- create mode 100644 tools/testing/selftests/hornet/trivial.bpf.c
+On 2/27/26 3:38 PM, Blaise Boscaccy wrote:
+> From: Paul Moore <paul@paul-moore.com>
+> 
+> Add a new LSM hook and two new LSM hook callbacks to support LSMs that
+> perform integrity verification, e.g. digital signature verification,
+> of BPF programs.
+> 
+> While the BPF subsystem does implement a signature verification scheme,
+> it does not satisfy a number of existing requirements, adding support
+> for BPF program integrity verification to the LSM framework allows
+> administrators to select additional integrity verification mechanisms
+> to meet these needs while also providing a mechanism for future
+> expansion.  Additional on why this is necessary can be found at the
+> lore archive link below:
+> 
+> https://lore.kernel.org/linux-security-module/CAHC9VhTQ_DR=ANzoDBjcCtrimV7XcCZVUsANPt=TjcvM4d-vjg@mail.gmail.com/
+> 
+> The LSM-based BPF integrity verification mechanism works within the
+> existing security_bpf_prog_load() hook called by the BPF subsystem.
+> It adds an additional dedicated integrity callback and a new LSM
+> hook/callback to be called from within LSMs implementing integrity
+> verification.
+> 
+> The first new callback, bpf_prog_load_integrity(), located within the
+> security_bpf_prog_load() hook, is necessary to ensure that the integrity
+> verification callbacks are executed before any of the existing LSMs
+> are executed via the bpf_prog_load() callback.  Reusing the existing
+> bpf_prog_load() callback for integrity verification could result in LSMs
+> not having access to the integrity verification results when asked to
+> authorize the BPF program load in the bpf_prog_load() callback.
+> 
+> The new LSM hook, security_bpf_prog_load_post_integrity(), is intended
+> to be called from within LSMs performing BPF program integrity
+> verification.  It is used to report the verdict of the integrity
+> verification to other LSMs enforcing access control policy on BPF
+> program loads.  LSMs enforcing such access controls should register a
+> bpf_prog_load_post_integrity() callback to receive integrity verdicts.
+> 
+> More information on these new callbacks and hook can be found in the
+> code comments in this patch.
+> 
+> Signed-off-by: Paul Moore <paul@paul-moore.com>
+> ---
+>  include/linux/lsm_hook_defs.h |  5 +++
+>  include/linux/security.h      | 25 ++++++++++++
+>  security/security.c           | 75 +++++++++++++++++++++++++++++++++--
+>  3 files changed, 102 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 450f13ba4cca..4e2d1cd88c82 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -44,6 +44,7 @@ TARGETS += ftrace
- TARGETS += futex
- TARGETS += gpio
- TARGETS += hid
-+TARGETS += hornet
- TARGETS += intel_pstate
- TARGETS += iommu
- TARGETS += ipc
-diff --git a/tools/testing/selftests/hornet/Makefile b/tools/testing/selftests/hornet/Makefile
-new file mode 100644
-index 000000000000..432bce59f54e
---- /dev/null
-+++ b/tools/testing/selftests/hornet/Makefile
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: GPL-2.0
-+include ../../../build/Build.include
-+include ../../../scripts/Makefile.arch
-+include ../../../scripts/Makefile.include
-+
-+CLANG ?= clang
-+CFLAGS := -g -O2 -Wall
-+BPFTOOL ?= $(TOOLSDIR)/bpf/bpftool/bpftool
-+SCRIPTSDIR := $(abspath ../../../../scripts/hornet)
-+TOOLSDIR := $(abspath ../../..)
-+LIBDIR := $(TOOLSDIR)/lib
-+BPFDIR := $(LIBDIR)/bpf
-+TOOLSINCDIR := $(TOOLSDIR)/include
-+APIDIR := $(TOOLSINCDIR)/uapi
-+CERTDIR := $(abspath ../../../../certs)
-+PKG_CONFIG ?= $(CROSS_COMPILE)pkg-config
-+
-+TEST_GEN_PROGS := loader
-+TEST_GEN_FILES := vmlinux.h loader.h trivial.bpf.o map.bin sig.bin insn.bin signed_loader.h
-+$(TEST_GEN_PROGS): LDLIBS += -lbpf
-+$(TEST_GEN_PROGS): $(TEST_GEN_FILES)
-+
-+include ../lib.mk
-+
-+BPF_CFLAGS := -target bpf \
-+	-D__TARGET_ARCH_$(ARCH) \
-+	-I/usr/include/$(shell uname -m)-linux-gnu \
-+	$(KHDR_INCLUDES)
-+
-+vmlinux.h:
-+	$(BPFTOOL) btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
-+
-+trivial.bpf.o: trivial.bpf.c vmlinux.h
-+	$(CLANG) $(CFLAGS) $(BPF_CFLAGS) -c $< -o $@
-+
-+loader.h: trivial.bpf.o
-+	$(BPFTOOL) gen skeleton -S -k $(CERTDIR)/signing_key.pem -i $(CERTDIR)/signing_key.x509 \
-+		-L $< name trivial > $@
-+
-+insn.bin: loader.h
-+	$(SCRIPTSDIR)/extract-insn.sh $< > $@
-+
-+map.bin: loader.h
-+	$(SCRIPTSDIR)/extract-map.sh $< > $@
-+
-+$(OUTPUT)/gen_sig: ../../../../scripts/hornet/gen_sig.c
-+	$(call msg,GEN_SIG,,$@)
-+	$(Q)$(CC) $(shell $(PKG_CONFIG) --cflags libcrypto 2> /dev/null) \
-+		  $< -o $@ \
-+		  $(shell $(PKG_CONFIG) --libs libcrypto 2> /dev/null || echo -lcrypto)
-+
-+sig.bin: insn.bin map.bin $(OUTPUT)/gen_sig
-+	$(OUTPUT)/gen_sig --key $(CERTDIR)/signing_key.pem --cert $(CERTDIR)/signing_key.x509 \
-+		--data insn.bin --add map.bin:0 --out sig.bin
-+
-+signed_loader.h: sig.bin
-+	$(SCRIPTSDIR)/write-sig.sh loader.h sig.bin > $@
-+
-+loader: loader.c signed_loader.h
-+	$(CC) $(CFLAGS) -I$(LIBDIR) -I$(APIDIR) $< -o $@ -lbpf
-+
-+
-+EXTRA_CLEAN = $(OUTPUT)/gen_sig
-diff --git a/tools/testing/selftests/hornet/loader.c b/tools/testing/selftests/hornet/loader.c
-new file mode 100644
-index 000000000000..f27580c7262b
---- /dev/null
-+++ b/tools/testing/selftests/hornet/loader.c
-@@ -0,0 +1,21 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <stddef.h>
-+#include <sys/resource.h>
-+#include <bpf/libbpf.h>
-+#include <errno.h>
-+#include  "signed_loader.h"
-+
-+int main(int argc, char **argv)
-+{
-+	struct trivial *skel;
-+
-+	skel = trivial__open_and_load();
-+	if (!skel)
-+		return -1;
-+
-+	trivial__destroy(skel);
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/hornet/trivial.bpf.c b/tools/testing/selftests/hornet/trivial.bpf.c
-new file mode 100644
-index 000000000000..d38c5b53ff93
---- /dev/null
-+++ b/tools/testing/selftests/hornet/trivial.bpf.c
-@@ -0,0 +1,33 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+
-+#include "vmlinux.h"
-+
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
-+
-+char LICENSE[] SEC("license") = "Dual BSD/GPL";
-+
-+int monitored_pid = 0;
-+
-+SEC("tracepoint/syscalls/sys_enter_unlinkat")
-+int handle_enter_unlink(struct trace_event_raw_sys_enter *ctx)
-+{
-+	char filename[128] = { 0 };
-+	struct task_struct *task;
-+	unsigned long start_time = 0;
-+	int pid = bpf_get_current_pid_tgid() >> 32;
-+	char *pathname_ptr = (char *) BPF_CORE_READ(ctx, args[1]);
-+
-+	bpf_probe_read_str(filename, sizeof(filename), pathname_ptr);
-+	task = (struct task_struct *)bpf_get_current_task();
-+	start_time = BPF_CORE_READ(task, start_time);
-+
-+	bpf_printk("BPF triggered unlinkat by PID: %d, start_time %ld. pathname = %s",
-+		   pid, start_time, filename);
-+
-+	if (monitored_pid == pid)
-+		bpf_printk("target pid found");
-+
-+	return 0;
-+}
+For patches that you did not author, but are transporting instead,
+Documentation/process/submitting-patches.rst indicates that you should
+add your Signed-off-by: line to them:
+
+"""
+Any further SoBs (Signed-off-by:'s) following the author's SoB are from
+people handling and transporting the patch, but were not involved in its
+development. SoB chains should reflect the **real** route a patch took
+as it was propagated to the maintainers and ultimately to Linus, with
+the first SoB entry signalling primary authorship of a single author.
+"""
+
 -- 
-2.52.0
+~Randy
 
 
