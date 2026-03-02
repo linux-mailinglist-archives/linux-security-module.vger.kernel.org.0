@@ -1,267 +1,157 @@
-Return-Path: <linux-security-module+bounces-15091-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-15188-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EM62H1f0pWkxIQAAu9opvQ
-	(envelope-from <linux-security-module+bounces-15091-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Mon, 02 Mar 2026 21:34:31 +0100
+	id MFkONqAOpmmFJgAAu9opvQ
+	(envelope-from <linux-security-module+bounces-15188-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Mon, 02 Mar 2026 23:26:40 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A3111DFBC8
-	for <lists+linux-security-module@lfdr.de>; Mon, 02 Mar 2026 21:34:30 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54F881E55CD
+	for <lists+linux-security-module@lfdr.de>; Mon, 02 Mar 2026 23:26:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id A9BFA300FED8
-	for <lists+linux-security-module@lfdr.de>; Mon,  2 Mar 2026 20:34:27 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D4583305A2E0
+	for <lists+linux-security-module@lfdr.de>; Mon,  2 Mar 2026 22:08:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D331747F2CE;
-	Mon,  2 Mar 2026 20:28:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96512282F0F;
+	Mon,  2 Mar 2026 22:08:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ownmail.net header.i=@ownmail.net header.b="D0eLfEma";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="tAFci6MJ"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="X1TfWAE7"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from flow-a3-smtp.messagingengine.com (flow-a3-smtp.messagingengine.com [103.168.172.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C014C3E0C56;
-	Mon,  2 Mar 2026 20:28:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E2625DB12
+	for <linux-security-module@vger.kernel.org>; Mon,  2 Mar 2026 22:08:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772483311; cv=none; b=JcWXZ+XSgN8ws31UptU73dBVK7waXrJWt7eMjpV4jnGn7Ef047EWttuE3W0boeJ/lgIoReVdgxUz4RjKo1WvZc/EhOqEITbPWwJFpqIRffaeHOgrEBRgKh7jBZ0CfRtADf2WlvibE11iBkWYev6Lb9mLeZzCvMAwpiKN19EgdXI=
+	t=1772489287; cv=none; b=LkEzNXrVfPAwsD5xTGvMKpoIJ068LYgvAFqONsvmHsnKvn9piE7xt3r5fEGHAv8OZ/taRlW2jh0yCDuyk16VErAUUDEAT/hzdHA0kZTzxLmISjQnqjh68FWPezXEbqwSYJuCyEz7wYUn0bLmdiBsed0NZrIcVxj5nE49mpJgKRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772483311; c=relaxed/simple;
-	bh=c6YqrRFFIG57Nm7BKgEnOZWVnoX2J8Ac6s6y/FZAKqg=;
-	h=Content-Type:MIME-Version:From:To:Cc:Subject:In-reply-to:
-	 References:Date:Message-id; b=FJ8cOckemaRp9p8l5qdQwenaaEU0UviVrsQPgRzTdo7/wQnFZsijvWsCGomSrFG6qiVYNnIzkEKJrmUym+qRKyIIe4nlG4wXnlFJhNtMOiGZi7AteQo4FCWqZ86YPlDjV6Jf2zqfmkEH5do40sv6QMDZ3apJcEwioI9DJFkBWxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ownmail.net; spf=pass smtp.mailfrom=ownmail.net; dkim=pass (2048-bit key) header.d=ownmail.net header.i=@ownmail.net header.b=D0eLfEma; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=tAFci6MJ; arc=none smtp.client-ip=103.168.172.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ownmail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ownmail.net
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailflow.phl.internal (Postfix) with ESMTP id E2C371380BB2;
-	Mon,  2 Mar 2026 15:28:27 -0500 (EST)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-06.internal (MEProxy); Mon, 02 Mar 2026 15:28:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ownmail.net; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:reply-to:subject:subject:to:to; s=fm1; t=
-	1772483307; x=1772490507; bh=PGuwBdT/fi6I7xD4ofJxORaVZCjsED51iJF
-	HAxPkzm0=; b=D0eLfEmafy1DHEs3ecfMGa9SYgwJ/9KAoySk2AcXFiBYwVuCHdf
-	wlKN7gQsxxMEyi2M/XZl3H1JirKUUEak7rVSusoXBc2ExFGbWRl91PGNKrD7r1BM
-	tcD38hugO/0ju6D9M0vKfWAOcUt7p8mYe66lGNZns/ZGAyreVjIXQUh0d7IYRzBn
-	7fz9fCPr2TH0URqaOWQVc8IS+hIYdkKv9g3dutjoPYAI1ep+J0ZkN3yuU87vNknB
-	x/BEgI5PjfQAcEhHecVTCUbpz5Q9w7fIuoFAyOjqeZPuB/9TlvrtqqZ7WjuGUbEb
-	yhixnkuN7oO4S5hzKpfpVAkxmj0+Zo0kfZg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1772483307; x=
-	1772490507; bh=PGuwBdT/fi6I7xD4ofJxORaVZCjsED51iJFHAxPkzm0=; b=t
-	AFci6MJNoTqvVvOYewF6IF8CasVVsw5btRGe2wflqeQxnJDx0fVyyDgP9bCYWQOC
-	XkQJLwoCcabHfiFDQFPGrWGhbWkedbI9MpNm2NwsniQOwZjk++fCBuyyvo/qDj+9
-	MG16Gi+Q7RVWJG8g6pyCfVvl7oiIG0tsuDs/loDki67ozk2Zt0yXEIEG7yG68MeP
-	iK8dMG+C7NhRKDN7/qafBXo9x0wl9ALtVHmTIcspuXVPHDCBp1Yimi0WYUWZAG7i
-	epyZJDdyJwWX2QoUIqoRJyAZ+LcT13pTi8UgYKMpu0U/cVXHSrTFjZcjs+YL77AW
-	sWqfDYU88mol9V/JLIfpA==
-X-ME-Sender: <xms:6vKlac0S1uyHGmgu4rzTpxvRklQJfkHDrK5Uyumqmrz9mO-pjoT0hg>
-    <xme:6vKlaS9vw48XTdwyNBw_TTWTzQIEYGPNg8PzgxEf9buMAqE3tP8eNglHs-0M4XKAD
-    Z_W_4VqWLnoB4gyZnwcTpVoZ6vFSXlQzeHExnOqRzq0Ri99>
-X-ME-Received: <xmr:6vKladuhSn88PEMre-baego0jqJRKjSAqNOwOZ7LHpVWr1uWxlJYa9iuWMaOW4dPkkRCgXGiQ_hTiEK18TQiOyZbiIyOTTYMvvSm1NAr2A_G>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvheekieegucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurheptgfgggfhvfevufgjfhffkfhrsehtqhertddttdejnecuhfhrohhmpefpvghilheu
-    rhhofihnuceonhgvihhlsgesohifnhhmrghilhdrnhgvtheqnecuggftrfgrthhtvghrnh
-    epvdeuteelkeejkeevteetvedtkeegleduieeftdeftefgtddtleejgfelgfevffeinecu
-    ffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpehnvghilhgssehofihnmhgrihhlrdhnvghtpdhnsggp
-    rhgtphhtthhopedvvddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepvhhirhhose
-    iivghnihhvrdhlihhnuhigrdhorhhgrdhukhdprhgtphhtthhopehsvghlihhnuhigsehv
-    ghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidquhhnihhonhhfsh
-    esvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhsvggtuhhr
-    ihhthidqmhhoughulhgvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplh
-    hinhhugidqnhhfshesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhn
-    uhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlih
-    hnuhigqdhfshguvghvvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
-    mhhikhhlohhssehsiigvrhgvughirdhhuhdprhgtphhtthhopehjrggtkhesshhushgvrd
-    gtii
-X-ME-Proxy: <xmx:6vKlaer-3S458tUTAG_YwUVW1B-PDTT6QrxdCqvTH81jAFwzgVLejg>
-    <xmx:6vKlaYHXjFI95JvsJ5sDXR4EQsc_ezb6i2NBU-UThLKlWj5M797Viw>
-    <xmx:6vKlaR7OcojddhkX0vMniSB_eYyPVO5IWHCHlGaDubNTm_k8Bs02aA>
-    <xmx:6vKlabDlWp6tFwsOUnRBQ3BBJkpO3XfCb-O0DTSU0LsvYYhgguvrsw>
-    <xmx:6_KlafqVeoDSAdo4Nz-SP4GdTUtKutApTdNYU344W0_DJ979o9abUHi->
-Feedback-ID: i9d664b8f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 2 Mar 2026 15:28:20 -0500 (EST)
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1772489287; c=relaxed/simple;
+	bh=z/rzJMtLGYiIALrhUHUuSMwe3YYACkYuyancAx+6GE8=;
+	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
+	 References:In-Reply-To; b=g2BDpovqjGpF8hnCoiRKnfMK4yyXrLOB0K4Gtb4taRWePBPehqd0lwtMlW2vvSBgn5tOVbapkOOT3SZRbMG3BSzZAyJpedU/w5DaPl+eVFJJgyhjaoKegTTwKROZOvCA2qqM3RrYD26O0b8GEyp9CGiOyP0HJSkaM/FvauyNWgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=X1TfWAE7; arc=none smtp.client-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-8cbad8e6610so548211185a.0
+        for <linux-security-module@vger.kernel.org>; Mon, 02 Mar 2026 14:08:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1772489285; x=1773094085; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bgeJCkYZ7uwILUeA+oiWIAr+ytL103rllkD82SG1eeA=;
+        b=X1TfWAE7mhvtEdVV+0UnUFak7ukpMufYJzvW5Ex0sOJtoRxzso5+KsJyolwMM73hPm
+         Ihk5pAReaff6q1A2QoYegYfIpjOkmzbKhblAaezOGpHLg+858cG5rMLuE6doueYNX5dt
+         RDl3d/cJ8To9rkxiS2GhHBdZQu87DoCpVfy7Yqpte7/AccR1Dn/1FBMu0iLL/cm7YvHv
+         T1vL/Nlk4xbY9xSJKZIU54rLiHjPi9Y79s9TQhVT5XIvE/abAzBeaeAGlRocIf8N8ysK
+         6tA4mhSw/ndrMM7YTIHNAFlleG/bxFisNKBY2YCpx1QhcIHcgFVhrqA2ng3eXsZ8yNnW
+         TWZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772489285; x=1773094085;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bgeJCkYZ7uwILUeA+oiWIAr+ytL103rllkD82SG1eeA=;
+        b=rK7YkTbANbn+sZOPWPSt9o3pok/DPGiZ7YHvNCIaBY4qe9YLjalfrZGFKUvQxSDq95
+         4wmEKrq57Kre7eqY7yRY0RuKyl4ausCshnF14R7iu6T6o+XtMUFDRBK9yFUccSbDfRN7
+         NyzxwME4pvE3O+rAoc8o1GlIfzSQBTeNYHXrTx/Oc7DvNhnnQ/NRbY0WWlGsAAoWmH85
+         VxmaoBoXGSMErAhmp05XApzdfmPxyzk5wakoAwHAB5ftldDQGPrfM3H5mUWTI1klYfX8
+         Il+qvqv69o8UAaAb4tgLaE+2VzOqqVofGHf7GQJLukdeHc1dE3YgPqXrLNZNA1LI6K3t
+         sUuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW1pvsb2wQBgKlYmCgrfRkWsUUEmyszXcWuPIEmlDT6CEZZ4hG91Fzocz/6PnSoeQ1K4tGgCbqOnxZPCqKP6LsIOHxnJWo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/KWSxOBK182WM/fXpHGqwAkV4Hq9ocQzfuW2EURKK2SmOWdo9
+	jYO0CCoBWcYdahhigbDo8lKIbgqqtzjspJf8c6ulXZHk3SyYquJz+xf+igJvpYcJ3w==
+X-Gm-Gg: ATEYQzxfLln0jUWfgDA7TSkiGbFW36ZR8RUtD9HwdUGjKmE2IVnvNhLEDvktiE/YGTD
+	vL5VRqZOq/NqPYyWXt5FJMEJD+CtRRSH8OcEJRbl4QdUbLcBbKGfQBVzmviJxo00gyonZlLrkhR
+	RsoqZPjm34Q57+vdpaeOyRZxZI4L7jANXtMoRFFj9+Ldz4uNpUaJc+7CalTqU03llDy3U9H+yZQ
+	WnCSk9YDf0mINMwCFF4qXemxgkv3VqxnaAG9fNaUBlzKGAvDNdMBf8MjQlD4nFDMUliwfF/I7zk
+	KD7fpPCkoegV7pixLQmVldMi6XI6AynnGXnOZ4fMKINhLGvHxYQUKpSY7+/wCa2T9caqML7TzHA
+	E32a3AMpRpIiZtecjjTONZh9Z9Njj/e76AgykDU5miYROdAQ2t8XYbN4lfsJWX+u1ljQd+KnjS2
+	jIRGFWj92tffS9uPwXZT4i2Ul20fdj841nNqN+4oZ6Jmb2uV/0Wn5GDUZofFhdud/l6nSJ
+X-Received: by 2002:a05:620a:170b:b0:89e:b0bd:ced9 with SMTP id af79cd13be357-8cbc8ef7a8fmr1888817485a.43.1772489285291;
+        Mon, 02 Mar 2026 14:08:05 -0800 (PST)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-899f850b8b3sm36608516d6.23.2026.03.02.14.08.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Mar 2026 14:08:03 -0800 (PST)
+Date: Mon, 02 Mar 2026 17:08:02 -0500
+Message-ID: <0b3c6d530122d72a1047db17d016cf05@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-From: NeilBrown <neilb@ownmail.net>
-To: "Jeff Layton" <jlayton@kernel.org>
-Cc: "Christian Brauner" <brauner@kernel.org>,
- "Alexander Viro" <viro@zeniv.linux.org.uk>,
- "David Howells" <dhowells@redhat.com>, "Jan Kara" <jack@suse.cz>,
- "Chuck Lever" <chuck.lever@oracle.com>, "Miklos Szeredi" <miklos@szeredi.hu>,
- "Amir Goldstein" <amir73il@gmail.com>,
- "John Johansen" <john.johansen@canonical.com>,
- "Paul Moore" <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>,
- "Serge E. Hallyn" <serge@hallyn.com>,
- "Stephen Smalley" <stephen.smalley.work@gmail.com>,
- "Darrick J. Wong" <djwong@kernel.org>, linux-kernel@vger.kernel.org,
- netfs@lists.linux.dev, linux-fsdevel@vger.kernel.org,
- linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org,
- apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
- selinux@vger.kernel.org
-Subject: Re: [PATCH v3 01/15] VFS: note error returns in documentation for
- various lookup functions
-In-reply-to: <df3a0c1d7c2aa4653725a20401264de2ca1645b3.camel@kernel.org>
-References: <20260224222542.3458677-1-neilb@ownmail.net>,
- <20260224222542.3458677-2-neilb@ownmail.net>,
- <df3a0c1d7c2aa4653725a20401264de2ca1645b3.camel@kernel.org>
-Date: Tue, 03 Mar 2026 07:28:15 +1100
-Message-id: <177248329543.7472.6896694157211686467@noble.neil.brown.name>
-Reply-To: NeilBrown <neil@brown.name>
-X-Rspamd-Queue-Id: 8A3111DFBC8
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=UTF-8 
+Content-Transfer-Encoding: 8bit 
+X-Mailer: pstg-pwork:20260302_1612/pstg-lib:20260302_1053/pstg-pwork:20260302_1612
+From: Paul Moore <paul@paul-moore.com>
+To: Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc: Randy Dunlap <rdunlap@infradead.org>, Serge Hallyn <sergeh@kernel.org>, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH] cred: cred.h: fix kernel-doc warnings
+References: <20260302005154.3468238-1-rdunlap@infradead.org>
+In-Reply-To: <20260302005154.3468238-1-rdunlap@infradead.org>
+X-Rspamd-Queue-Id: 54F881E55CD
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ownmail.net,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[ownmail.net:s=fm1,messagingengine.com:s=fm1];
+	DMARC_POLICY_ALLOW(-0.50)[paul-moore.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[paul-moore.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-15188-lists,linux-security-module=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	REPLYTO_DN_EQ_FROM_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15091-lists,linux-security-module=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[22];
-	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[paul-moore.com:+];
 	TO_DN_SOME(0.00)[];
-	FREEMAIL_FROM(0.00)[ownmail.net];
-	FREEMAIL_CC(0.00)[kernel.org,zeniv.linux.org.uk,redhat.com,suse.cz,oracle.com,szeredi.hu,gmail.com,canonical.com,paul-moore.com,namei.org,hallyn.com,vger.kernel.org,lists.linux.dev,lists.ubuntu.com];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	DKIM_TRACE(0.00)[ownmail.net:+,messagingengine.com:+];
-	RCVD_COUNT_FIVE(0.00)[6];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[neilb@ownmail.net,linux-security-module@vger.kernel.org];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-security-module];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	HAS_REPLYTO(0.00)[neil@brown.name];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,brown.name:replyto,brown.name:email,ownmail.net:dkim,messagingengine.com:dkim]
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[paul@paul-moore.com,linux-security-module@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-security-module];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,infradead.org:email,paul-moore.com:dkim,paul-moore.com:email,paul-moore.com:url,paul-moore.com:mid]
 X-Rspamd-Action: no action
 
-On Tue, 03 Mar 2026, Jeff Layton wrote:
-> On Wed, 2026-02-25 at 09:16 +1100, NeilBrown wrote:
-> > From: NeilBrown <neil@brown.name>
-> >=20
-> > Darrick recently noted that try_lookup_noperm() is documented as
-> > "Look up a dentry by name in the dcache, returning NULL if it does not
-> > currently exist." but it can in fact return an error.
-> >=20
-> > So update the documentation for that and related functions.
-> >=20
-> > Link: https://lore.kernel.org/all/20260218234917.GA6490@frogsfrogsfrogs/
-> > Cc: "Darrick J. Wong" <djwong@kernel.org>
-> > Signed-off-by: NeilBrown <neil@brown.name>
-> > ---
-> >  fs/namei.c | 29 ++++++++++++++++++++++++++++-
-> >  1 file changed, 28 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/fs/namei.c b/fs/namei.c
-> > index 58f715f7657e..6f595f58acfe 100644
-> > --- a/fs/namei.c
-> > +++ b/fs/namei.c
-> > @@ -3124,7 +3124,8 @@ static int lookup_one_common(struct mnt_idmap *idma=
-p,
-> >   * @base:	base directory to lookup from
-> >   *
-> >   * Look up a dentry by name in the dcache, returning NULL if it does not
-> > - * currently exist.  The function does not try to create a dentry and if=
- one
-> > + * currently exist or an error if there is a problem with the name.
-> > + * The function does not try to create a dentry and if one
-> >   * is found it doesn't try to revalidate it.
-> >   *
-> >   * Note that this routine is purely a helper for filesystem usage and sh=
-ould
-> > @@ -3132,6 +3133,11 @@ static int lookup_one_common(struct mnt_idmap *idm=
-ap,
-> >   *
-> >   * No locks need be held - only a counted reference to @base is needed.
-> >   *
-> > + * Returns:
-> > + *   - ref-counted dentry on success, or
-> > + *   - %NULL if name could not be found, or
-> > + *   - ERR_PTR(-EACCES) if name is dot or dotdot or contains a slash or =
-nul, or
-> > + *   - ERR_PTR() if fs provide ->d_hash, and this returned an error.
-> >   */
-> >  struct dentry *try_lookup_noperm(struct qstr *name, struct dentry *base)
-> >  {
-> > @@ -3208,6 +3214,11 @@ EXPORT_SYMBOL(lookup_one);
-> >   *
-> >   * Unlike lookup_one, it should be called without the parent
-> >   * i_rwsem held, and will take the i_rwsem itself if necessary.
-> > + *
-> > + * Returns: - A dentry, possibly negative, or
-> > + *	    - same errors as try_lookup_noperm() or
-> > + *	    - ERR_PTR(-ENOENT) if parent has been removed, or
-> > + *	    - ERR_PTR(-EACCES) if parent directory is not searchable.
-> >   */
-> >  struct dentry *lookup_one_unlocked(struct mnt_idmap *idmap, struct qstr =
-*name,
-> >  				   struct dentry *base)
-> > @@ -3244,6 +3255,10 @@ EXPORT_SYMBOL(lookup_one_unlocked);
-> >   * It should be called without the parent i_rwsem held, and will take
-> >   * the i_rwsem itself if necessary.  If a fatal signal is pending or
-> >   * delivered, it will return %-EINTR if the lock is needed.
-> > + *
-> > + * Returns: A dentry, possibly negative, or
-> > + *	   - same errors as lookup_one_unlocked() or
-> > + *	   - ERR_PTR(-EINTR) if a fatal signal is pending.
-> >   */
-> >  struct dentry *lookup_one_positive_killable(struct mnt_idmap *idmap,
-> >  					    struct qstr *name,
->=20
-> Claude says:
->=20
->   lookup_one_positive_killable() documentation says "A dentry, possibly neg=
-ative" but the function
->   explicitly converts negative dentries to ERR_PTR(-ENOENT). It should say =
-"A positive dentry" like
->   the companion functions lookup_one_positive_unlocked() and lookup_noperm_=
-positive_unlocked().
+On Mar  1, 2026 Randy Dunlap <rdunlap@infradead.org> wrote:
+> 
+> Use the correct function parameter names, function names, or kernel-doc
+> format, and add function return comment sections to avoid kernel-doc
+> warnings:
+> 
+> Warning: include/linux/cred.h:43 function parameter 'gi' not described
+>  in 'get_group_info'
+> Warning: include/linux/cred.h:43 No description found for return value
+>  of 'get_group_info'
+> Warning: include/linux/cred.h:213 No description found for return value
+>  of 'get_cred_many'
+> Warning: include/linux/cred.h:260 function parameter '_cred' not described
+>  in 'put_cred_many'
+> Warning: include/linux/cred.h:260 expecting prototype for put_cred().
+>  Prototype was for put_cred_many() instead
+> 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> ---
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: Serge Hallyn <sergeh@kernel.org>
+> Cc: linux-security-module@vger.kernel.org
+> 
+>  include/linux/cred.h |   10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
 
-Thanks.  The top patch in my next batch contains a bunch of similar
-documentation cleanups.  I'll add this to that patch.
+Merged into lsm/dev, thanks.
 
->=20
-> ...but that seems to be the only "regression" it found.=20
->=20
-
-Good to know!
-
-Thanks,
-NeilBrown
-
->=20
-> Aside from that nit, this looks fine to me.
->=20
-> Reviewed-by: Jeff Layton <jlayton@kernel.org>
->=20
-
+--
+paul-moore.com
 
