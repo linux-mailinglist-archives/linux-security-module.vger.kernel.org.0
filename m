@@ -1,345 +1,231 @@
-Return-Path: <linux-security-module+bounces-15308-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-15311-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YD7JBrWIqGn2vQAAu9opvQ
-	(envelope-from <linux-security-module+bounces-15308-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Wed, 04 Mar 2026 20:32:05 +0100
+	id 8KuACyGnqGlMwQAAu9opvQ
+	(envelope-from <linux-security-module+bounces-15311-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Wed, 04 Mar 2026 22:41:53 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B79EB2071B0
-	for <lists+linux-security-module@lfdr.de>; Wed, 04 Mar 2026 20:32:04 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C138B2080C9
+	for <lists+linux-security-module@lfdr.de>; Wed, 04 Mar 2026 22:41:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DB6B8302881B
-	for <lists+linux-security-module@lfdr.de>; Wed,  4 Mar 2026 19:32:01 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 329D9301D0D4
+	for <lists+linux-security-module@lfdr.de>; Wed,  4 Mar 2026 21:41:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E32D376BD1;
-	Wed,  4 Mar 2026 19:32:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 828353A874F;
+	Wed,  4 Mar 2026 21:41:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="y19DrGGg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WOy+ahU5"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-190e.mail.infomaniak.ch (smtp-190e.mail.infomaniak.ch [185.125.25.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFFB53CE4AF
-	for <linux-security-module@vger.kernel.org>; Wed,  4 Mar 2026 19:31:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F229327BFB;
+	Wed,  4 Mar 2026 21:41:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772652721; cv=none; b=MrItsZPK/MrR7lHx7/tZJouWfYaO1PdibbdbwStgs/evn2unlT6oUz3SrWbLgZ5r3FshbLifMdrmcuy2Fe4x2W+2zexKBerftSiWPqgaKx1c4u75x+ux2bEpZ0Y27DJL72r4TAfxLi+XH0P1CdUBigWl6+egA0IIHFfvPF0iemA=
+	t=1772660508; cv=none; b=Sw+pyDYSj5GGyKQkh5PJeOWD5VmG87070nFTyihXeVoAmnxEjU3wcvp37vxTqwTTmxGU++tGIPesOxd1b7JixuRdvuf1j4gWqeB4FZf4ENZ9n0eeQSSTmQr/wCdQChvDlFbA5kY6tmcaIE8ZbEbj42ydFYCAGTSebHjuhEI2gAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772652721; c=relaxed/simple;
-	bh=8QzvSfYzUyePrFu7AjDtClUS6PcUzpvoOZB9nw7ENKs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pPlUj3Iw1xdNZpaKMeokRkDH5w9iRKDL/IkjxQM4fb1cVOo7LLjVDn0/tYXK7sMvSXnprCKp0g5fipI2ZQ55iOXwfW8czbDS76TlqyHtTALTK9i7hYzRTz5+SzEb5l0B2U+8C1/RUa07jWbsVFFppA6ARiMNl/B+jdgc5wTQWqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=y19DrGGg; arc=none smtp.client-ip=185.125.25.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246b])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fR2qC4qZwzYXT;
-	Wed,  4 Mar 2026 20:31:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1772652711;
-	bh=7yzNffPSqfZnEbwh/BS9xQp7GqDauD+fqKBS55Or0Aw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=y19DrGGgUa0N+Zw5xUjz+c+FFr9hjYm7j7eRnP4f9MloXz26DSt4gi+Cg8xNB4SD1
-	 4VEWNDtZbieu1j2tQVfY51UR3zweomPOWVbvpBCw9xHIARMTK23NSFKN8cScKYlbF3
-	 G+wBZOOD6EeDPkYOWJW+Kkd0vSc+Bw1zUr632Zy0=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4fR2qC27HHzTHM;
-	Wed,  4 Mar 2026 20:31:51 +0100 (CET)
-From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	linux-security-module@vger.kernel.org
-Subject: [PATCH v1 4/4] landlock: Fix formatting in tsync.c
-Date: Wed,  4 Mar 2026 20:31:27 +0100
-Message-ID: <20260304193134.250495-4-mic@digikod.net>
-In-Reply-To: <20260304193134.250495-1-mic@digikod.net>
-References: <20260304193134.250495-1-mic@digikod.net>
+	s=arc-20240116; t=1772660508; c=relaxed/simple;
+	bh=PV67OS/91fsa6EbIf+u5pJQmbMnqcMaw7mOqQaMZtc4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lfld2e8/PbdfaAtjfigBPh7E9dFW1n7G05AkucJry/6w46kgIFNyvq8Ec74bhrTMwT2u9Fs/hHRofFqKVS5l0aZXWocJDGl6q3qSWRzXAzvRXgGgyISAtQ65Mjbz52nMmgXXLwGijR+1/0Kp5egn+4O2VOcNn5aQK2iGIdfrkCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WOy+ahU5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFDDDC4CEF7;
+	Wed,  4 Mar 2026 21:41:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772660507;
+	bh=PV67OS/91fsa6EbIf+u5pJQmbMnqcMaw7mOqQaMZtc4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=WOy+ahU5UARQ0yTbDyVVAn1fSlv8RpYZwjPT+Gigf4F6vtlQM47BUEAaHpPl28jTi
+	 zijTiFmnsokrQhTEwusFFZyPjXjLpzptmexKVrqiO7zalnrs6jCk/4Dtvo7p2Wi1b1
+	 deFntjfjHaMPD1GtY9aIYLocTQHgNd9upu9na/Ju2G9Ir6nNYqwGJRWtco86cB0/5r
+	 uO2UQtHfq4CG7HDfigIocItuDJOTEaZae9H5bHTqKAx9IDkUJuakGJN2s0X8q9pydZ
+	 YUjxavtU51Dm29ViV1Ch1zVWrQIQ2z11hjkuPtHX/LzHUzaMqMA8RcsW3Ko5J8lxOB
+	 JCi7YwgNkSxnQ==
+Message-ID: <d5ef252a-02db-42d1-8ffa-1769189ae60a@kernel.org>
+Date: Thu, 5 Mar 2026 06:41:21 +0900
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 12/12] treewide: change inode->i_ino from unsigned long
+ to u64
+To: Jeff Layton <jlayton@kernel.org>, Alexander Viro
+ <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
+ Jan Kara <jack@suse.cz>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Dan Williams <dan.j.williams@intel.com>, Eric Biggers <ebiggers@kernel.org>,
+ "Theodore Y. Ts'o" <tytso@mit.edu>, Muchun Song <muchun.song@linux.dev>,
+ Oscar Salvador <osalvador@suse.de>, David Hildenbrand <david@kernel.org>,
+ David Howells <dhowells@redhat.com>, Paulo Alcantara <pc@manguebit.org>,
+ Andreas Dilger <adilger.kernel@dilger.ca>, Jan Kara <jack@suse.com>,
+ Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+ Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>,
+ Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>,
+ Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>,
+ Tom Talpey <tom@talpey.com>, Steve French <sfrench@samba.org>,
+ Ronnie Sahlberg <ronniesahlberg@gmail.com>,
+ Shyam Prasad N <sprasad@microsoft.com>, Bharath SM
+ <bharathsm@microsoft.com>, Alexander Aring <alex.aring@gmail.com>,
+ Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+ Viacheslav Dubeyko <slava@dubeyko.com>,
+ Eric Van Hensbergen <ericvh@kernel.org>, Latchesar Ionkov
+ <lucho@ionkov.net>, Dominique Martinet <asmadeus@codewreck.org>,
+ Christian Schoenebeck <linux_oss@crudebyte.com>,
+ David Sterba <dsterba@suse.com>, Marc Dionne <marc.dionne@auristor.com>,
+ Ian Kent <raven@themaw.net>, Luis de Bethencourt <luisbg@kernel.org>,
+ Salah Triki <salah.triki@gmail.com>,
+ "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
+ Ilya Dryomov <idryomov@gmail.com>, Alex Markuze <amarkuze@redhat.com>,
+ Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu,
+ Nicolas Pitre <nico@fluxnic.net>, Tyler Hicks <code@tyhicks.com>,
+ Amir Goldstein <amir73il@gmail.com>, Christoph Hellwig <hch@infradead.org>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ Yangtao Li <frank.li@vivo.com>,
+ Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
+ David Woodhouse <dwmw2@infradead.org>, Richard Weinberger <richard@nod.at>,
+ Dave Kleikamp <shaggy@kernel.org>,
+ Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+ Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>,
+ Joseph Qi <joseph.qi@linux.alibaba.com>, Mike Marshall
+ <hubcap@omnibond.com>, Martin Brandenburg <martin@omnibond.com>,
+ Miklos Szeredi <miklos@szeredi.hu>, Anders Larsen <al@alarsen.net>,
+ Zhihao Cheng <chengzhihao1@huawei.com>, Naohiro Aota <naohiro.aota@wdc.com>,
+ Johannes Thumshirn <jth@kernel.org>,
+ John Johansen <john.johansen@canonical.com>, Paul Moore
+ <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+ "Serge E. Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>,
+ Roberto Sassu <roberto.sassu@huawei.com>,
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+ Eric Snowberg <eric.snowberg@oracle.com>, Fan Wu <wufan@kernel.org>,
+ Stephen Smalley <stephen.smalley.work@gmail.com>,
+ Ondrej Mosnacek <omosnace@redhat.com>,
+ Casey Schaufler <casey@schaufler-ca.com>,
+ Alex Deucher <alexander.deucher@amd.com>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Sumit Semwal <sumit.semwal@linaro.org>, Eric Dumazet <edumazet@google.com>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Willem de Bruijn <willemb@google.com>, "David S. Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, James Clark
+ <james.clark@linaro.org>, "Darrick J. Wong" <djwong@kernel.org>,
+ Martin Schiller <ms@dev.tdt.de>, Eric Paris <eparis@redhat.com>,
+ Joerg Reuter <jreuter@yaina.de>, Marcel Holtmann <marcel@holtmann.org>,
+ Johan Hedberg <johan.hedberg@gmail.com>,
+ Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+ Oliver Hartkopp <socketcan@hartkopp.net>,
+ Marc Kleine-Budde <mkl@pengutronix.de>, David Ahern <dsahern@kernel.org>,
+ Neal Cardwell <ncardwell@google.com>,
+ Steffen Klassert <steffen.klassert@secunet.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>,
+ Remi Denis-Courmont <courmisch@gmail.com>,
+ Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+ Xin Long <lucien.xin@gmail.com>, Magnus Karlsson
+ <magnus.karlsson@intel.com>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
+ fsverity@lists.linux.dev, linux-mm@kvack.org, netfs@lists.linux.dev,
+ linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+ linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+ samba-technical@lists.samba.org, linux-nilfs@vger.kernel.org,
+ v9fs@lists.linux.dev, linux-afs@lists.infradead.org, autofs@vger.kernel.org,
+ ceph-devel@vger.kernel.org, codalist@coda.cs.cmu.edu,
+ ecryptfs@vger.kernel.org, linux-mtd@lists.infradead.org,
+ jfs-discussion@lists.sourceforge.net, ntfs3@lists.linux.dev,
+ ocfs2-devel@lists.linux.dev, devel@lists.orangefs.org,
+ linux-unionfs@vger.kernel.org, apparmor@lists.ubuntu.com,
+ linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org,
+ selinux@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+ linaro-mm-sig@lists.linaro.org, netdev@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+ linux-xfs@vger.kernel.org, linux-hams@vger.kernel.org,
+ linux-x25@vger.kernel.org, audit@vger.kernel.org,
+ linux-bluetooth@vger.kernel.org, linux-can@vger.kernel.org,
+ linux-sctp@vger.kernel.org, bpf@vger.kernel.org
+References: <20260304-iino-u64-v3-0-2257ad83d372@kernel.org>
+ <20260304-iino-u64-v3-12-2257ad83d372@kernel.org>
+Content-Language: en-US
+From: Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <20260304-iino-u64-v3-12-2257ad83d372@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
-X-Rspamd-Queue-Id: B79EB2071B0
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: C138B2080C9
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.17 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MIXED_CHARSET(0.83)[subject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[digikod.net:s=20191114];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-15308-lists,linux-security-module=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[digikod.net];
+	TAGGED_FROM(0.00)[bounces-15311-lists,linux-security-module=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[digikod.net:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FROM_NEQ_ENVFROM(0.00)[mic@digikod.net,linux-security-module@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[3];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-security-module];
+	FREEMAIL_TO(0.00)[kernel.org,zeniv.linux.org.uk,suse.cz,goodmis.org,efficios.com,intel.com,mit.edu,linux.dev,suse.de,redhat.com,manguebit.org,dilger.ca,suse.com,oracle.com,brown.name,talpey.com,samba.org,gmail.com,microsoft.com,dubeyko.com,ionkov.net,codewreck.org,crudebyte.com,auristor.com,themaw.net,cs.cmu.edu,fluxnic.net,tyhicks.com,infradead.org,physik.fu-berlin.de,vivo.com,artax.karlin.mff.cuni.cz,nod.at,paragon-software.com,fasheh.com,evilplan.org,linux.alibaba.com,omnibond.com,szeredi.hu,alarsen.net,huawei.com,wdc.com,canonical.com,paul-moore.com,namei.org,hallyn.com,linux.ibm.com,schaufler-ca.com,amd.com,ffwll.ch,linaro.org,google.com,davemloft.net,arm.com,linux.intel.com,dev.tdt.de,yaina.de,holtmann.org,hartkopp.net,pengutronix.de,secunet.com,gondor.apana.org.au,fomichev.me,iogearbox.net];
+	HAS_ORG_HEADER(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[170];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dlemoal@kernel.org,linux-security-module@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	NEURAL_HAM(-0.00)[-0.998];
+	TAGGED_RCPT(0.00)[linux-security-module];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-Fix comment formatting in tsync.c to fit in 80 columns.
+On 3/5/26 00:32, Jeff Layton wrote:
+> On 32-bit architectures, unsigned long is only 32 bits wide, which
+> causes 64-bit inode numbers to be silently truncated. Several
+> filesystems (NFS, XFS, BTRFS, etc.) can generate inode numbers that
+> exceed 32 bits, and this truncation can lead to inode number collisions
+> and other subtle bugs on 32-bit systems.
+> 
+> Change the type of inode->i_ino from unsigned long to u64 to ensure that
+> inode numbers are always represented as 64-bit values regardless of
+> architecture. Update all format specifiers treewide from %lu/%lx to
+> %llu/%llx to match the new type, along with corresponding local variable
+> types.
+> 
+> This is the bulk treewide conversion. Earlier patches in this series
+> handled trace events separately to allow trace field reordering for
+> better struct packing on 32-bit.
+> 
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-Cc: Günther Noack <gnoack@google.com>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
----
+For the zonefs bits:
 
-My previous squashed fix was wrong.
----
- security/landlock/tsync.c | 121 +++++++++++++++++++++-----------------
- 1 file changed, 66 insertions(+), 55 deletions(-)
+Acked-by: Damien Le Moal <dlemoal@kernel.org>
 
-diff --git a/security/landlock/tsync.c b/security/landlock/tsync.c
-index 359aecbb1e4b..50445ae167dd 100644
---- a/security/landlock/tsync.c
-+++ b/security/landlock/tsync.c
-@@ -85,12 +85,14 @@ static void restrict_one_thread(struct tsync_shared_context *ctx)
- 		/*
- 		 * Switch out old_cred with new_cred, if possible.
- 		 *
--		 * In the common case, where all threads initially point to the same
--		 * struct cred, this optimization avoids creating separate redundant
--		 * credentials objects for each, which would all have the same contents.
-+		 * In the common case, where all threads initially point to the
-+		 * same struct cred, this optimization avoids creating separate
-+		 * redundant credentials objects for each, which would all have
-+		 * the same contents.
- 		 *
--		 * Note: We are intentionally dropping the const qualifier here, because
--		 * it is required by commit_creds() and abort_creds().
-+		 * Note: We are intentionally dropping the const qualifier
-+		 * here, because it is required by commit_creds() and
-+		 * abort_creds().
- 		 */
- 		cred = (struct cred *)get_cred(ctx->new_cred);
- 	} else {
-@@ -101,8 +103,8 @@ static void restrict_one_thread(struct tsync_shared_context *ctx)
- 			atomic_set(&ctx->preparation_error, -ENOMEM);
- 
- 			/*
--			 * Even on error, we need to adhere to the protocol and coordinate
--			 * with concurrently running invocations.
-+			 * Even on error, we need to adhere to the protocol and
-+			 * coordinate with concurrently running invocations.
- 			 */
- 			if (atomic_dec_return(&ctx->num_preparing) == 0)
- 				complete_all(&ctx->all_prepared);
-@@ -135,9 +137,9 @@ static void restrict_one_thread(struct tsync_shared_context *ctx)
- 	}
- 
- 	/*
--	 * Make sure that all sibling tasks fulfill the no_new_privs prerequisite.
--	 * (This is in line with Seccomp's SECCOMP_FILTER_FLAG_TSYNC logic in
--	 * kernel/seccomp.c)
-+	 * Make sure that all sibling tasks fulfill the no_new_privs
-+	 * prerequisite.  (This is in line with Seccomp's
-+	 * SECCOMP_FILTER_FLAG_TSYNC logic in kernel/seccomp.c)
- 	 */
- 	if (ctx->set_no_new_privs)
- 		task_set_no_new_privs(current);
-@@ -221,16 +223,17 @@ static void tsync_works_trim(struct tsync_works *s)
- 	ctx = s->works[s->size - 1];
- 
- 	/*
--	 * For consistency, remove the task from ctx so that it does not look like
--	 * we handed it a task_work.
-+	 * For consistency, remove the task from ctx so that it does not look
-+	 * like we handed it a task_work.
- 	 */
- 	put_task_struct(ctx->task);
- 	*ctx = (typeof(*ctx)){};
- 
- 	/*
--	 * Cancel the tsync_works_provide() change to recycle the reserved memory
--	 * for the next thread, if any.  This also ensures that cancel_tsync_works()
--	 * and tsync_works_release() do not see any NULL task pointers.
-+	 * Cancel the tsync_works_provide() change to recycle the reserved
-+	 * memory for the next thread, if any.  This also ensures that
-+	 * cancel_tsync_works() and tsync_works_release() do not see any NULL
-+	 * task pointers.
- 	 */
- 	s->size--;
- }
-@@ -388,17 +391,17 @@ static bool schedule_task_work(struct tsync_works *works,
- 			continue;
- 
- 		/*
--		 * We found a sibling thread that is not doing its task_work yet, and
--		 * which might spawn new threads before our task work runs, so we need
--		 * at least one more round in the outer loop.
-+		 * We found a sibling thread that is not doing its task_work
-+		 * yet, and which might spawn new threads before our task work
-+		 * runs, so we need at least one more round in the outer loop.
- 		 */
- 		found_more_threads = true;
- 
- 		ctx = tsync_works_provide(works, thread);
- 		if (!ctx) {
- 			/*
--			 * We ran out of preallocated contexts -- we need to try again with
--			 * this thread at a later time!
-+			 * We ran out of preallocated contexts -- we need to
-+			 * try again with this thread at a later time!
- 			 * found_more_threads is already true at this point.
- 			 */
- 			break;
-@@ -413,10 +416,10 @@ static bool schedule_task_work(struct tsync_works *works,
- 		err = task_work_add(thread, &ctx->work, TWA_SIGNAL);
- 		if (unlikely(err)) {
- 			/*
--			 * task_work_add() only fails if the task is about to exit.  We
--			 * checked that earlier, but it can happen as a race.  Resume
--			 * without setting an error, as the task is probably gone in the
--			 * next loop iteration.
-+			 * task_work_add() only fails if the task is about to
-+			 * exit.  We checked that earlier, but it can happen as
-+			 * a race.  Resume without setting an error, as the
-+			 * task is probably gone in the next loop iteration.
- 			 */
- 			tsync_works_trim(works);
- 
-@@ -497,24 +500,25 @@ int landlock_restrict_sibling_threads(const struct cred *old_cred,
- 	 *    After this barrier is reached, it's safe to read
- 	 *    shared_ctx.preparation_error.
- 	 *
--	 * 4) reads shared_ctx.preparation_error and then either does commit_creds()
--	 *    or abort_creds().
-+	 * 4) reads shared_ctx.preparation_error and then either does
-+	 *    commit_creds() or abort_creds().
- 	 *
- 	 * 5) signals that it's done altogether (barrier synchronization
- 	 *    "all_finished")
- 	 *
--	 * Unlike seccomp, which modifies sibling tasks directly, we do not need to
--	 * acquire the cred_guard_mutex and sighand->siglock:
-+	 * Unlike seccomp, which modifies sibling tasks directly, we do not
-+	 * need to acquire the cred_guard_mutex and sighand->siglock:
- 	 *
--	 * - As in our case, all threads are themselves exchanging their own struct
--	 *   cred through the credentials API, no locks are needed for that.
-+	 * - As in our case, all threads are themselves exchanging their own
-+	 *   struct cred through the credentials API, no locks are needed for
-+	 *   that.
- 	 * - Our for_each_thread() loops are protected by RCU.
--	 * - We do not acquire a lock to keep the list of sibling threads stable
--	 *   between our for_each_thread loops.  If the list of available sibling
--	 *   threads changes between these for_each_thread loops, we make up for
--	 *   that by continuing to look for threads until they are all discovered
--	 *   and have entered their task_work, where they are unable to spawn new
--	 *   threads.
-+	 * - We do not acquire a lock to keep the list of sibling threads
-+	 *   stable between our for_each_thread loops.  If the list of
-+	 *   available sibling threads changes between these for_each_thread
-+	 *   loops, we make up for that by continuing to look for threads until
-+	 *   they are all discovered and have entered their task_work, where
-+	 *   they are unable to spawn new threads.
- 	 */
- 	do {
- 		/* In RCU read-lock, count the threads we need. */
-@@ -531,43 +535,50 @@ int landlock_restrict_sibling_threads(const struct cred *old_cred,
- 		}
- 
- 		/*
--		 * The "all_prepared" barrier is used locally to the loop body, this use
--		 * of for_each_thread().  We can reset it on each loop iteration because
--		 * all previous loop iterations are done with it already.
-+		 * The "all_prepared" barrier is used locally to the loop body,
-+		 * this use of for_each_thread().  We can reset it on each loop
-+		 * iteration because all previous loop iterations are done with
-+		 * it already.
- 		 *
--		 * num_preparing is initialized to 1 so that the counter can not go to 0
--		 * and mark the completion as done before all task works are registered.
--		 * We decrement it at the end of the loop body.
-+		 * num_preparing is initialized to 1 so that the counter can
-+		 * not go to 0 and mark the completion as done before all task
-+		 * works are registered.  We decrement it at the end of the
-+		 * loop body.
- 		 */
- 		atomic_set(&shared_ctx.num_preparing, 1);
- 		reinit_completion(&shared_ctx.all_prepared);
- 
- 		/*
--		 * In RCU read-lock, schedule task work on newly discovered sibling
--		 * tasks.
-+		 * In RCU read-lock, schedule task work on newly discovered
-+		 * sibling tasks.
- 		 */
- 		found_more_threads = schedule_task_work(&works, &shared_ctx);
- 
- 		/*
--		 * Decrement num_preparing for current, to undo that we initialized it
--		 * to 1 a few lines above.
-+		 * Decrement num_preparing for current, to undo that we
-+		 * initialized it to 1 a few lines above.
- 		 */
- 		if (atomic_dec_return(&shared_ctx.num_preparing) > 0) {
- 			if (wait_for_completion_interruptible(
- 				    &shared_ctx.all_prepared)) {
--				/* In case of interruption, we need to retry the system call. */
-+				/*
-+				 * In case of interruption, we need to retry
-+				 * the system call.
-+				 */
- 				atomic_set(&shared_ctx.preparation_error,
- 					   -ERESTARTNOINTR);
- 
- 				/*
--				 * Cancel task works for tasks that did not start running yet,
--				 * and decrement all_prepared and num_unfinished accordingly.
-+				 * Cancel task works for tasks that did not
-+				 * start running yet, and decrement
-+				 * all_prepared and num_unfinished accordingly.
- 				 */
- 				cancel_tsync_works(&works, &shared_ctx);
- 
- 				/*
--				 * The remaining task works have started running, so waiting for
--				 * their completion will finish.
-+				 * The remaining task works have started
-+				 * running, so waiting for their completion
-+				 * will finish.
- 				 */
- 				wait_for_completion(&shared_ctx.all_prepared);
- 			}
-@@ -576,14 +587,14 @@ int landlock_restrict_sibling_threads(const struct cred *old_cred,
- 		 !atomic_read(&shared_ctx.preparation_error));
- 
- 	/*
--	 * We now have all sibling threads blocking and in "prepared" state in the
--	 * task work. Ask all threads to commit.
-+	 * We now have all sibling threads blocking and in "prepared" state in
-+	 * the task work. Ask all threads to commit.
- 	 */
- 	complete_all(&shared_ctx.ready_to_commit);
- 
- 	/*
--	 * Decrement num_unfinished for current, to undo that we initialized it to 1
--	 * at the beginning.
-+	 * Decrement num_unfinished for current, to undo that we initialized it
-+	 * to 1 at the beginning.
- 	 */
- 	if (atomic_dec_return(&shared_ctx.num_unfinished) > 0)
- 		wait_for_completion(&shared_ctx.all_finished);
 -- 
-2.53.0
-
+Damien Le Moal
+Western Digital Research
 
