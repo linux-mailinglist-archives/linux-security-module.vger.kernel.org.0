@@ -1,58 +1,58 @@
-Return-Path: <linux-security-module+bounces-15307-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-15309-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IKXPJLOIqGn2vQAAu9opvQ
-	(envelope-from <linux-security-module+bounces-15307-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Wed, 04 Mar 2026 20:32:03 +0100
+	id 6C2SJbaIqGn2vQAAu9opvQ
+	(envelope-from <linux-security-module+bounces-15309-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Wed, 04 Mar 2026 20:32:06 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA2402071A2
-	for <lists+linux-security-module@lfdr.de>; Wed, 04 Mar 2026 20:32:02 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECFE82071B8
+	for <lists+linux-security-module@lfdr.de>; Wed, 04 Mar 2026 20:32:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 96EE93022F9F
+	by sea.lore.kernel.org (Postfix) with ESMTP id 031FD302BA54
 	for <lists+linux-security-module@lfdr.de>; Wed,  4 Mar 2026 19:32:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E717A3D34AA;
-	Wed,  4 Mar 2026 19:32:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E3E53DA5D7;
+	Wed,  4 Mar 2026 19:32:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="iNkGslL1"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="XT7KsGF6"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp-bc0c.mail.infomaniak.ch (smtp-bc0c.mail.infomaniak.ch [45.157.188.12])
+Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [84.16.66.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3E28376BD1
-	for <linux-security-module@vger.kernel.org>; Wed,  4 Mar 2026 19:31:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF4C3381B06
+	for <linux-security-module@vger.kernel.org>; Wed,  4 Mar 2026 19:31:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772652720; cv=none; b=Z24KurdFP+TPqElytJUarpWaE04J9o/viiu3OSyZ5sXfFLqBGkQk8yzD/mnpQw+aLTXtx/ZTy/w/xUPQ1uyZSyeWbdfMDkAZjynizaa6QyHZ3xyYej1SYuzRvw/B+hQyCHbms0gykvENw/GkMwes8kFDPX4eunzu2gxFiMWiO+0=
+	t=1772652721; cv=none; b=TStyyLpyjJQwaHRBIgC+0gpmOCcRVFO0z3mPg+cVpO3px2mO4FZEcRw7Nini3NRnqj7QTId1Y7DRMZ9ogAtLNIFQTYGeuNr+GrwwUA0bXEahXl96TbTARVdUccliI58JF1kORnxJIQ4sVSy0mnzeKfxyBeKWeXcumJgPplGE0Ew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772652720; c=relaxed/simple;
-	bh=YOmJO8CoUbHBMhX4HitFMc2z7F50vMzmRuwX9ARc0cs=;
+	s=arc-20240116; t=1772652721; c=relaxed/simple;
+	bh=XbJ2+PMXtVL3fc36+c74uYtVrKKGUrD9rhc+Y3CmpN8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=e3i6TI0KB+DFH/spQIrTOI8HZ5ZHVEWEYTKPoym0g3/L6u8emDsr4QdNANt8bDksor7uN6k1eFTftqd5UdElb8I3hiLFwrb+zxZ/vy5NDP5UBkEWvXqs7+K/+4mKdRJp26mDtA2nRk5xFnA6k14uFUGTa7yz2F9ikWGJAqRfMm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=iNkGslL1; arc=none smtp.client-ip=45.157.188.12
+	 MIME-Version:Content-Type; b=X7a1JoDC3WJOZm6dyZxtaw3YcKHO8gNyvGXVFcmdaJhkWjWM4rLskbmoFvAxkjxWd4gBmUBrKYEkhx+uiNobO3CPbvjAVaGl0lD+Mw0OZ1ddYkX/JZIHdzXhuzWwbAE7t2Zl0D2DvALSlHyYRo8bHETYaFjnvf6BydYgGsffJkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=XT7KsGF6; arc=none smtp.client-ip=84.16.66.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Received: from smtp-3-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246b])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fR2q93PbpzYVd;
-	Wed,  4 Mar 2026 20:31:49 +0100 (CET)
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fR2qB4HK4zZB5;
+	Wed,  4 Mar 2026 20:31:50 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1772652709;
-	bh=4sbd0AqvNtwuKiDIp9rxKIHqOcMYN8fUJ1l3+ny1Uco=;
+	s=20191114; t=1772652710;
+	bh=6QU75etpnBvAJDDk6KscjX5kzEVvtATKNV+mZ3Yjud4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iNkGslL1fOH+/Ci/tbKD2jEALx4iAqGesa/TYU5Mp9enVLOa1fAeV3lJXs2py+tsx
-	 RFmH6EOPUIRGEVRNmPrOrDRu90TW/IDxpVW0gGPwLlXf9b5cR1W4/yenAXBKQiQUOk
-	 lOCX604WDcyAjQ+YfdFnO89aSaIKL+4Z0FVtl/VU=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4fR2q90jgtzRTY;
-	Wed,  4 Mar 2026 20:31:49 +0100 (CET)
+	b=XT7KsGF6RSlEiv4ee2hWCvkZkFyz7Y1XAAaHdIBuu8Zp1nWbVCohKeb+mHtFSsM/r
+	 hzjAgLV8SMJSsXODES4GMzFPNnBJDxIIXGdPamss5cIZQnV1atSeLJb2lgHNO0bb1+
+	 OPLBnF+mx/LfIuTNThNWOTFKA3lOn+YNvV3TPauY=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4fR2qB1NR7zQ2K;
+	Wed,  4 Mar 2026 20:31:50 +0100 (CET)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>
 Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	linux-security-module@vger.kernel.org
-Subject: [PATCH v1 2/4] landlock: Add missing kernel-doc "Return:" sections
-Date: Wed,  4 Mar 2026 20:31:25 +0100
-Message-ID: <20260304193134.250495-2-mic@digikod.net>
+Subject: [PATCH v1 3/4] landlock: Improve kernel-doc "Return:" section consistency
+Date: Wed,  4 Mar 2026 20:31:26 +0100
+Message-ID: <20260304193134.250495-3-mic@digikod.net>
 In-Reply-To: <20260304193134.250495-1-mic@digikod.net>
 References: <20260304193134.250495-1-mic@digikod.net>
 Precedence: bulk
@@ -64,18 +64,18 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
-X-Rspamd-Queue-Id: EA2402071A2
+X-Rspamd-Queue-Id: ECFE82071B8
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.05 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MIXED_CHARSET(0.71)[subject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[digikod.net:s=20191114];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-15307-lists,linux-security-module=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-15309-lists,linux-security-module=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	DMARC_NA(0.00)[digikod.net];
@@ -83,7 +83,7 @@ X-Spamd-Result: default: False [0.05 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[digikod.net:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
@@ -96,175 +96,226 @@ X-Spamd-Result: default: False [0.05 / 15.00];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-The kernel-doc -Wreturn check warns about functions with documentation
-comments that lack a "Return:" section.  Add "Return:" documentation to
-all functions missing it so that kernel-doc -Wreturn passes cleanly.
+The canonical kernel-doc form is "Return:" (singular, without trailing
+"s").  Normalize all existing "Returns:" occurrences across the Landlock
+source tree to the canonical form.
 
-Convert existing function descriptions into a formal "Return:" section.
-Also fix the inaccurate return documentation for
-landlock_merge_ruleset() which claimed to return @parent directly, and
-document the previously missing ERR_PTR() error return path.  Document
-the ABI version and errata return paths for landlock_create_ruleset()
-which were previously only implied by the prose.
+Also fix capitalization for consistency.  Balance descriptions to
+describe all possible returned values.
+
+Consolidate bullet-point return descriptions into inline text for
+functions with simple two-value or three-value returns for consistency.
 
 Cc: Günther Noack <gnoack@google.com>
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
 ---
- security/landlock/domain.c   |  2 ++
- security/landlock/fs.c       |  2 +-
- security/landlock/ruleset.c  |  8 +++++---
- security/landlock/syscalls.c | 17 +++++++++++------
- security/landlock/task.c     |  9 +++++----
- 5 files changed, 24 insertions(+), 14 deletions(-)
+ security/landlock/cred.h    |  2 +-
+ security/landlock/domain.c  |  4 ++--
+ security/landlock/fs.c      | 26 +++++++++++---------------
+ security/landlock/id.c      |  2 +-
+ security/landlock/ruleset.c |  2 +-
+ security/landlock/ruleset.h |  2 +-
+ security/landlock/task.c    |  4 ++--
+ security/landlock/tsync.c   | 17 ++++++-----------
+ 8 files changed, 25 insertions(+), 34 deletions(-)
 
+diff --git a/security/landlock/cred.h b/security/landlock/cred.h
+index c10a06727eb1..f287c56b5fd4 100644
+--- a/security/landlock/cred.h
++++ b/security/landlock/cred.h
+@@ -115,7 +115,7 @@ static inline bool landlocked(const struct task_struct *const task)
+  * @handle_layer: returned youngest layer handling a subset of @masks.  Not set
+  *                if the function returns NULL.
+  *
+- * Returns: landlock_cred(@cred) if any access rights specified in @masks is
++ * Return: landlock_cred(@cred) if any access rights specified in @masks is
+  * handled, or NULL otherwise.
+  */
+ static inline const struct landlock_cred_security *
 diff --git a/security/landlock/domain.c b/security/landlock/domain.c
-index 79cb3bbdf4c5..343a1aabaac6 100644
+index 343a1aabaac6..8b9939005aa8 100644
 --- a/security/landlock/domain.c
 +++ b/security/landlock/domain.c
-@@ -115,6 +115,8 @@ static struct landlock_details *get_current_details(void)
-  * restriction.  The subjective credentials must not be in an overridden state.
+@@ -34,7 +34,7 @@
+  * @exe_size: Returned size of @exe_str (including the trailing null
+  *            character), if any.
   *
-  * @hierarchy->parent and @hierarchy->usage should already be set.
-+ *
-+ * Return: 0 on success, -errno on failure.
+- * Returns: A pointer to an allocated buffer where @exe_str point to, %NULL if
++ * Return: A pointer to an allocated buffer where @exe_str point to, %NULL if
+  * there is no executable path, or an error otherwise.
   */
- int landlock_init_hierarchy_log(struct landlock_hierarchy *const hierarchy)
- {
+ static const void *get_current_exe(const char **const exe_str,
+@@ -73,7 +73,7 @@ static const void *get_current_exe(const char **const exe_str,
+ }
+ 
+ /*
+- * Returns: A newly allocated object describing a domain, or an error
++ * Return: A newly allocated object describing a domain, or an error
+  * otherwise.
+  */
+ static struct landlock_details *get_current_details(void)
 diff --git a/security/landlock/fs.c b/security/landlock/fs.c
-index e764470f588c..cfe69075bf4e 100644
+index cfe69075bf4e..a03ec664c78e 100644
 --- a/security/landlock/fs.c
 +++ b/security/landlock/fs.c
-@@ -1568,7 +1568,7 @@ static int hook_path_truncate(const struct path *const path)
+@@ -119,8 +119,8 @@ static const struct landlock_object_underops landlock_fs_underops = {
+  * Any new IOCTL commands that are implemented in fs/ioctl.c's do_vfs_ioctl()
+  * should be considered for inclusion here.
   *
-  * @file: File being opened.
-  *
-- * Returns the access rights that are required for opening the given file,
-+ * Return: The access rights that are required for opening the given file,
-  * depending on the file type and open mode.
+- * Returns: true if the IOCTL @cmd can not be restricted with Landlock for
+- * device files.
++ * Return: True if the IOCTL @cmd can not be restricted with Landlock for
++ * device files, false otherwise.
   */
- static access_mask_t
+ static __attribute_const__ bool is_masked_device_ioctl(const unsigned int cmd)
+ {
+@@ -428,10 +428,10 @@ static bool may_refer(const struct layer_access_masks *const src_parent,
+  * Check that a destination file hierarchy has more restrictions than a source
+  * file hierarchy.  This is only used for link and rename actions.
+  *
+- * Returns: true if child1 may be moved from parent1 to parent2 without
+- * increasing its access rights.  If child2 is set, an additional condition is
++ * Return: True if child1 may be moved from parent1 to parent2 without
++ * increasing its access rights (if child2 is set, an additional condition is
+  * that child2 may be used from parent2 to parent1 without increasing its access
+- * rights.
++ * rights), false otherwise.
+  */
+ static bool no_more_access(const struct layer_access_masks *const parent1,
+ 			   const struct layer_access_masks *const child1,
+@@ -734,9 +734,7 @@ static void test_is_eacces_with_write(struct kunit *const test)
+  * checks that the collected accesses and the remaining ones are enough to
+  * allow the request.
+  *
+- * Returns:
+- * - true if the access request is granted;
+- * - false otherwise.
++ * Return: True if the access request is granted, false otherwise.
+  */
+ static bool
+ is_access_to_paths_allowed(const struct landlock_ruleset *const domain,
+@@ -1022,9 +1020,8 @@ static access_mask_t maybe_remove(const struct dentry *const dentry)
+  * only handles walking on the same mount point and only checks one set of
+  * accesses.
+  *
+- * Returns:
+- * - true if all the domain access rights are allowed for @dir;
+- * - false if the walk reached @mnt_root.
++ * Return: True if all the domain access rights are allowed for @dir, false if
++ * the walk reached @mnt_root.
+  */
+ static bool collect_domain_accesses(const struct landlock_ruleset *const domain,
+ 				    const struct dentry *const mnt_root,
+@@ -1120,10 +1117,9 @@ static bool collect_domain_accesses(const struct landlock_ruleset *const domain,
+  * ephemeral matrices take some space on the stack, which limits the number of
+  * layers to a deemed reasonable number: 16.
+  *
+- * Returns:
+- * - 0 if access is allowed;
+- * - -EXDEV if @old_dentry would inherit new access rights from @new_dir;
+- * - -EACCES if file removal or creation is denied.
++ * Return: 0 if access is allowed, -EXDEV if @old_dentry would inherit new
++ * access rights from @new_dir, or -EACCES if file removal or creation is
++ * denied.
+  */
+ static int current_check_refer_path(struct dentry *const old_dentry,
+ 				    const struct path *const new_dir,
+diff --git a/security/landlock/id.c b/security/landlock/id.c
+index 838c3ed7bb82..6c8769777fdc 100644
+--- a/security/landlock/id.c
++++ b/security/landlock/id.c
+@@ -258,7 +258,7 @@ static void test_range2_rand16(struct kunit *const test)
+  *
+  * @number_of_ids: Number of IDs to hold.  Must be greater than one.
+  *
+- * Returns: The first ID in the range.
++ * Return: The first ID in the range.
+  */
+ u64 landlock_get_id_range(size_t number_of_ids)
+ {
 diff --git a/security/landlock/ruleset.c b/security/landlock/ruleset.c
-index a61ced492f41..de8386af2f30 100644
+index de8386af2f30..52e48ffcc3aa 100644
 --- a/security/landlock/ruleset.c
 +++ b/security/landlock/ruleset.c
-@@ -202,6 +202,8 @@ static void build_check_ruleset(void)
-  * When merging a ruleset in a domain, or copying a domain, @layers will be
-  * added to @ruleset as new constraints, similarly to a boolean AND between
-  * access rights.
-+ *
-+ * Return: 0 on success, -errno on failure.
+@@ -675,7 +675,7 @@ get_access_mask_t(const struct landlock_ruleset *const ruleset,
+  * @masks: Layer access masks to populate.
+  * @key_type: The key type to switch between access masks of different types.
+  *
+- * Returns: An access mask where each access right bit is set which is handled
++ * Return: An access mask where each access right bit is set which is handled
+  * in any of the active layers in @domain.
   */
- static int insert_rule(struct landlock_ruleset *const ruleset,
- 		       const struct landlock_id id,
-@@ -531,8 +533,8 @@ void landlock_put_ruleset_deferred(struct landlock_ruleset *const ruleset)
-  * The current task is requesting to be restricted.  The subjective credentials
-  * must not be in an overridden state. cf. landlock_init_hierarchy_log().
+ access_mask_t
+diff --git a/security/landlock/ruleset.h b/security/landlock/ruleset.h
+index 87d52031fb5a..5e63f78f7e1a 100644
+--- a/security/landlock/ruleset.h
++++ b/security/landlock/ruleset.h
+@@ -232,7 +232,7 @@ static inline void landlock_get_ruleset(struct landlock_ruleset *const ruleset)
   *
-- * Returns the intersection of @parent and @ruleset, or returns @parent if
-- * @ruleset is empty, or returns a duplicate of @ruleset if @parent is empty.
-+ * Return: A new domain merging @parent and @ruleset on success, or ERR_PTR()
-+ * on failure.  If @parent is NULL, the new domain duplicates @ruleset.
+  * @domain: Landlock ruleset (used as a domain)
+  *
+- * Returns: an access_masks result of the OR of all the domain's access masks.
++ * Return: An access_masks result of the OR of all the domain's access masks.
   */
- struct landlock_ruleset *
- landlock_merge_ruleset(struct landlock_ruleset *const parent,
-@@ -623,7 +625,7 @@ landlock_find_rule(const struct landlock_ruleset *const ruleset,
-  * @rule: A rule that grants a set of access rights for each layer
-  * @masks: A matrix of unfulfilled access rights for each layer
-  *
-- * Returns true if the request is allowed (i.e. the access rights granted all
-+ * Return: True if the request is allowed (i.e. the access rights granted all
-  * remaining unfulfilled access rights and masks has no leftover set bits).
-  */
- bool landlock_unmask_layers(const struct landlock_rule *const rule,
-diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
-index 0d66a68677b7..3b33839b80c7 100644
---- a/security/landlock/syscalls.c
-+++ b/security/landlock/syscalls.c
-@@ -60,6 +60,8 @@ static bool is_initialized(void)
-  * @ksize_min: Minimal required size to be copied.
-  * @src: User space pointer or NULL.
-  * @usize: (Alleged) size of the data pointed to by @src.
-+ *
-+ * Return: 0 on success, -errno on failure.
-  */
- static __always_inline int
- copy_min_struct_from_user(void *const dst, const size_t ksize,
-@@ -178,16 +180,19 @@ const int landlock_abi_version = 8;
-  *         - %LANDLOCK_CREATE_RULESET_VERSION
-  *         - %LANDLOCK_CREATE_RULESET_ERRATA
-  *
-- * This system call enables to create a new Landlock ruleset, and returns the
-- * related file descriptor on success.
-+ * This system call enables to create a new Landlock ruleset.
-  *
-  * If %LANDLOCK_CREATE_RULESET_VERSION or %LANDLOCK_CREATE_RULESET_ERRATA is
-  * set, then @attr must be NULL and @size must be 0.
-  *
-- * Possible returned errors are:
-+ * Return: The ruleset file descriptor on success, the Landlock ABI version if
-+ * %LANDLOCK_CREATE_RULESET_VERSION is set, the errata value if
-+ * %LANDLOCK_CREATE_RULESET_ERRATA is set, or -errno on failure.  Possible
-+ * returned errors are:
-  *
-  * - %EOPNOTSUPP: Landlock is supported by the kernel but disabled at boot time;
-- * - %EINVAL: unknown @flags, or unknown access, or unknown scope, or too small @size;
-+ * - %EINVAL: unknown @flags, or unknown access, or unknown scope, or too small
-+ *   @size;
-  * - %E2BIG: @attr or @size inconsistencies;
-  * - %EFAULT: @attr or @size inconsistencies;
-  * - %ENOMSG: empty &landlock_ruleset_attr.handled_access_fs.
-@@ -398,7 +403,7 @@ static int add_rule_net_port(struct landlock_ruleset *ruleset,
-  * This system call enables to define a new rule and add it to an existing
-  * ruleset.
-  *
-- * Possible returned errors are:
-+ * Return: 0 on success, or -errno on failure.  Possible returned errors are:
-  *
-  * - %EOPNOTSUPP: Landlock is supported by the kernel but disabled at boot time;
-  * - %EAFNOSUPPORT: @rule_type is %LANDLOCK_RULE_NET_PORT but TCP/IP is not
-@@ -464,7 +469,7 @@ SYSCALL_DEFINE4(landlock_add_rule, const int, ruleset_fd,
-  * namespace or is running with no_new_privs.  This avoids scenarios where
-  * unprivileged tasks can affect the behavior of privileged children.
-  *
-- * Possible returned errors are:
-+ * Return: 0 on success, or -errno on failure.  Possible returned errors are:
-  *
-  * - %EOPNOTSUPP: Landlock is supported by the kernel but disabled at boot time;
-  * - %EINVAL: @flags contains an unknown bit.
+ static inline struct access_masks
+ landlock_union_access_masks(const struct landlock_ruleset *const domain)
 diff --git a/security/landlock/task.c b/security/landlock/task.c
-index 833bc0cfe5c9..bf7c3db7ce46 100644
+index bf7c3db7ce46..f2dbdebf2770 100644
 --- a/security/landlock/task.c
 +++ b/security/landlock/task.c
-@@ -37,6 +37,9 @@
+@@ -174,8 +174,8 @@ static int hook_ptrace_traceme(struct task_struct *const parent)
+  * @server: IPC receiver domain.
+  * @scope: The scope restriction criteria.
   *
-  * Checks if the @parent domain is less or equal to (i.e. an ancestor, which
-  * means a subset of) the @child domain.
-+ *
-+ * Return: True if @parent is an ancestor of or equal to @child, false
+- * Returns: True if @server is in a different domain from @client, and @client
+- * is scoped to access @server (i.e. access should be denied).
++ * Return: True if @server is in a different domain from @client and @client
++ * is scoped to access @server (i.e. access should be denied), false otherwise.
+  */
+ static bool domain_is_scoped(const struct landlock_ruleset *const client,
+ 			     const struct landlock_ruleset *const server,
+diff --git a/security/landlock/tsync.c b/security/landlock/tsync.c
+index b06a0fa4cedb..359aecbb1e4b 100644
+--- a/security/landlock/tsync.c
++++ b/security/landlock/tsync.c
+@@ -183,10 +183,8 @@ struct tsync_works {
+  * capacity.  This can legitimately happen if new threads get started after we
+  * grew the capacity.
+  *
+- * Returns:
+- *   A pointer to the preallocated context struct, with task filled in.
+- *
+- *   NULL, if we ran out of preallocated context structs.
++ * Return: A pointer to the preallocated context struct with task filled in, or
++ * NULL if preallocated context structs ran out.
+  */
+ static struct tsync_work *tsync_works_provide(struct tsync_works *s,
+ 					      struct task_struct *task)
+@@ -243,11 +241,8 @@ static void tsync_works_trim(struct tsync_works *s)
+  * On a successful return, the subsequent n calls to tsync_works_provide() are
+  * guaranteed to succeed.  (size + n <= capacity)
+  *
+- * Returns:
+- *   -ENOMEM if the (re)allocation fails
+-
+- *   0       if the allocation succeeds, partially succeeds, or no reallocation
+- *           was needed
++ * Return: 0 on success or partial success, -ENOMEM if the (re)allocation
++ * fails.
+  */
+ static int tsync_works_grow_by(struct tsync_works *s, size_t n, gfp_t flags)
+ {
+@@ -363,8 +358,8 @@ static size_t count_additional_threads(const struct tsync_works *works)
+  * For each added task_work, atomically increments shared_ctx->num_preparing and
+  * shared_ctx->num_unfinished.
+  *
+- * Returns:
+- *     true, if at least one eligible sibling thread was found
++ * Return: True if at least one eligible sibling thread was found, false
 + * otherwise.
   */
- static bool domain_scope_le(const struct landlock_ruleset *const parent,
- 			    const struct landlock_ruleset *const child)
-@@ -79,8 +82,7 @@ static int domain_ptrace(const struct landlock_ruleset *const parent,
-  * If the current task has Landlock rules, then the child must have at least
-  * the same rules.  Else denied.
-  *
-- * Determines whether a process may access another, returning 0 if permission
-- * granted, -errno if denied.
-+ * Return: 0 if permission is granted, -errno if denied.
-  */
- static int hook_ptrace_access_check(struct task_struct *const child,
- 				    const unsigned int mode)
-@@ -129,8 +131,7 @@ static int hook_ptrace_access_check(struct task_struct *const child,
-  * If the parent has Landlock rules, then the current task must have the same
-  * or more rules.  Else denied.
-  *
-- * Determines whether the nominated task is permitted to trace the current
-- * process, returning 0 if permission is granted, -errno if denied.
-+ * Return: 0 if permission is granted, -errno if denied.
-  */
- static int hook_ptrace_traceme(struct task_struct *const parent)
- {
+ static bool schedule_task_work(struct tsync_works *works,
+ 			       struct tsync_shared_context *shared_ctx)
 -- 
 2.53.0
 
