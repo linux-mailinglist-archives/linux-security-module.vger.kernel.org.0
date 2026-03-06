@@ -1,167 +1,186 @@
-Return-Path: <linux-security-module+bounces-15345-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-15347-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CN4GCdb6qWk7JAEAu9opvQ
-	(envelope-from <linux-security-module+bounces-15345-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Thu, 05 Mar 2026 22:51:18 +0100
+	id MOZxLKQ5qmnUNQEAu9opvQ
+	(envelope-from <linux-security-module+bounces-15347-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Fri, 06 Mar 2026 03:19:16 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97EB5218AA3
-	for <lists+linux-security-module@lfdr.de>; Thu, 05 Mar 2026 22:51:17 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1215A21A8AC
+	for <lists+linux-security-module@lfdr.de>; Fri, 06 Mar 2026 03:19:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8A0A0305D6F2
-	for <lists+linux-security-module@lfdr.de>; Thu,  5 Mar 2026 21:50:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 37A6B305B44E
+	for <lists+linux-security-module@lfdr.de>; Fri,  6 Mar 2026 02:18:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0755E35DA66;
-	Thu,  5 Mar 2026 21:50:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F11443328E3;
+	Fri,  6 Mar 2026 02:18:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BPJcBdUy"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="djX3wARl"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbg154.qq.com (smtpbg154.qq.com [15.184.224.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D583C360722
-	for <linux-security-module@vger.kernel.org>; Thu,  5 Mar 2026 21:50:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7537317715;
+	Fri,  6 Mar 2026 02:18:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=15.184.224.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772747429; cv=none; b=nfDtVptdnSrcsVeQSY9mhRGAy8OFw/lSxHYrIGCFRJTV7fSGqLs1Tf2MXC9739KrEcR1RzOPba1dId88z5ylTBEIDroMMW5eaUhNOvVRg6fP9v+GTLAo2lvYKVPWGO1Ls3/Ei/AkgjLycUtEGltprAheW0fHFopfQYc5QG0mWCE=
+	t=1772763499; cv=none; b=mq7XgYmFTS4IA2wlHIcHK7I9ms07W9CJUcTojUwsBnLdCgR2kwHX0SifKxDZaDLb0lKc85XgYfVyER9Xeuee8w68vaHTjgnb4Dxlm24B8157U/XzeUAlTKT2mBbsP33WbDG22og+Dae4EaeeDhp+CH2AzHJUvtNsWK+8E4zA1Jc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772747429; c=relaxed/simple;
-	bh=lmPpYSlPcQNZpTQXLMEyB3rxC3XM040jCc/+2R5k/b0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=b8aD+FGad+oJA9K1Ors7xCiNSd0s9uAIxI7DXgAOBWYX3UI61PuxJdzrNXPCzjPE/80UylNGrHB1fr+z57ceZ2aBZ/X0bJTdZIW+Fa6sDq6/m6yfXXi8lKPhBqC5NG9Sg5Z7zo7HfexuHisDlloXPoocbcFHE7aNPdNve4WwgXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BPJcBdUy; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-358f058973fso8153506a91.1
-        for <linux-security-module@vger.kernel.org>; Thu, 05 Mar 2026 13:50:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772747428; x=1773352228; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q82HY+Ox5JF0vwG5eIoCl0bQkH1ycg7BDvsoRBp0gXg=;
-        b=BPJcBdUyqtlPnWnmC0qotZqGwAZv3gPcSMX7Y8Hn1FKBefTIQJGTS7236qHjNFC/9n
-         07O6+CdYNvqFrXHR6rIRpeQAo319sIUbY6Ans6okNlrnG3I0/mVw/SEsTN9mPye09yLR
-         YT5xtfEbjapQZRwzU/JwzWKmHgczNex9Qo17bexgciejq0pNNnahNXOrUPTUdJr2LaNu
-         pY1qhwGLNjycgHCN2aqoS+p9bwzDnHzqLkx14iEZxiIceqAkh+1z/SXBYnMCKiB2n7Bd
-         4RizIWGzhaHfOhnAjI47IZHRNuupe3FuiL3abzrvKDz/qBHyLdPe8Z2WUR+v7Vuj1ZOL
-         Vz/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772747428; x=1773352228;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q82HY+Ox5JF0vwG5eIoCl0bQkH1ycg7BDvsoRBp0gXg=;
-        b=wudH0yPI32bDp62llkQ/IfhrNuQ++6T/Q+PxFnwobH+A/IzgOMHYYfgptkhFh5ZrZg
-         M8pwG5ii4og33iQzyaAANK0d2Ual4jguiNCL2798g3nWiuB7qJW3haIXLnul6bWzNQMI
-         vrjb0vaDvB01pSvqK3FrwbzcQJj7uJmiRnLlEVcxIaOtlnh9mcAG7IGpaLnIBHh1xD4Y
-         KBol+wWVCByGlSC9bLOGbAFO+n81iijnzUPCYCgtZPbkM0e0SvLGzTp5GZSPOViBotpm
-         9Igo6BV+WNkPyEx7R41OzwDZXYSAMexV1nmBJR87JMQSEb44JFcsU24UWfnVBy2XDb8S
-         IWow==
-X-Forwarded-Encrypted: i=1; AJvYcCW+Mn0CVESPPxWasg6iQWaAqcI3clYcSwV37ABPF1nQvVeXwuDX5Feo3ZJzS9zW6DPDA2EoM6H8kTTCOAzaPsVM1ubQJ/s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw951AGy9MMZoQdrVS7NJh1FA4ssYtoXiyzmlbE3w4IvHb/DtoS
-	vC/5gYvnstVxNbIyG3OolMITSZfnkCFUkw6iqk9NzOeISefmh+3CqVpDF2PGVXvrQoXeT0wxjGq
-	xlHzAgA==
-X-Received: from pjbgk12.prod.google.com ([2002:a17:90b:118c:b0:359:9051:f779])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:5111:b0:343:7714:4caa
- with SMTP id 98e67ed59e1d1-359bb337ee1mr905032a91.3.1772747427978; Thu, 05
- Mar 2026 13:50:27 -0800 (PST)
-Date: Thu,  5 Mar 2026 21:49:52 +0000
-In-Reply-To: <20260305215013.2984628-1-kuniyu@google.com>
+	s=arc-20240116; t=1772763499; c=relaxed/simple;
+	bh=JIIsENqr+ijZqwesf9PmBThzsFa2kfYIQ+aD5452FTw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=qDr7LVbwAQD5Cka3pUdKodXG/QGXJD1NMXy9oFYFeFpDRs4FZLlSW2jDwuKYx8L20JyhdCGkIfaKuHKinoreK8QyEhv7EOHWuUvlPyGyBqk40ZBM4qUZ8pC8FlIUFe0JMD9Lh+8Sa1LT+gOMwob5miTokQIsQmaDQUh4TXbPus0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=djX3wARl; arc=none smtp.client-ip=15.184.224.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1772763438;
+	bh=6Lvw1y8jO53tsdMBEuP/2gWGmjzhOC/b4ItepTfDW7U=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=djX3wARlbxoi1tXnQtXgjcFgTU/WEGMjDvExC8cfrEeRERwR0QqOuMVaO0YpCN4nW
+	 SM7Dd6jsy/46HM1rXwddEZ8RhWqgIMtmXvVj7sNcNdgCCl3vsP+IIcJWe99Gh3E8g7
+	 XMKSRYUlNORawLHckS4dhMJOhdMwtFI3zijKlBmE=
+X-QQ-mid: esmtpgz16t1772763420t656afca9
+X-QQ-Originating-IP: JjtnBdP+c9fPNjHvn0HE62t9ESrMHBnp/4VP8A1fOS8=
+Received: from localhost.localdomain ( [123.114.60.34])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Fri, 06 Mar 2026 10:16:53 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 16607703761546890952
+EX-QQ-RecipientCnt: 10
+From: Yihan Ding <dingyihan@uniontech.com>
+To: gnoack3000@gmail.com
+Cc: dingyihan@uniontech.com,
+	jannh@google.com,
+	linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	m@maowtm.org,
+	mic@digikod.net,
+	paul@paul-moore.com,
+	syzbot+7ea2f5e9dfd468201817@syzkaller.appspotmail.com,
+	utilityemal77@gmail.com
+Subject: [PATCH v5 0/2] landlock: Fix TSYNC deadlock and clean up error path
+Date: Fri,  6 Mar 2026 10:16:49 +0800
+Message-Id: <20260306021651.744723-1-dingyihan@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260305215013.2984628-1-kuniyu@google.com>
-X-Mailer: git-send-email 2.53.0.473.g4a7958ca14-goog
-Message-ID: <20260305215013.2984628-7-kuniyu@google.com>
-Subject: [PATCH v2 net-next 06/15] smack: Remove IPPROTO_UDPLITE support in security_sock_rcv_skb().
-From: Kuniyuki Iwashima <kuniyu@google.com>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, David Ahern <dsahern@kernel.org>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: Simon Horman <horms@kernel.org>, Florian Westphal <fw@strlen.de>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, netdev@vger.kernel.org, 
-	Willem de Bruijn <willemb@google.com>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: 97EB5218AA3
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpgz:uniontech.com:qybglogicsvrsz:qybglogicsvrsz4b-0
+X-QQ-XMAILINFO: MGXSylOY155T/6Yf8DJ1cuk5IqXXrSBiYiN76x9yzzL44eNCtb1DF0W2
+	jSGPS9Vh0t2HKOLvKBDFT+Ef2uxobn77jDO512lu+QWZHHJQko+gbRc1xToJQ0IeyBavzB5
+	eYna0waMquffOWJWJNr7zllvY0TpPQ7aNYvwDH3TdqqnRjgM//y/NuiROQUAe/WY5h6lgr5
+	s0WYYzwYVr5qaKx1SE2KsA3cgu51/mT6iImmaF4ci8cktLC+EcLkq579yzN+8SVVzb3mAv9
+	lnmB8opTNO7g0a+NduYqz5CUn3TEgINHd7vq/6fpJjtHCVIldCtNDwQcOHI3YTOxZEhvSwX
+	JYek+RLwslKENCsQilbn1hbXWw3oIgkIWPExrS8hWjw5/b6aBw/vaQNyEeS7lUviLQVWade
+	HhCJ4QDRiuZvi4s8i9f7IthJ5aHR36u95AsnE4kTddupNRBlD+rD99PXWVygjn4skD0a5VO
+	o2xF8+7oTRbOQu2uYHLYjZajCoV+dy53HuMBQv1dOqTCkCsiPANGt2Rh75ViRybV9j+ZNz9
+	0bitOA3QX1JFJtw/6XqAYNKqwC7x/vpBY9pJoIQw6RMPQeoVhb2FqKd90RvLu3kAyWFfZyQ
+	c/5SImrzWEZ2ggzm1D7cnVyUYfydOhr57E60kpo2Dm++2KnuwyGo9WNgkIRwe/4/FYdF+xg
+	xNafR8MXsNx4N+mDAaeWp1mMzq6DtjY5KE4ImxVKEhIUV0WV/+7CuYHvzV7UkcFG5RDqE5V
+	zakZbVd0uMU7NXwBB4vEXrT9MRDxhQxyhJD4zWzos6wpa4LH0AU7zmxBq+bp/AGApRA12IG
+	/SFcmdwtLeM9tqQTFsw2/qzrFx3ESrd9uBgliLp//4jgXhaC8VmjMOWPY3kio5grnM5teJf
+	t+LrQdcSjc9zpe3uTvt6jrLNd4I4LHcCnlmnBEgf+CNFZUxVcVA9P5/D4xhyTGpKdvHXK75
+	6xBpGVIM00qzk4eC+QSjEV0T4jtgmts/4RRFh870WJVGVJEyJEgcweF5iNwbVaHPNJNthvC
+	xJF8Bgqm2ist1uJiwefgSTiOseenRsIznuV+6QXcqnHHJqN3lz
+X-QQ-XMRINFO: OWPUhxQsoeAVwkVaQIEGSKwwgKCxK/fD5g==
+X-QQ-RECHKSPAM: 0
+X-Rspamd-Queue-Id: 1215A21A8AC
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MV_CASE(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
-	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[uniontech.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[uniontech.com:s=onoh2408];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_TO(0.00)[gmail.com,kernel.org,davemloft.net,google.com,redhat.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15345-lists,linux-security-module=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[uniontech.com,google.com,vger.kernel.org,maowtm.org,digikod.net,paul-moore.com,syzkaller.appspotmail.com,gmail.com];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-15347-lists,linux-security-module=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[google.com:+];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[kuniyu@google.com,linux-security-module@vger.kernel.org];
-	FREEMAIL_CC(0.00)[kernel.org,strlen.de,google.com,gmail.com,vger.kernel.org,schaufler-ca.com,paul-moore.com,namei.org,hallyn.com];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TAGGED_RCPT(0.00)[linux-security-module];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,hallyn.com:email,paul-moore.com:email,namei.org:email]
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_NONE(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dingyihan@uniontech.com,linux-security-module@vger.kernel.org];
+	DKIM_TRACE(0.00)[uniontech.com:+];
+	NEURAL_HAM(-0.00)[-0.998];
+	TAGGED_RCPT(0.00)[linux-security-module,7ea2f5e9dfd468201817];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[uniontech.com:dkim,uniontech.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-smack_socket_sock_rcv_skb() is registered as socket_sock_rcv_skb,
-which is called as security_sock_rcv_skb() in sk_filter_trim_cap().
 
-Now that UDP-Lite is gone, let's remove the IPPROTO_UDPLITE support
-in smack_socket_sock_rcv_skb().
+Hello,
 
-Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-Reviewed-by: Willem de Bruijn <willemb@google.com>
-Acked-by: Casey Schaufler <casey@schaufler-ca.com>
+This patch series fixes a deadlock in the Landlock TSYNC multithreading 
+support, originally reported by syzbot, and cleans up the associated 
+interrupt recovery path.
+
+The deadlock occurs when multiple threads concurrently call 
+landlock_restrict_self() with sibling thread restriction enabled, 
+causing them to mutually queue task_works on each other and block 
+indefinitely.
+
+* Patch 1 fixes the root cause by serializing the TSYNC operations 
+  within the same process using the exec_update_lock.
+* Patch 2 cleans up the interrupt recovery path by replacing an 
+  unnecessary wait_for_completion() with a straightforward loop break, 
+  avoiding Use-After-Free while unblocking remaining task_works.
 ---
-Cc: Paul Moore <paul@paul-moore.com>
-Cc: James Morris <jmorris@namei.org>
-Cc: "Serge E. Hallyn" <serge@hallyn.com>
-Cc: linux-security-module@vger.kernel.org
----
- security/smack/smack_lsm.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Changes in v5:
+- Just simple formatting changes, no code changes.
 
-diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index 98af9d7b9434..e581d6465946 100644
---- a/security/smack/smack_lsm.c
-+++ b/security/smack/smack_lsm.c
-@@ -4176,7 +4176,6 @@ static int smk_skb_to_addr_ipv6(struct sk_buff *skb, struct sockaddr_in6 *sip)
- 			sip->sin6_port = th->source;
- 		break;
- 	case IPPROTO_UDP:
--	case IPPROTO_UDPLITE:
- 		uh = skb_header_pointer(skb, offset, sizeof(_udph), &_udph);
- 		if (uh != NULL)
- 			sip->sin6_port = uh->source;
-@@ -4301,8 +4300,7 @@ static int smack_socket_sock_rcv_skb(struct sock *sk, struct sk_buff *skb)
- #if IS_ENABLED(CONFIG_IPV6)
- 	case PF_INET6:
- 		proto = smk_skb_to_addr_ipv6(skb, &sadd);
--		if (proto != IPPROTO_UDP && proto != IPPROTO_UDPLITE &&
--		    proto != IPPROTO_TCP)
-+		if (proto != IPPROTO_UDP && proto != IPPROTO_TCP)
- 			break;
- #ifdef SMACK_IPV6_SECMARK_LABELING
- 		skp = smack_from_skb(skb);
+Changes in v4:
+- Patch 1: Use restart_syscall() instead of returning -ERESTARTNOINTR.
+  This ensures the syscall is properly restarted without leaking the
+  internal error code to userspace, fixing a test failure in
+  tsync_test.competing_enablement. (Caught by Justin Suess, suggested
+  by Tingmao Wang).
+- Patch 1 and 2: Wrap comments to fit in 80 columns
+
+Changes in v3:
+- Patch 1: Changed down_write_killable() to down_write_trylock() and
+  return -ERESTARTNOINTR on failure. This avoids a secondary deadlock 
+  where a blocking wait prevents a sibling thread from waking up to 
+  execute the requested TSYNC task_work. (Noted by Günther Noack. 
+  down_write_interruptible() was also suggested but is not implemented 
+  for rw_semaphores in the kernel).
+- Patch 2: No changes.
+
+Changes in v2:
+- Split the changes into a 2-patch series.
+- Patch 1: Adopted down_write_killable() instead of down_write().
+- Patch 2: Removed wait_for_completion(&shared_ctx.all_prepared) and 
+  replaced it with a `break` to prevent UAF.
+
+Link to v4: https://lore.kernel.org/all/20260304095418.465594-1-dingyihan@uniontech.com/
+Link to v3: https://lore.kernel.org/all/20260226015903.3158620-1-dingyihan@uniontech.com/
+Link to v2: https://lore.kernel.org/all/20260225024734.3024732-1-dingyihan@uniontech.com/
+Link to v1: https://lore.kernel.org/all/20260224062729.2908692-1-dingyihan@uniontech.com/
+
+Yihan Ding (2):
+  landlock: Serialize TSYNC thread restriction
+  landlock: Clean up interrupted thread logic in TSYNC
+
+ security/landlock/tsync.c | 28 ++++++++++++++++++++--------
+ 1 file changed, 20 insertions(+), 8 deletions(-)
+
 -- 
-2.53.0.473.g4a7958ca14-goog
+2.20.1
 
 
