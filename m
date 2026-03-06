@@ -1,232 +1,166 @@
-Return-Path: <linux-security-module+bounces-15365-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-15366-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gFBECT4Yq2kfaAEAu9opvQ
-	(envelope-from <linux-security-module+bounces-15365-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Fri, 06 Mar 2026 19:09:02 +0100
+	id YDA7JRZDq2nJbgEAu9opvQ
+	(envelope-from <linux-security-module+bounces-15366-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Fri, 06 Mar 2026 22:11:50 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7A5C226915
-	for <lists+linux-security-module@lfdr.de>; Fri, 06 Mar 2026 19:09:01 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93B7C227BEB
+	for <lists+linux-security-module@lfdr.de>; Fri, 06 Mar 2026 22:11:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 159F23011C85
-	for <lists+linux-security-module@lfdr.de>; Fri,  6 Mar 2026 18:09:01 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 19908300B47D
+	for <lists+linux-security-module@lfdr.de>; Fri,  6 Mar 2026 21:11:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09327366804;
-	Fri,  6 Mar 2026 18:09:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50471481AA4;
+	Fri,  6 Mar 2026 21:11:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="I5JbAbA0"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from wind.enjellic.com (wind.enjellic.com [67.230.224.160])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E13E234B662;
-	Fri,  6 Mar 2026 18:08:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.230.224.160
+Received: from sonic316-27.consmr.mail.ne1.yahoo.com (sonic316-27.consmr.mail.ne1.yahoo.com [66.163.187.153])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4A8481A97
+	for <linux-security-module@vger.kernel.org>; Fri,  6 Mar 2026 21:11:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.187.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772820539; cv=none; b=tasmeYJmbEtZXUqP9qdSja7P6ZU8zEtk0jxxqoTRE9C4VQ1Dyj8RuRjNf4i6oeS2yUssMPdgwxBreWp0o27F6HOdArvJAlosyQJmPHQxVpfw8Co0FtlzkQx7mkoiCZmzYHEVDkxnfV3e7paR6Rj5kfjPW4nwc29MJcDIJnYBEIE=
+	t=1772831503; cv=none; b=ZNw42ys4LawRElqfp1Mx1czA9uXrtYhrcYTzPLAmK3MLRd139PztR4YlGv1oWmwMcAhl7snh2Z8Yp/nTPt4zdE2KIu/i3XYyE3KyHoYdbsAEjm3vLCFT+h6eV/XYpbYwLM8G4/+VloEkpRNErb3LOG+3rnwPNG1fe1rCbaerU94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772820539; c=relaxed/simple;
-	bh=PoW2Hmsa3XJr2dYEOm5XJGVqWQqGKLvCDFKjYYNzGWE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Mime-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FtSwdhU2M+vgleuT6w8EI0RRwoA5SKsNlaHxxjxh9+sxon8y8bS3+txCknMJZrArH4nmjSrECbG0UwPuafG2EaQDRJ7tArJgmGfP0l6ohjE4HEiZUcbpDR15OWBGvaVlemOUXyKqeSpijQErj1GvUr5nSG1mDAkBrsMJcy1NzME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com; spf=pass smtp.mailfrom=wind.enjellic.com; arc=none smtp.client-ip=67.230.224.160
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wind.enjellic.com
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-	by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 626HmJCB010007;
-	Fri, 6 Mar 2026 11:48:19 -0600
-Received: (from greg@localhost)
-	by wind.enjellic.com (8.15.2/8.15.2/Submit) id 626HmFf3010004;
-	Fri, 6 Mar 2026 11:48:15 -0600
-Date: Fri, 6 Mar 2026 11:48:15 -0600
-From: "Dr. Greg" <greg@enjellic.com>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        John Johansen <john.johansen@canonical.com>
-Subject: Re: LSM namespacing API
-Message-ID: <20260306174815.GA9953@wind.enjellic.com>
-Reply-To: "Dr. Greg" <greg@enjellic.com>
-References: <CAHC9VhRGMmhxbajwQNfGFy+ZFF1uN=UEBjqQZQ4UBy7yds3eVQ@mail.gmail.com> <CAHC9VhTeVs7kS9hzukukZRfGu6CC6=Dq4KP69tpEtiFpBJ+jOQ@mail.gmail.com> <CAEjxPJ4urh7mUbDJEi-DbdiAifMM_uDH3m35tLeTdx6z+qhPyg@mail.gmail.com> <CAHC9VhTGruOPJ+NWZT8vw1bjXzkB4DSPFmWd1pC=J2jTYHP5BA@mail.gmail.com>
+	s=arc-20240116; t=1772831503; c=relaxed/simple;
+	bh=DkhHXsS6gMF0c2zp638LypIrNx0MI8kizoulUI3kThc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LRKS7X+rAYdUHlnZ2hzsSEuR1Q59eE2rCwj1ynZHER4qmWRUh8k8ny9JJ1u5ja4igW5l3Tqr8XwBjS0WivOFyrEjzjToV44nsT0hCK16wyIlR15sZ6mHIZB+bKvjNOwf6NMaJkmAgySjfkvtBfiXTnVDWHOJDmgQBMdS1MpjjiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=I5JbAbA0; arc=none smtp.client-ip=66.163.187.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1772831501; bh=RWHa4kBONMFmFBcTzzY16yZMHVhKSyvVBBu97xTYIw8=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=I5JbAbA08KW7kmLBnCIbnokMBN95D5MiXut3oe/GUW0P1GKBrdQdrzJeLmUXUiGy3IzsTAp0fgfGc+y6P45i+25ZALowfrvd2bmDvoSpPUdXS7dMCFMKnkltXnhar2o/Hk93evuKvKCPxIYtd/O8hIrBcedCB9lDdUhohJtF0DEaA64RstXsGCWDS5ZfC4dWsx2ryT0G7y+M6oZQrcIkuU2pQmAWo75i6kOOluRX8JBUjXzOzhJA+0lVLRzlIgLBBJ4V2qJUvSv4vX4JLhB1ZOLROfCbIBoGwXA3wnRhpd9z7nSdA8TAXzXjNQVFfQxd2Cc9aZtAAIeC693IZudZkw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1772831501; bh=uweSByS6gx0jC1f+HgzNm16JxQm6WNammJhaIjt5jsa=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=O+kq9oUN/r1N70zrD5WJcRI2Ouh7uD3xThM/GAZHEsclH182bQzt5otCoZuCqe7lq8HUBh0J4CPYUiZTZH3vaKz0+Cb6L/PS/Y9u63ELa7zuN1hNC7OfKN7TvhL1IhbvD6LKrSHStkGdotVtyVAwrm1Cc2o5lDqw8L+DpxRER8L49SKagin2r5qEJZewf5vJJ47zK3hwDetl8K7m5A7gi001p+uCpFYE8Ff6XEUI61uIQyngvxy4oj+qm9urIoOFqN+wETpec/Ct7AYztmXMEEV8+xzVIawNh6hmDEgnBrNxlp1CeqSYyZJlUVnWuDJs1qQvTUIp/WmA4Jqb0VztsA==
+X-YMail-OSG: 7XhMbdIVM1ltSZv4p8H2w_MFMnrq45mp01GhhxDLn_JL8CnsKc7AqqetP.t6_6U
+ fPzHBV2KyUFNmUM_YULBvooxURlp3oml_3ytUKJDZs43MIvJmKV7Ph4UUi0K9T0.oLjhBdkElEwf
+ E_P7zyFiqC1tWuEw81lxh3CXuCRyFyukpLeOjABgsdYH0ywiny4Ww_.j.lzEbvf.3D0O9TLNIgZU
+ MCOgUHAJZxvLzDng_DSkB_K4y3RyO6rsU5ye_hggDLPggfwINgW4ebrEDXQ0owjk2_h3szCmBRlv
+ 9zulIniQcAO0aA1EAZwyNu76aTA0X9W_zIscqVLNG8rbydgFLGBHxT_eBObHpVQ9RNgLUtlq5cSG
+ StTdcASOZYxjkiD.Ycc0aDQgVnfYlayHckahVh750dVsFdYEzDNiwdJas4RtOltH1i.Q5ZDWH7.X
+ gItkhLFBTnKu4wwLv.pg4254Rf.yGlsnVXqBaNygOOV2PmJxXVDmYMLNcfWFQc4iTmEnscUW00ek
+ Nzp20mRWjJ1unjOqxHRWB1S9QhalJE.85Gyy1edZUKo15vxXz8ki3vNS8y4eLKBxGOUqHdG_5LsF
+ fNXmMTNwegPUzbqilKTliwF3MVcysPH0rD7sNQk6Ej1L9tTr64oNcFC5jlp51l.eF2FwiftVKX1_
+ kZerRN09oQ1kwNikUwlJb0GzNcjORnN3Ao7bzmydikm2uYxvhFNo07TPU_oAk6mfZ2paTaqBDs45
+ WNvoP3F5rG6w.sge2gTg5EP7QYchAHS6.CrRBrRddcBbQf36iSNMPasml5wYZrHkef8mABKqxpH8
+ SS.4zYlh5mOdQlB8F0B5C0Ci5sbFaNB4peOApgUg_AQlGJG4Occhp9zZXWcKotyHXBUgdchHCIt7
+ .B92ala0N2kyI5AprP7VX0O.rbwJQdiijVomI.FAroAW5L_tuzPMhGLIt6wm6luL10B4RheAeo3k
+ bzsFZ4kT1Gr1jhXwR8gDG_9jDzYsIcSfy__3KN1JdQFA7TuH6gFvkG3XLyemYb9tmOz4o0dHFHOC
+ 8pC.2nhFLhKJEG_DOeVGuaEekkCp7RhuB7C96jbdRbh.PnuhEQ8yky409qVqYiqQrcIgFqeUZrlz
+ CxOFif0BtXUUBBXQz8uHkkLTQdiUvd4sfBkPYcksUiMRL.g.KpurwM5D7AGA.qNkcCbCl..vdfvJ
+ w91.MsiKcUGMFnwQHOiuv.RVL_r.GvunFDVW2jAqk0H5qzQRk3iYi5p1hfAPE4aeJq9tFgqBVhIT
+ ipiERh79OOpBbR11UbePaVMwWRu9rszBq1xrZ6tVAFDfWHyjwr9wdXCCivZeYPJdX9eUwkZwwlR0
+ 6KYYCJ7S7Siny6xrYBbUPnHa4msTMrH3cH6lyuXQhe2qN7e_NUJ3rycAAgCFrNg4zmfUWD.Sv9n_
+ KP6Lq7TUOGUMVcbuDqRf86c9IT.vF7pm1mliwsKaB4YKpqZm1akkFN7WyI40GhCo9O4eNWFQfj1U
+ 9cTbH3N0b18RekyLlOK7Oha.rhx5mfkEmjSDJl0NGOT9rE65Ahn0Kg2l3PNbDUi.oMJolji9AvvG
+ HkxiS5qV9NcU2.Q17PLRBd7w5uKxG0ViTxi1NE0w38TtdLArPVrw.InWnDZu5.3cXIYxwhYf7mhE
+ 4Z61vdO_.1IHRlqSgXknIFMqa7mEOvCGelRRRuC0vK9nqFVsC4EQJeK0g4gCVKqN6iq90EPvEuiV
+ AA9cSDLLClcLfsnWqiHF0znr9fPtxrhrQKwDPkNAYM_ZtRFY0HO8Zngyz1RR4klyDAjKGFQhlGML
+ .cfHqmNSSy3n9s_0H1Ur2Ya7Y_GtUdhEvobToi_CDt1PKpOp_b.gB.5Ml9xJ.JG2BexFCfx7.ilO
+ OfABH2Vt4Gi4NB_dCLGfymBewQBPRz3E24m7YzRwC_EqgE4lRH.lg61HhoHymPFkB3.mdyzY5qBu
+ VDmlrSvO5bAErEpU2HZ5T6LVxlnx0xsqW7S_Eaoce.t5nVsddV5nJkJHa6z7KzDlEUvYnggNmykY
+ btBwhfuWnXFev9.eZ2MvLffYG4d1YAaBTH6_G19ziO1IWNLAiLBRQl8t3KIcfXvHaiPAUvy31NDd
+ VgCDCGaOAcRdG174otCPCBJxrP1IxQYkoOeLpn22YMokUav_fClQkuEUWKPGFPtokpduMJuJugRZ
+ u6khNvf0L4Ri6NSaWnMqdUgUZRKR3Vc3PGHZBySypl3mmkC84diZroWXdxBz4Rmq75q_fgfC_qm_
+ 1L3QilF5tf9rqa5cPnujQPek87B_jnQE5tuXu4.dWT0XUGCGENr7DCwGGvgzNCrSP9y5ln5pOi4U
+ wKUiga3S0oSjYQ08-
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 089228bc-47ae-44c6-9a3a-c863a2947ce6
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Fri, 6 Mar 2026 21:11:41 +0000
+Received: by hermes--production-gq1-6dfcf9f8b-m4k66 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID b49a5db42688b0ae6e7eb7714645b814;
+          Fri, 06 Mar 2026 21:01:33 +0000 (UTC)
+Message-ID: <ae5e9c1b-d0cd-476b-87d2-70c0bc8ba09c@schaufler-ca.com>
+Date: Fri, 6 Mar 2026 13:01:31 -0800
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHC9VhTGruOPJ+NWZT8vw1bjXzkB4DSPFmWd1pC=J2jTYHP5BA@mail.gmail.com>
-User-Agent: Mutt/1.4i
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Fri, 06 Mar 2026 11:48:19 -0600 (CST)
-X-Rspamd-Queue-Id: B7A5C226915
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: LSM namespacing API
+To: "Dr. Greg" <greg@enjellic.com>, Paul Moore <paul@paul-moore.com>
+Cc: Stephen Smalley <stephen.smalley.work@gmail.com>,
+ Ondrej Mosnacek <omosnace@redhat.com>,
+ linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+ John Johansen <john.johansen@canonical.com>
+References: <CAHC9VhRGMmhxbajwQNfGFy+ZFF1uN=UEBjqQZQ4UBy7yds3eVQ@mail.gmail.com>
+ <CAHC9VhTeVs7kS9hzukukZRfGu6CC6=Dq4KP69tpEtiFpBJ+jOQ@mail.gmail.com>
+ <CAEjxPJ4urh7mUbDJEi-DbdiAifMM_uDH3m35tLeTdx6z+qhPyg@mail.gmail.com>
+ <CAHC9VhTGruOPJ+NWZT8vw1bjXzkB4DSPFmWd1pC=J2jTYHP5BA@mail.gmail.com>
+ <20260306174815.GA9953@wind.enjellic.com>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20260306174815.GA9953@wind.enjellic.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.25198 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Rspamd-Queue-Id: 93B7C227BEB
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.54 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	FROM_NAME_HAS_TITLE(1.00)[dr];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MV_CASE(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[yahoo.com:s=s2048];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
 	FREEMAIL_CC(0.00)[gmail.com,redhat.com,vger.kernel.org,canonical.com];
-	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15365-lists,linux-security-module=lfdr.de];
-	DMARC_NA(0.00)[enjellic.com];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	REPLYTO_EQ_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-security-module];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[greg@enjellic.com,linux-security-module@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-15366-lists,linux-security-module=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[schaufler-ca.com: no valid DMARC record];
+	DKIM_TRACE(0.00)[yahoo.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	R_DKIM_NA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,enjellic.com:replyto,wind.enjellic.com:mid];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	NEURAL_HAM(-0.00)[-0.631];
-	HAS_REPLYTO(0.00)[greg@enjellic.com]
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[casey@schaufler-ca.com,linux-security-module@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	NEURAL_HAM(-0.00)[-0.990];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-security-module];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Tue, Mar 03, 2026 at 11:46:53AM -0500, Paul Moore wrote:
+On 3/6/2026 9:48 AM, Dr. Greg wrote:
+> On Tue, Mar 03, 2026 at 11:46:53AM -0500, Paul Moore wrote:
+>
+> Good morning, I hope the week is winding down well for everyone.
+>
+>> On Tue, Mar 3, 2026 at 8:30???AM Stephen Smalley
+>>> I think my only caveat here is that your proposal is quite a bit more
+>>> complex than what I implemented here:
+>>> [1] https://lore.kernel.org/selinux/20251003190959.3288-2-stephen.smalley.work@gmail.com/
+>>> [2] https://lore.kernel.org/selinux/20251003191328.3605-1-stephen.smalley.work@gmail.com/
+>>> and I'm not sure the extra complexity is worth it.
+>>>
+>>> In particular:
+>>> 1. Immediately unsharing the namespace upon lsm_set_self_attr() allows
+>>> the caller to immediately and unambiguously know if the operation is
+>>> supported and allowed ...
+>> Performing the unshare operation immediately looks much less like a
+>> LSM attribute and more like its own syscall.  That isn't a problem
+>> in my eyes, it just means if this is the direction we want to go we
+>> should implement a lsm_unshare(2) API, or something similar.
+> Stephen's take on this is correct, the least complicated path forward
+> is a simple call, presumably lsm_unshare(2), that instructs the LSM(s)
+> to carry out whatever is needed to create a new security namespace.
+>
+> There are only two public implementations of what can be referred to
+> as major security namespacing efforts; Stephen's work with SeLinux and
+> our TSEM implementation.
 
-Good morning, I hope the week is winding down well for everyone.
+Please be just a tiny bit careful before you make this sort of assertion:
 
-> On Tue, Mar 3, 2026 at 8:30???AM Stephen Smalley
-> > I think my only caveat here is that your proposal is quite a bit more
-> > complex than what I implemented here:
-> > [1] https://lore.kernel.org/selinux/20251003190959.3288-2-stephen.smalley.work@gmail.com/
-> > [2] https://lore.kernel.org/selinux/20251003191328.3605-1-stephen.smalley.work@gmail.com/
-> > and I'm not sure the extra complexity is worth it.
-> >
-> > In particular:
-> > 1. Immediately unsharing the namespace upon lsm_set_self_attr() allows
-> > the caller to immediately and unambiguously know if the operation is
-> > supported and allowed ...
+	https://lwn.net/Articles/645403/
 
-> Performing the unshare operation immediately looks much less like a
-> LSM attribute and more like its own syscall.  That isn't a problem
-> in my eyes, it just means if this is the direction we want to go we
-> should implement a lsm_unshare(2) API, or something similar.
-
-Stephen's take on this is correct, the least complicated path forward
-is a simple call, presumably lsm_unshare(2), that instructs the LSM(s)
-to carry out whatever is needed to create a new security namespace.
-
-There are only two public implementations of what can be referred to
-as major security namespacing efforts; Stephen's work with SeLinux and
-our TSEM implementation.  Given that both initiatives, which are
-significantly different, independently settled on the same approach
-seems to suggest it is a mechanism that enjoys successful field
-experience.
-
-The larger and more important question would seem to be what type of
-common namespace infrastructure actions would be amortizable across
-all the different types of security models that are supported by the
-LSM infrastructure.
-
-We haven't seen any further comments or patches out of what Christian
-and Lennart are attempting to implement with respect to the concept of
-a security namespace in order to support their Amutable initiative.
-It seems reasonable that one of the common pieces of infrastructure
-would be the allocation of a security namespace specific context of
-data, i.e. an LSM security blob, that Christian had proposed patches
-for.
-
-Given the potential security implications of creating a security
-namespace, we assume that the 'unshare' operation would call an LSM
-hook that interrogated the current LSM stack for permission to do so.
-
-For example, it would seem reasonable that the Lockdown LSM would want
-the ability to block attempts to create alternate security namespaces.
-
-> > 3. We don't need to introduce a new CLONE_* flag at all or introduce
-> > new or changed LSM hooks to clone/unshare,
-> 
-> While I think we could get away with a new lsm_unshare(2) syscall, I
-> have zero interest in an lsm_clone(2) syscall.  If we do away with the
-> namespace related LSM attributes and rely entirely on a lsm_unshare(2)
-> syscall, would everyone be okay with that?
-
-We assume that there is agreement on the fact that an orchestrator
-needs to have the ability to specify attributes or policy for the new
-namespace that is being created.
-
-Given that, there will be a need to be able specify the
-characteristics that configure the new namespace which will go into
-effect, atomically, at the time the proposed lsm_unshare(s) system
-call executes.
-
-For example, now that IMA is an LSM, it would be reasonable to assume
-that the cryptographic hash function used for the integrity
-measurements could be specified as part of the namespace setup call
-for a new IMA namespace.
-
-> (I think we would still want/need the procfs API)
-
-That is only needed if there is a desire to support the ability of a
-process to enter a security namespace that it is not part of.
-
-That is potentially a useful feature, suffice it to say however, there
-are a host of issues involved with this.  We've had significant field
-experience with this concept and its implications, we don't get the
-sense that the mainline LSM's have had the opportunity to understand
-the implications of what this would mean.
-
-> > All that said, I'm willing to wire up the SELinux namespaces
-> > implementation to the proposed interface if someone implements the
-> > necessary plumbing, but I'm not sure it's better.
-
-> I'd really like to hear from some of the other LSMs before we start
-> diving into the code.  It may sound funny, but from my perspective
-> doing the work to get the API definition "right" is far more
-> important than implementing it.
-
-It isn't funny, it is pragmatic, particularily in this case.
-
-The primary challenge will be the tension that exists between the fact
-that there is no practical field experience with security namespacing,
-particularily with respect to its security implications, in the
-mainline kernel and the Linux userspace guarantee policy, that once an
-API/ABI becomes visible to userspace it cannot be changed.
-
-At this point in time the most basic and common security namespace
-infrastructure to get right and lay down would seem to be three fold:
-
-1.) A security check for whether or not namespace creation should be
-allowed.
-
-2.) The ability to specify characteristics of a new security namespace
-and to invoke those atomically when a process requests that a new
-security namespace be created.
-
-3.) Allocation of an LSM namespace 'blob' of memory that can be used
-to implement the security context for the new namespace.
-
-TSEM obviously isn't in the kernel, so understandably, our perspective
-may not hold much value in these quarters.
-
-It is, however, the most significant security namespace implementation
-that has been done for Linux, with respect to its scope and
-capabilities.  Perhaps most importantly, we have had ten years of
-experience dealing with all of these issues and their implications,
-particularly from a security perspective.
-
-Given that, we would be happy to test fire TSEM against any proposed
-infrastructure changes that focus on the generic needs of security
-namespacing.
-
-> paul-moore.com
-
-Have a good weekend.
-
-As always,
-Dr. Greg
-
-The Quixote Project - Flailing at the Travails of Cybersecurity
-              https://github.com/Quixote-Project
 
