@@ -1,169 +1,207 @@
-Return-Path: <linux-security-module+bounces-15376-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-15378-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id INPlJskprWlAzAEAu9opvQ
-	(envelope-from <linux-security-module+bounces-15376-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Sun, 08 Mar 2026 08:48:25 +0100
+	id aBaPGmo+rWlV0AEAu9opvQ
+	(envelope-from <linux-security-module+bounces-15378-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Sun, 08 Mar 2026 10:16:26 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1D1F22EFA2
-	for <lists+linux-security-module@lfdr.de>; Sun, 08 Mar 2026 08:48:24 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4B7722F223
+	for <lists+linux-security-module@lfdr.de>; Sun, 08 Mar 2026 10:16:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id D5A3430091CC
-	for <lists+linux-security-module@lfdr.de>; Sun,  8 Mar 2026 07:48:21 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 89C6A300E3D9
+	for <lists+linux-security-module@lfdr.de>; Sun,  8 Mar 2026 09:16:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB75B346797;
-	Sun,  8 Mar 2026 07:48:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62F40355F2B;
+	Sun,  8 Mar 2026 09:16:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fLCiyfsE"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="wQKK3t2n"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-bc08.mail.infomaniak.ch (smtp-bc08.mail.infomaniak.ch [45.157.188.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B732A3446CB
-	for <linux-security-module@vger.kernel.org>; Sun,  8 Mar 2026 07:48:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76C433537DA
+	for <linux-security-module@vger.kernel.org>; Sun,  8 Mar 2026 09:16:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772956099; cv=none; b=I6paUKlGd1iCIkuBxboEZpuRqZNZOlfYpTCiJX6VGF1CG2F2rxKU/9fJH6XhxIJsUgbLbWgeGARzJEaYE/sxLaHq3dnfev0ufwyvFlCdwYtnuxCRK+mB95VpD5i2eU6DRfBvVs4/689zXXuVMEFtoOuJUwOCSCKVWiX0XKtlK70=
+	t=1772961382; cv=none; b=g2MvVRz2ZB3/OnC83Ri8oSOAtjePTmb3lq8nOx00+IO8muHNh3JPOssyEKU5G9it9yCyZnE4LWskcgakifdVb/jWLXgWX/d0oGarrTvlUBmE0rVcQcU4NBDsAMCxzSgf3sfNeDEbA8Sj40PgtXHLazAfztCooIrutHtgvXgbkcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772956099; c=relaxed/simple;
-	bh=5Kn1rIgXr/VfSh2FYokFQ5Xhl/V9jSbyumwCwi8VucI=;
+	s=arc-20240116; t=1772961382; c=relaxed/simple;
+	bh=dY7aV8PjEJFsNWzIYqg5PC3zubmmReQdXvvnh5Ksnbs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RasV5S8ya+009lHS1AJgSTK1QrP60X/Yg6T4kICblOu/Q8QR4Lny7fkis7FbuUfFSIM/WbFDEthnxdR+VnSfWJ4vp6iIgf3GpkCZ49ggZxFpxSPHragHdwozxt8g6YV5jEoa3rIFsPZUeFi7qSKUV9Gt38YglotXolDgV3iBGng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fLCiyfsE; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2ae50a33ff8so52278905ad.3
-        for <linux-security-module@vger.kernel.org>; Sat, 07 Mar 2026 23:48:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772956098; x=1773560898; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OmbQKad/yw7sNPhRMboDHSs+lSb0BUfzcUHLjfJzC4c=;
-        b=fLCiyfsEb4aFwrwUI47NuHrA0s3FSv4le9OAIXnim1UqAxzzt0EbAm4egXa2K9kUvx
-         tLjjnr3AUcAfdiD6GNj5s9SQNoaefySw8qwe25FaSi9y9gtfnYvlH8UKdrweJZX7aqUw
-         dSaqJxuT4N6HXiaHSpa8j7Vsy9hursjmjUWpx/IPJnuieXz2oV9iCBX5MrpJ598JPv8t
-         +HThstHwvmEeC/XuRyuzgPc+C0VBVCgnd+1hj0mI19+P0OxtFjV9WXQKkeKluHxgSrq6
-         VRO+mW/nSm38nXeRygpyC12U6FRSsWY2AHJH1l6Sj6+vNp4kFvivULcMF8c40KBzR22F
-         jWwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772956098; x=1773560898;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OmbQKad/yw7sNPhRMboDHSs+lSb0BUfzcUHLjfJzC4c=;
-        b=dhepnciexyMK++8lStuVXMRb+B4LVHRxWgTrclnSLXKsMpxvnNHCNeEPuviPTkv43p
-         zMtj8H05oG9KIlYAdVIOKr+gXILIjkrKxgFnZcqwnLoKUF94s2OzqgDI2UoUHVUBZlxf
-         kMsM1lyxAwLyi5KDzm//s8B/2MXe1kl1bCiYG/Nn1jigdqHwRai9OW7D0sqqsl73tbxf
-         Zlrygmg3tVzjbWPX0LMm902ZNchuBt5EDlGuBn8zV4zKO41739D14wFg80KHJbiNi6dM
-         8lO2gHht/dqmrsufg4I03aS9t1OYuOj153OrIH0/gdR6Mn67ap9mrrlKNOdQt5vPQaUv
-         iVgQ==
-X-Gm-Message-State: AOJu0Yy1iqmDIEt578Yzt8PEjoTfrYYM/9a/0gKNH4LaK/yAksM90Ac7
-	celHUW7w4WjHzTr4a8aoliZke/A+zjl0mAh7Uf460FjSjhHx159byALJ
-X-Gm-Gg: ATEYQzzt8NjXHbzTTUberAr8sOgdlbE+9z2cr0uXcHdXSE2PIcX3jucdzCese8K5wh3
-	vTQN1KSnX1qpHAYd2oypD0bR05dU/qBSyA+WmrTNxI7U/+NPlSeUb6j1QYroZ0LMzqP88vAEhub
-	DrvG3wM35kWTpLew3iLnMacNqK0cmNRpFQ0137A2c1hjdGfmZVeM71k/BpUYtAy5LDjUH8JB+rc
-	hmNJGljcEGsjVKXki2K/cupxoEIeFC7HeFm1BTk1SEwIgFjW0BGymQEQGUoyFb9KGPczvcJLAaD
-	HlHfvsKV0tTNPg7TAqaj8MdZwbiUnoUrShfOIRnI39gS2/Is1+D+WEDwJryxDogZxLP8B8Fqb94
-	Xi+jSY9aAH0k132r0shCuaGVYCg16q8WpDk8uOHfOpQqDVy4hWiO6GcKeLao3h7+60CostpS0V9
-	BNnqHnn56hjEUWZK2iQqo=
-X-Received: by 2002:a17:902:cf4c:b0:2ae:6b54:27b1 with SMTP id d9443c01a7336-2ae82450ddemr76055945ad.40.1772956097968;
-        Sat, 07 Mar 2026 23:48:17 -0800 (PST)
-Received: from archie.me ([210.87.74.117])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae83e57b14sm93468275ad.19.2026.03.07.23.48.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Mar 2026 23:48:17 -0800 (PST)
-Received: by archie.me (Postfix, from userid 1000)
-	id 6FAFF41FD8A6; Sun, 08 Mar 2026 14:48:13 +0700 (WIB)
-Date: Sun, 8 Mar 2026 14:48:13 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Evan Ducas <evan.j.ducas@gmail.com>, wufan@kernel.org, corbet@lwn.net,
-	skhan@linuxfoundation.org
-Cc: linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] docs: security: ipe: fix typos and grammar
-Message-ID: <aa0pvREYJYrAZRsB@archie.me>
-References: <20260308031633.28890-1-evan.j.ducas@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ti1q+BJHq3Zp71KjLbZtK397wV2sVLEI/om/KssyPJmyMWcsVQrH9LPGz63wpibnad/0dUalYYgfPGZGCaXu4v1We0xd8j13UuCVPK4POoutvWJZJJZo+EGBjhoP5TWIIGZ6onunY2DkDI+vRVBhdpr2aZ3odP8J/GSD+45Qn18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=wQKK3t2n; arc=none smtp.client-ip=45.157.188.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fTDqH3n0yz8XS;
+	Sun,  8 Mar 2026 10:09:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1772960971;
+	bh=ixxX42SudKgPtlOFhWAtbUdAT0D5WwMCtN2JoO9Goxw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=wQKK3t2nAEAoJv2il4+Ms7IOiDUDgj4BK/QNpCJZ6vSf641tsCG2gGry2vXIJQOkO
+	 C/wgReSAb5S8Yn0y+HUcUgSQr6DPGkfOE268zbVZPrsBBflx0Ok6Fv+ZX2/J8oNYod
+	 DUUu2HjukV4FjL5XOn8243Vtnge5kRYOyNwiZOf8=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4fTDqG50dkzkRr;
+	Sun,  8 Mar 2026 10:09:30 +0100 (CET)
+Date: Sun, 8 Mar 2026 10:09:21 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack3000@gmail.com>
+Cc: John Johansen <john.johansen@canonical.com>, 
+	Tingmao Wang <m@maowtm.org>, Justin Suess <utilityemal77@gmail.com>, 
+	Jann Horn <jannh@google.com>, linux-security-module@vger.kernel.org, 
+	Samasth Norway Ananda <samasth.norway.ananda@oracle.com>, Matthieu Buffet <matthieu@buffet.re>, 
+	Mikhail Ivanov <ivanov.mikhail1@huawei-partners.com>, konstantin.meskhidze@huawei.com, 
+	Demi Marie Obenour <demiobenour@gmail.com>, Alyssa Ross <hi@alyssa.is>, 
+	Tahera Fahimi <fahimitahera@gmail.com>
+Subject: Re: [PATCH v5 2/9] landlock: Control pathname UNIX domain socket
+ resolution by path
+Message-ID: <20260308.zie6thaiP0aj@digikod.net>
+References: <20260215105158.28132-1-gnoack3000@gmail.com>
+ <20260215105158.28132-3-gnoack3000@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="vB29sbE/bA8VxDG8"
-Content-Disposition: inline
-In-Reply-To: <20260308031633.28890-1-evan.j.ducas@gmail.com>
-X-Rspamd-Queue-Id: A1D1F22EFA2
-X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.76 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	MAILLIST(-0.15)[generic];
-	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FREEMAIL_TO(0.00)[gmail.com,kernel.org,lwn.net,linuxfoundation.org];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15376-lists,linux-security-module=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bagasdotme@gmail.com,linux-security-module@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.950];
-	TAGGED_RCPT(0.00)[linux-security-module];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com]
-X-Rspamd-Action: no action
-
-
---vB29sbE/bA8VxDG8
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260215105158.28132-3-gnoack3000@gmail.com>
+X-Infomaniak-Routing: alpha
+X-Rspamd-Queue-Id: C4B7722F223
+X-Rspamd-Server: lfdr
+X-Spamd-Result: default: False [-1.07 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_MIXED_CHARSET(0.59)[subject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[digikod.net:s=20191114];
+	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
+	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-15378-lists,linux-security-module=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[canonical.com,maowtm.org,gmail.com,google.com,vger.kernel.org,oracle.com,buffet.re,huawei-partners.com,huawei.com,alyssa.is];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	DMARC_NA(0.00)[digikod.net];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[digikod.net:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[mic@digikod.net,linux-security-module@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.968];
+	TAGGED_RCPT(0.00)[linux-security-module];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[digikod.net:dkim,digikod.net:email,digikod.net:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+X-Rspamd-Action: no action
 
-On Sat, Mar 07, 2026 at 10:16:33PM -0500, Evan Ducas wrote:
->  As requirements change over time (vulnerabilities are found in previously
-> -trusted applications, keys roll, etcetera). Updating a kernel to change =
-the
-> +trusted applications, keys roll, etcetera). Updating a kernel to change =
-to
->  meet those security goals is not always a suitable option, as updates ar=
-e not
->  always risk-free, and blocking a security update leaves systems vulnerab=
-le.
->  This means IPE requires a policy that can be completely updated (allowing
+On Sun, Feb 15, 2026 at 11:51:50AM +0100, Günther Noack wrote:
+> * Add a new access right LANDLOCK_ACCESS_FS_RESOLVE_UNIX, which
+>   controls the look up operations for named UNIX domain sockets.  The
+>   resolution happens during connect() and sendmsg() (depending on
+>   socket type).
+> * Hook into the path lookup in unix_find_bsd() in af_unix.c, using a
+>   LSM hook.  Make policy decisions based on the new access rights
+> * Increment the Landlock ABI version.
+> * Minor test adaptions to keep the tests working.
+> 
+> With this access right, access is granted if either of the following
+> conditions is met:
+> 
+> * The target socket's filesystem path was allow-listed using a
+>   LANDLOCK_RULE_PATH_BENEATH rule, *or*:
+> * The target socket was created in the same Landlock domain in which
+>   LANDLOCK_ACCESS_FS_RESOLVE_UNIX was restricted.
+> 
+> In case of a denial, connect() and sendmsg() return EACCES, which is
+> the same error as it is returned if the user does not have the write
+> bit in the traditional Unix file system permissions of that file.
 
-As requirements change over time ..., updating a kernel to meet ..., yet
-blocking a security update ... .
+It is not the same error code as for scoped abstract unix socket
+(EPERM), but it makes sense because the scope restrictions are closer to
+ambient rights (i.e. similar to a network isolation), whereas here the
+final denial comes from a missing FS rule (and all FS access checks may
+return EACCES).  It would be worth mentioning this difference in the
+user documentation.
 
-Thanks.
+> 
+> This feature was created with substantial discussion and input from
+> Justin Suess, Tingmao Wang and Mickaël Salaün.
+> 
+> Cc: Tingmao Wang <m@maowtm.org>
+> Cc: Justin Suess <utilityemal77@gmail.com>
+> Cc: Mickaël Salaün <mic@digikod.net>
+> Suggested-by: Jann Horn <jannh@google.com>
+> Link: https://github.com/landlock-lsm/linux/issues/36
+> Signed-off-by: Günther Noack <gnoack3000@gmail.com>
+> ---
+>  include/uapi/linux/landlock.h                |  10 ++
+>  security/landlock/access.h                   |  11 +-
+>  security/landlock/audit.c                    |   1 +
+>  security/landlock/fs.c                       | 102 ++++++++++++++++++-
+>  security/landlock/limits.h                   |   2 +-
+>  security/landlock/syscalls.c                 |   2 +-
+>  tools/testing/selftests/landlock/base_test.c |   2 +-
+>  tools/testing/selftests/landlock/fs_test.c   |   5 +-
+>  8 files changed, 128 insertions(+), 7 deletions(-)
 
---=20
-An old man doll... just what I always wanted! - Clara
+> +static int hook_unix_find(const struct path *const path, struct sock *other,
+> +			  int flags)
+> +{
+> +	const struct landlock_ruleset *dom_other;
+> +	const struct landlock_cred_security *subject;
+> +	struct layer_access_masks layer_masks;
+> +	struct landlock_request request = {};
+> +	static const struct access_masks fs_resolve_unix = {
+> +		.fs = LANDLOCK_ACCESS_FS_RESOLVE_UNIX,
+> +	};
+> +
+> +	/* Lookup for the purpose of saving coredumps is OK. */
+> +	if (unlikely(flags & SOCK_COREDUMP))
+> +		return 0;
+> +
+> +	/* Access to the same (or a lower) domain is always allowed. */
+> +	subject = landlock_get_applicable_subject(current_cred(),
+> +						  fs_resolve_unix, NULL);
+> +
+> +	if (!subject)
+> +		return 0;
+> +
+> +	if (!landlock_init_layer_masks(subject->domain, fs_resolve_unix.fs,
+> +				       &layer_masks, LANDLOCK_KEY_INODE))
+> +		return 0;
+> +
+> +	/* Checks the layers in which we are connecting within the same domain. */
+> +	dom_other = landlock_cred(other->sk_socket->file->f_cred)->domain;
+> +	unmask_scoped_access(subject->domain, dom_other, &layer_masks,
+> +			     fs_resolve_unix.fs);
+> +
+> +	if (layer_access_masks_empty(&layer_masks))
 
---vB29sbE/bA8VxDG8
-Content-Type: application/pgp-signature; name=signature.asc
+I don't see the point of this helper and this call wrt the following
+is_access_to_paths_allowed() call and the is_layer_masks_allowed()
+check.
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCaa0puAAKCRD2uYlJVVFO
-o5byAQDwdsUfbgqZLGBn546xcdOSlCftJat4qLbiS2NcDKE+9wEAhe+mAGEuqNq3
-sg2kekxxONJDUWS1X7oX5QJCwRIH4AM=
-=3l/q
------END PGP SIGNATURE-----
-
---vB29sbE/bA8VxDG8--
+> +		return 0;
+> +
+> +	/* Checks the connections to allow-listed paths. */
+> +	if (is_access_to_paths_allowed(subject->domain, path,
+> +				       fs_resolve_unix.fs, &layer_masks,
+> +				       &request, NULL, 0, NULL, NULL, NULL))
+> +		return 0;
+> +
+> +	landlock_log_denial(subject, &request);
+> +	return -EACCES;
+> +}
 
