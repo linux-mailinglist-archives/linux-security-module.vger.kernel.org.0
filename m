@@ -1,170 +1,160 @@
-Return-Path: <linux-security-module+bounces-15389-lists+linux-security-module=lfdr.de@vger.kernel.org>
+Return-Path: <linux-security-module+bounces-15391-lists+linux-security-module=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-security-module@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aNsAGyGtrmntHQIAu9opvQ
-	(envelope-from <linux-security-module+bounces-15389-lists+linux-security-module=lfdr.de@vger.kernel.org>)
-	for <lists+linux-security-module@lfdr.de>; Mon, 09 Mar 2026 12:21:05 +0100
+	id qDbTIFO8rmn6IQIAu9opvQ
+	(envelope-from <linux-security-module+bounces-15391-lists+linux-security-module=lfdr.de@vger.kernel.org>)
+	for <lists+linux-security-module@lfdr.de>; Mon, 09 Mar 2026 13:25:55 +0100
 X-Original-To: lists+linux-security-module@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C77BF237D0F
-	for <lists+linux-security-module@lfdr.de>; Mon, 09 Mar 2026 12:21:04 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23C30238C76
+	for <lists+linux-security-module@lfdr.de>; Mon, 09 Mar 2026 13:25:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EC091307016A
-	for <lists+linux-security-module@lfdr.de>; Mon,  9 Mar 2026 11:15:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 302353089545
+	for <lists+linux-security-module@lfdr.de>; Mon,  9 Mar 2026 12:15:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D68BE39A7FB;
-	Mon,  9 Mar 2026 11:15:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E97835C1AA;
+	Mon,  9 Mar 2026 12:15:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nCkqRQ/k"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VbpQ0agn"
 X-Original-To: linux-security-module@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B285639A05B;
-	Mon,  9 Mar 2026 11:15:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C59B33711D
+	for <linux-security-module@vger.kernel.org>; Mon,  9 Mar 2026 12:15:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773054935; cv=none; b=AWbSlEec0OiLHoPjrc0AdUbDCouOMu03f8q2svVpQpVNl6hlqVzOa4GqX45FGKdj8or/gO62Z645wvn27tepBj7x0RM9uBF5rUne98xPRV2p2jaPKK9L4C4RgtkJsme4u6j3Q5xjNuaAbyJsmXNKJ+Fn74cRNgMG49j6W4BXoRg=
+	t=1773058520; cv=none; b=JdFSF9qdwMarBvIdfF+qaL+B0pzOltx8442vcLASj1M6bmYsFowr8XhJ2KBO2LkzxXvGNPzMvydxm7+6InUCvEvkwpzxT3ALhH+2wat99rQkTtkX3KFGbpqjiUFCsVWZQJr5L+jePjWA+IMPceEmxD/ttwYhC0oHfEzgcBEBBN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773054935; c=relaxed/simple;
-	bh=YZqrFAi+xx1WasdQBcrBtpQgQLl0zbLLz0lMnsGCHt8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dWX2SAwnERPgqFYkauvcS0WX49dlSOyMUVDgwJXtv2JTs1cGfUjaFxlRt8iWxAP+C8PuAR4jOmeIVeA+yeHQX6GGoJvA6sSB7W80BoLdP0i06lyVShVmGygbJ2+jvN9wNcjIgM6qLteKzWVlTRBNDywZl+262kFEt5J9aDrOqWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nCkqRQ/k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8F5EC4CEF7;
-	Mon,  9 Mar 2026 11:15:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773054935;
-	bh=YZqrFAi+xx1WasdQBcrBtpQgQLl0zbLLz0lMnsGCHt8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=nCkqRQ/kDYnasY1FUbbys375EBYRCVztdy70T7qjDndxTBBSy3Z26gZOFIVm+0MrS
-	 OphQZjvAtzLYKW+PmwWHOuD0sQjwTZwkdqyLPkZJF88KSZ/4EeOeC/gBGFOdLRtdRP
-	 nao9/KeoIZnSDNOPssFj6WwGOA+0VbyHsDLCeXrCbDyXJA6Fn0n1QDNo7Q6A38XyoA
-	 HqsV94Pyk15yuYIDwnh6mvA1ejGppYXCZGPrUV3ImVYfFy623kgIW3qowWBW58/Y5a
-	 wUpSjDEMnPKCDT6H5BgI7o5nhBUw33K2xT1rGfmeHeXprgQjUjth9w8Yrkav/XFU4S
-	 4a/hsEr9qo2Zw==
-From: Leon Romanovsky <leon@kernel.org>
-To: Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Itay Avraham <itayavr@nvidia.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	Chiara Meiohas <cmeiohas@nvidia.com>,
-	Maher Sanalla <msanalla@nvidia.com>,
-	Edward Srouji <edwards@nvidia.com>
-Subject: [PATCH 3/3] fwctl/mlx5: Invoke fw_validate_cmd LSM hook for fwctl commands
-Date: Mon,  9 Mar 2026 13:15:20 +0200
-Message-ID: <20260309-fw-lsm-hook-v1-3-4a6422e63725@nvidia.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260309-fw-lsm-hook-v1-0-4a6422e63725@nvidia.com>
-References: <20260309-fw-lsm-hook-v1-0-4a6422e63725@nvidia.com>
+	s=arc-20240116; t=1773058520; c=relaxed/simple;
+	bh=HPiSJ93sUzqz5SidOlMS933Yx3yWvCUQ5wbilVvU0I0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=luHelD5Ktm507OA1dS7oqTxLMRSlPlgtFy1Zb2Mp1U71DNnvMnq+N+lBXlxV5QGYDR21JtEbeK0PhmcmFLKkajtf9ZZgT5gX4GhA3qMn3lpOTabYqdO1uFs2eke13GNad6qIPCsQ6RuzhkyHYCU+XgYlVheWg1/f0azPy13RJjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VbpQ0agn; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-35994d84c6dso3226331a91.2
+        for <linux-security-module@vger.kernel.org>; Mon, 09 Mar 2026 05:15:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773058519; x=1773663319; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HPiSJ93sUzqz5SidOlMS933Yx3yWvCUQ5wbilVvU0I0=;
+        b=VbpQ0agnypTOPPjI8m/21HBhHNH5aAc7ANzcsMeyyTush88NDbcEKIDU/0FNDrmpe2
+         AKFJJIPXU4fyZtFDdF8bTYLCxjX1aOuVenPZRcUp2sjiUJF5NaOBayfLhruDiqVWKr4X
+         3UblMgyuSQyfM/GkJaqo4Cs+4AHZ/lcpwpxJIv2Kaa7h+03sncESZSkM2HsRsKqlvbZ4
+         tTGc0gsFE6YiZVYxmkP2kGFnsO4NfIhc1X0y06Th3ssZBxSIMeuN1pJyOm+t5Il5z0wr
+         l/VhxyPwH3xy6Gu4Q6KAL7q8BevPFztCYMh7PILLF3ownniEyDtSwVFOwFrNXvOrM7UR
+         ga2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773058519; x=1773663319;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HPiSJ93sUzqz5SidOlMS933Yx3yWvCUQ5wbilVvU0I0=;
+        b=BEbFVsh+NJT4epuOzexvXBUnacoNYTSWqU1998WvJM1FtyAlpobXXnXGXMwUOcvGkq
+         MnkVZgJ1Pd+jCgcMwPSz8btv3J+ZY6vTG3d8GwFAHRxTVoefGl0rJmPM/2IAErP4wTAW
+         RZtDA/1DLX0S8mHoYLoZGtwtl/S2E4w/ChNRLo76IqcsQLnpZNcicpYxmDR5d2EgQ1x2
+         GJgHHWqXlHIYBz1Q5CfRrBabH2tNECilWH09qtSq8q9NSvhtVwx78eDUqt+/wApg98eh
+         V/WmeGmL1pZxefoRZH0e/L2oPBwZXIYGx22xQm/hqn+A31Mrs6xLesBoyvSUsc6Em/91
+         fryQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWrZzgs6RmcSb8xnkAy6KIjgvn1q6p1LeSKoBToI01jfRqrWHRz0bW4DAllBrUrK8qzqguZy2Po4EBrBrbJyuGGsC8h3EQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWtNGCANJN0S6T8Vq+5OhCR3BI6Kw7xacXdW6U0QXkAe2/M8Gv
+	9CKnaMzLgEgdI2OqJdBOaujSzQTX1w+ftJnN4X9nK5135S8KgK6f+NMA
+X-Gm-Gg: ATEYQzzFwoKAJ3mkPLCnB60ZE4bvcpqaoM+wY6HXxIMDJb41SVNXpioS/DeLsGyMaby
+	ITUUo7qYywGmlk0V0Et2cENUUcz7D2vTwXBj7CvvrCH2NWH100omfMKbItKqUoHKcgAz4WCbXTg
+	sElK17dVTjJMW/CWUlY/RBBXO0uD+NxZZLd692KcrUb0VeANy9PbljShGJJAZbbLs1eRq6dPDFl
+	3EbFFHC+Qy5B+pWuugH8b7vKQ9+/lX5mReljOjPuksHQUKnwLBfvsh2Si1Ox4cCKBPfhYpsYwMm
+	Jdkt2dPaxwK5Ubuolt6Cj+OkfuJryOPqNaKWZmBaB5/UtMgONvQNIiSNndnmVBzwqd7Nw6+yGOR
+	ssuoYlzFt1H4aBfkuapzflFYtLd8LbupITZ9c+VGmN1F+CzdCb6p4JAnCNx3x6LJXcF3jXNL0uE
+	t++AAPF4PQ8zcW1YLcqxU=
+X-Received: by 2002:a17:90b:4ac7:b0:359:7fe6:7de with SMTP id 98e67ed59e1d1-359be3736e7mr9726794a91.23.1773058514021;
+        Mon, 09 Mar 2026 05:15:14 -0700 (PDT)
+Received: from archie.me ([210.87.74.117])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-359c0154a09sm10902291a91.12.2026.03.09.05.15.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Mar 2026 05:15:12 -0700 (PDT)
+Received: by archie.me (Postfix, from userid 1000)
+	id 3278B4208F41; Mon, 09 Mar 2026 19:15:09 +0700 (WIB)
+Date: Mon, 9 Mar 2026 19:15:08 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Evan Ducas <evan.j.ducas@gmail.com>, wufan@kernel.org, corbet@lwn.net,
+	skhan@linuxfoundation.org
+Cc: rdunlap@infradead.org, linux-security-module@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] docs: security: ipe: fix typos and grammar
+Message-ID: <aa65zOqsFLKzgL1P@archie.me>
+References: <20260308180734.5792-1-evan.j.ducas@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-security-module@vger.kernel.org
 List-Id: <linux-security-module.vger.kernel.org>
 List-Subscribe: <mailto:linux-security-module+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-security-module+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.15-dev-18f8f
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: C77BF237D0F
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="WlQl3PTVy40ZKrDC"
+Content-Disposition: inline
+In-Reply-To: <20260308180734.5792-1-evan.j.ducas@gmail.com>
+X-Rspamd-Queue-Id: 23C30238C76
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-2.76 / 15.00];
+	SIGNED_PGP(-2.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-15389-lists,linux-security-module=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-15391-lists,linux-security-module=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[leon@kernel.org,linux-security-module@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	NEURAL_HAM(-0.00)[-0.916];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-security-module];
+	FREEMAIL_TO(0.00)[gmail.com,kernel.org,lwn.net,linuxfoundation.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[nvidia.com:mid,nvidia.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bagasdotme@gmail.com,linux-security-module@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.951];
+	TAGGED_RCPT(0.00)[linux-security-module];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[archie.me:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-From: Chiara Meiohas <cmeiohas@nvidia.com>
 
-fwctl is subsystem which exposes a firmware interface directly to
-userspace: it allows userspace to send device specific command
-buffers to firmware.
+--WlQl3PTVy40ZKrDC
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Call security_fw_validate_cmd() before dispatching the user-provided
-firmware command.
+On Sun, Mar 08, 2026 at 02:07:34PM -0400, Evan Ducas wrote:
+> Fix several spelling and grammar mistakes in the IPE
+> documentation.
 
-This allows security modules to implement custom policies and
-enforce per-command security policy on user-triggered firmware
-commands. For example, a BPF LSM program could filter firmware
-commands based on their opcode.
+Acked-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-Signed-off-by: Chiara Meiohas <cmeiohas@nvidia.com>
-Reviewed-by: Maher Sanalla <msanalla@nvidia.com>
-Signed-off-by: Edward Srouji <edwards@nvidia.com>
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
----
- drivers/fwctl/mlx5/main.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+--=20
+An old man doll... just what I always wanted! - Clara
 
-diff --git a/drivers/fwctl/mlx5/main.c b/drivers/fwctl/mlx5/main.c
-index e86ab703c767a..8ed17aaf48f1f 100644
---- a/drivers/fwctl/mlx5/main.c
-+++ b/drivers/fwctl/mlx5/main.c
-@@ -7,6 +7,7 @@
- #include <linux/mlx5/device.h>
- #include <linux/mlx5/driver.h>
- #include <uapi/fwctl/mlx5.h>
-+#include <linux/security.h>
- 
- #define mlx5ctl_err(mcdev, format, ...) \
- 	dev_err(&mcdev->fwctl.dev, format, ##__VA_ARGS__)
-@@ -324,6 +325,15 @@ static void *mlx5ctl_fw_rpc(struct fwctl_uctx *uctx, enum fwctl_rpc_scope scope,
- 	if (!mlx5ctl_validate_rpc(rpc_in, scope))
- 		return ERR_PTR(-EBADMSG);
- 
-+	/* Enforce the user context for the command */
-+	MLX5_SET(mbox_in_hdr, rpc_in, uid, mfd->uctx_uid);
-+
-+	ret = security_fw_validate_cmd(rpc_in, in_len, &mcdev->fwctl.dev,
-+				       FW_CMD_CLASS_FWCTL,
-+				       FWCTL_DEVICE_TYPE_MLX5);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
- 	/*
- 	 * mlx5_cmd_do() copies the input message to its own buffer before
- 	 * executing it, so we can reuse the allocation for the output.
-@@ -336,8 +346,6 @@ static void *mlx5ctl_fw_rpc(struct fwctl_uctx *uctx, enum fwctl_rpc_scope scope,
- 			return ERR_PTR(-ENOMEM);
- 	}
- 
--	/* Enforce the user context for the command */
--	MLX5_SET(mbox_in_hdr, rpc_in, uid, mfd->uctx_uid);
- 	ret = mlx5_cmd_do(mcdev->mdev, rpc_in, in_len, rpc_out, *out_len);
- 
- 	mlx5ctl_dbg(mcdev,
+--WlQl3PTVy40ZKrDC
+Content-Type: application/pgp-signature; name=signature.asc
 
--- 
-2.53.0
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCaa65xwAKCRD2uYlJVVFO
+o/D6AQCQz/ijZESqN6jyW5u4EgkfCM8QCoDE3QAGxp1yQFRSDQD9H0AwrEQ/Omij
+xMlXzOiUS1xLbjwmeV9LMLCBiJSd+wE=
+=SsgC
+-----END PGP SIGNATURE-----
+
+--WlQl3PTVy40ZKrDC--
 
